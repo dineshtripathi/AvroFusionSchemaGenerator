@@ -4,9 +4,9 @@ namespace AvroFusionGenerator.Implementation;
 
 public class AvroNullableTypeStrategy : IAvroTypeStrategy
 {
-    private readonly AvroSchemaGenerator _avroSchemaGenerator;
+    private readonly IAvroSchemaGenerator _avroSchemaGenerator;
 
-    public AvroNullableTypeStrategy(AvroSchemaGenerator avroSchemaGenerator)
+    public AvroNullableTypeStrategy(IAvroSchemaGenerator avroSchemaGenerator)
     {
         _avroSchemaGenerator = avroSchemaGenerator;
     }

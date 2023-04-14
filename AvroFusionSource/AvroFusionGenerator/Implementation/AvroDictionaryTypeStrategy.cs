@@ -4,9 +4,9 @@ namespace AvroFusionGenerator.Implementation;
 
 public class AvroDictionaryTypeStrategy : IAvroTypeStrategy
 {
-    private readonly AvroSchemaGenerator _avroSchemaGenerator;
+    private readonly IAvroSchemaGenerator _avroSchemaGenerator;
 
-    public AvroDictionaryTypeStrategy(AvroSchemaGenerator avroSchemaGenerator)
+    public AvroDictionaryTypeStrategy(IAvroSchemaGenerator avroSchemaGenerator)
     {
         _avroSchemaGenerator = avroSchemaGenerator;
     }

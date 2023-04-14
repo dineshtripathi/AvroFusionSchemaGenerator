@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AvroFusionGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "\"D:\\AvroFusionGenerator\\SampleAndTest\\TestModels\\GenerateAvscSchemaFromThisModel.cs\" \"D:\\AvroFusionGenerator\\SampleAndTest\\TestModels\\\""
+    }
+  }
+}

@@ -24,21 +24,23 @@ public class GenerateCommandHandler : ICommandHandler
 
     public async Task<int> InvokeAsync(InvocationContext context)
     {
-        string? inputFile = context.ParseResult.GetValueForOption<string>(new Option<string>("--input-file", "Input file path."));
-        string? outputDir = context.ParseResult.GetValueForOption<string>(new Option<string>("--output-dir", "Output directory path."));
+        string? inputFile = context.ParseResult.GetValueForArgument(new Argument<string>("input-file"));
+        string? outputDir = context.ParseResult.RootCommandResult.GetValueForArgument(new Argument<string>("output-dir"));
+        string? @namespace = context.ParseResult.RootCommandResult.GetValueForArgument(new Argument<string>("namespace"));
+
 
         // Load types from the input file
         string sourceCode = await File.ReadAllTextAsync(inputFile);
         var types = _compilerService.LoadTypesFromSource(sourceCode);
 
         // Generate the combined Avro schema
-        string mainClassName = "CombinedRecord";
+        string parentClassModelName = types.First().Name;
         var progressReporter = new ProgressReporter(); // Create a progress reporter if needed
-        string combinedSchema = _avroSchemaGenerator.GenerateCombinedSchema(types, mainClassName, progressReporter);
+        string schemaFromParentClassProperties = _avroSchemaGenerator.GenerateCombinedSchema(types, parentClassModelName, progressReporter);
 
         // Save the combined Avro schema to the output directory
-        string outputPath = Path.Combine(outputDir, $"{mainClassName}.avsc");
-        await File.WriteAllTextAsync(outputPath, combinedSchema);
+        string outputPath = Path.Combine(outputDir, $"{parentClassModelName}.avsc");
+        await File.WriteAllTextAsync(outputPath, schemaFromParentClassProperties);
 
         AnsiConsole.MarkupLine("[green]Success![/]");
 

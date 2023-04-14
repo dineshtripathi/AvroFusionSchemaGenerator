@@ -13,22 +13,22 @@ namespace AvroFusionGenerator
 
         public static async Task<int> Main(string[] args)
         {
-            var services = ConfigureServices()?.BuildServiceProvider();
-            var commandBuilder = services?.GetService<CommandBuilder>();
+            ConfigureServices();
+            var commandBuilder =GetService<CommandBuilder>();
 
-            var program = new AvroFusionGenerator(services);
+            var program = new AvroFusionGenerator(FusionGeneratorServiceProvider);
             return await program.Run(args);
         }
 
         public async Task<int> Run(string[] args)
         {
-            var serviceProvider = Services.BuildServiceProvider();
+          //  var serviceProvider = Services.BuildServiceProvider();
 
-            var commandBuilder = serviceProvider.GetService<CommandBuilder>();
+            var commandBuilder = GetService<CommandBuilder>();
             var rootCommand = commandBuilder?.BuildRootCommand();
             rootCommand.Description = "AvroSchemaGenerator - Generate Avro Schemas from C# types.";
 
-            var generateCommandHandler = serviceProvider.GetService<GenerateCommandHandler>();
+            var generateCommandHandler = GetService<GenerateCommandHandler>();
             rootCommand.Handler = generateCommandHandler;
 
             return await rootCommand.InvokeAsync(args);

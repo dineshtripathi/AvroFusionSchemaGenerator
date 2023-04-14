@@ -2,15 +2,14 @@
 
 namespace AvroFusionGenerator.Implementation;
 
-public class AvroClassTypeStrategy : IAvroTypeStrategy
+public class ClassTypeStrategy : IAvroTypeStrategy
 {
-    private readonly AvroSchemaGenerator _avroSchemaGenerator;
+    private readonly IAvroSchemaGenerator _avroSchemaGenerator;
 
-    public AvroClassTypeStrategy(AvroSchemaGenerator avroSchemaGenerator)
+    public ClassTypeStrategy(IAvroSchemaGenerator avroSchemaGenerator)
     {
         _avroSchemaGenerator = avroSchemaGenerator;
     }
-
     public bool CanHandle(Type type)
     {
         return type.IsClass && !type.Equals(typeof(string));
@@ -19,32 +18,30 @@ public class AvroClassTypeStrategy : IAvroTypeStrategy
     public object CreateAvroType(Type type, HashSet<string> generatedTypes)
     {
         if (generatedTypes.Contains(type.FullName))
-        {
             return type.FullName;
-        }
 
         generatedTypes.Add(type.FullName);
 
-        var fields = new List<Dictionary<string, object>>();
-
-        foreach (var propertyInfo in type.GetProperties())
-        {
-            var propertyType = propertyInfo.PropertyType;
-            var fieldSchema = _avroSchemaGenerator.GenerateAvroType(propertyType, generatedTypes);
-            var field = new Dictionary<string, object>
+        var fieldInfos = type.GetProperties()
+            .Select(prop => new
             {
-                { "name", propertyInfo.Name },
-                { "type", fieldSchema }
-            };
-            fields.Add(field);
-        }
+                Name = prop.Name,
+                Type = _avroSchemaGenerator.GenerateAvroType(prop.PropertyType, generatedTypes)
+            });
 
-        return new Dictionary<string, object>
+        var avroType = new Dictionary<string, object>
         {
             { "type", "record" },
             { "name", type.Name },
             { "namespace", type.Namespace },
-            { "fields", fields }
+            { "fields", fieldInfos.Select(fieldInfo => new Dictionary<string, object>
+                {
+                    { "name", fieldInfo.Name },
+                    { "type", fieldInfo.Type }
+                }).ToList()
+            }
         };
+
+        return avroType;
     }
 }

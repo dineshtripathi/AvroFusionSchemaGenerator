@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using AvroFusionGenerator.DIRegistration;
 using AvroFusionGenerator.Implementation;
+using AvroFusionGenerator.ServiceInterface;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AvroFusionGenerator;
@@ -19,6 +20,8 @@ public static class DependencyInjectionHelper
         ICommandBuilderRegistration commandBuilderRegistration = new CommandBuilderRegistration();
         commandBuilderRegistration.RegisterCommandBuilder(services);
 
-        services?.AddSingleton<ProgressReporter>().AddSingleton<AvroSchemaGenerator>();
+        services?.AddSingleton<ProgressReporter>();
+        services?.AddSingleton<IAvroSchemaGenerator, AvroSchemaGenerator>();
+
     }
 }

@@ -5,7 +5,11 @@ VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AvroFusionSource", "AvroFusionSource", "{B764DA62-3CE5-4BB5-AE7D-B099FA5E7E4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvroFusionGenerator", "AvroFusionSource\AvroFusionGenerator\AvroFusionGenerator.csproj", "{13D7189C-D18E-45AD-9E8D-875EE62D343E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AvroFusionGenerator", "AvroFusionSource\AvroFusionGenerator\AvroFusionGenerator.csproj", "{13D7189C-D18E-45AD-9E8D-875EE62D343E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SamplesAndTest", "SamplesAndTest", "{2317E9C1-7A04-46DA-A042-EC66C11BE2C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestModels", "SampleAndTest\TestModels\TestModels.csproj", "{4AC01257-7C90-46B7-B56B-584380554C5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,12 +21,17 @@ Global
 		{13D7189C-D18E-45AD-9E8D-875EE62D343E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13D7189C-D18E-45AD-9E8D-875EE62D343E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13D7189C-D18E-45AD-9E8D-875EE62D343E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AC01257-7C90-46B7-B56B-584380554C5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AC01257-7C90-46B7-B56B-584380554C5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AC01257-7C90-46B7-B56B-584380554C5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AC01257-7C90-46B7-B56B-584380554C5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{13D7189C-D18E-45AD-9E8D-875EE62D343E} = {B764DA62-3CE5-4BB5-AE7D-B099FA5E7E4C}
+		{4AC01257-7C90-46B7-B56B-584380554C5E} = {2317E9C1-7A04-46DA-A042-EC66C11BE2C2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8F56C8F3-7B77-4C06-B814-CB9FD662A2D7}
