@@ -11,7 +11,7 @@ public class AvroSchemaGenerator
         _avroTypeStrategies = avroTypeStrategies;
     }
 
-    private object GenerateAvroType(Type type, HashSet<string> generatedTypes)
+    public object GenerateAvroType(Type type, HashSet<string> generatedTypes)
     {
         foreach (var strategy in _avroTypeStrategies)
             if (strategy.CanHandle(type))
