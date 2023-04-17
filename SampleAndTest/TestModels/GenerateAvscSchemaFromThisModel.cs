@@ -1,4 +1,7 @@
-﻿namespace TestModels
+﻿using System;
+using System.Collections.Generic;
+using System.Collections;
+namespace TestModels
 {
     public class GenerateAvscSchemaFromThisModel
     {

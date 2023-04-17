@@ -9,7 +9,7 @@ public class AvroSByteStrategy : IAvroTypeStrategy
         return type.Name == "SByte";
     }
 
-    public object CreateAvroType(Type type, HashSet<string> generatedTypes)
+    public object CreateAvroType(Type type, HashSet<string> generatedTypes, IEnumerable<Dictionary<string, object>> fieldInfos)
     {
         return "int";
     }

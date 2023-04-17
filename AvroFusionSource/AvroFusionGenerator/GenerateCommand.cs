@@ -10,17 +10,6 @@ public class GenerateCommand : AsyncCommand<GenerateCommand.Settings>
 {
     public class Settings : CommandSettings
     {
-        //    [CommandOption( "<input-file>")]
-        //    [Description("Input file path.")]
-        //    public string InputFile { get; set; }
-
-        //    [CommandArgument(1, "<output-dir>")]
-        //    [Description("Output directory path.")]
-        //    public string OutputDir { get; set; }
-
-        //    [CommandOption("-n|--namespace <NAMESPACE>")]
-        //    [Description("The namespace of the generated Avro schemas.")]
-        //    public string Namespace { get; set; }
         [CommandOption("--input-file <INPUT_FILE>")]
         public string InputFile { get; set; }
 
@@ -30,10 +19,6 @@ public class GenerateCommand : AsyncCommand<GenerateCommand.Settings>
         [CommandOption("--namespace <NAMESPACE>")]
         public string Namespace { get; set; }
     }
-
-
-   
-
 
     private readonly IAvroSchemaGenerator _avroSchemaGenerator;
     private readonly ICompilerService _compilerService;

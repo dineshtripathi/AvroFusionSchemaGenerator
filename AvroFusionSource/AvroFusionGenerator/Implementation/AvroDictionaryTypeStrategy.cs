@@ -4,9 +4,9 @@ namespace AvroFusionGenerator.Implementation;
 
 public class AvroDictionaryTypeStrategy : IAvroTypeStrategy
 {
-    private readonly IAvroSchemaGenerator _avroSchemaGenerator;
+    private readonly Lazy<IAvroSchemaGenerator> _avroSchemaGenerator;
 
-    public AvroDictionaryTypeStrategy(IAvroSchemaGenerator avroSchemaGenerator)
+    public AvroDictionaryTypeStrategy(Lazy<IAvroSchemaGenerator> avroSchemaGenerator)
     {
         _avroSchemaGenerator = avroSchemaGenerator;
     }
@@ -17,9 +17,9 @@ public class AvroDictionaryTypeStrategy : IAvroTypeStrategy
                type.GetGenericArguments()[0] == typeof(string);
     }
 
-    public object CreateAvroType(Type type, HashSet<string> generatedTypes)
+    public object CreateAvroType(Type type, HashSet<string> generatedTypes, IEnumerable<Dictionary<string, object>> fieldInfos)
     {
-        var valueType = _avroSchemaGenerator.GenerateAvroType(type.GetGenericArguments()[1], generatedTypes);
+        var valueType = _avroSchemaGenerator.Value.GenerateAvroType(type.GetGenericArguments()[1], generatedTypes);
         return new Dictionary<string, object> { { "type", "map" }, { "values", valueType } };
     }
 }

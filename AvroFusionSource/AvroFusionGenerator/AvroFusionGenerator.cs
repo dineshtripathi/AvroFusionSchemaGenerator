@@ -11,41 +11,31 @@ namespace AvroFusionGenerator
     public class AvroFusionGenerator : AvroFusionGeneratorBase
     {
         private static IServiceCollection services;
-        public AvroFusionGenerator(IServiceProvider? services)
-            : base(services)
+        static SpectreServiceProviderTypeRegistrar typeRegistrar;
+        public AvroFusionGenerator()
+            : base()
         {
         }
 
         public static async Task<int> Main(string[] args)
         {
-            services=ConfigureServices();
-            var commandBuilder =GetService<CommandBuilder>();
 
-            var program = new AvroFusionGenerator(FusionGeneratorServiceProvider);
+            var program = new AvroFusionGenerator();
             return await program.Run(args);
         }
 
         public async Task<int> Run(string[] args)
         {
-            //  var serviceProvider = Services.BuildServiceProvider();
+            services = new ServiceCollection();
+            services = ConfigureServices(services);
 
-            //var commandBuilder = GetService<CommandBuilder>();
-            //var rootCommand = commandBuilder?.BuildRootCommand();
-            //rootCommand.Description = "AvroSchemaGenerator - Generate Avro Schemas from C# types.";
-
-            //var generateCommandHandler = GetService<GenerateCommandHandler>();
-            //rootCommand.Handler = generateCommandHandler;
-
-            //return await rootCommand.InvokeAsync(args);
-            ConfigureServices();
-
-            var typeRegistrar = new SpectreServiceProviderTypeRegistrar(services);
+            typeRegistrar = new SpectreServiceProviderTypeRegistrar(services);
+          
             var app = new CommandApp(typeRegistrar);
 
             app.Configure(config =>
             {
                 config.AddCommand<GenerateCommand>("generate");
-              //  config.AddCommand<DefaultCommand>("");
             });
 
             return await app.RunAsync(args);

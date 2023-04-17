@@ -2,11 +2,11 @@
 
 namespace AvroFusionGenerator.Implementation;
 
-public class ClassTypeStrategy : IAvroTypeStrategy
+public class AvroClassTypeStrategy : IAvroTypeStrategy
 {
-    private readonly IAvroSchemaGenerator _avroSchemaGenerator;
+    private readonly Lazy<IAvroSchemaGenerator> _avroSchemaGenerator;
 
-    public ClassTypeStrategy(IAvroSchemaGenerator avroSchemaGenerator)
+    public AvroClassTypeStrategy(Lazy<IAvroSchemaGenerator> avroSchemaGenerator)
     {
         _avroSchemaGenerator = avroSchemaGenerator;
     }
@@ -15,19 +15,19 @@ public class ClassTypeStrategy : IAvroTypeStrategy
         return type.IsClass && !type.Equals(typeof(string));
     }
 
-    public object CreateAvroType(Type type, HashSet<string> generatedTypes)
+    public object CreateAvroType(Type type, HashSet<string> generatedTypes, IEnumerable<Dictionary<string, object>> fieldInfos)
     {
         if (generatedTypes.Contains(type.FullName))
             return type.FullName;
 
         generatedTypes.Add(type.FullName);
 
-        var fieldInfos = type.GetProperties()
-            .Select(prop => new
-            {
-                Name = prop.Name,
-                Type = _avroSchemaGenerator.GenerateAvroType(prop.PropertyType, generatedTypes)
-            });
+        //var fieldInfos = type.GetProperties()
+        //    .Select(prop => new
+        //    {
+        //        Name = prop.Name,
+        //        Type = _avroSchemaGenerator.Value.GenerateAvroType(prop.PropertyType, generatedTypes)
+        //    });
 
         var avroType = new Dictionary<string, object>
         {
@@ -36,8 +36,8 @@ public class ClassTypeStrategy : IAvroTypeStrategy
             { "namespace", type.Namespace },
             { "fields", fieldInfos.Select(fieldInfo => new Dictionary<string, object>
                 {
-                    { "name", fieldInfo.Name },
-                    { "type", fieldInfo.Type }
+                    { "name", fieldInfo["Name"] },
+                    { "type", fieldInfo["Type"] }
                 }).ToList()
             }
         };

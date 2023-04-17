@@ -9,7 +9,7 @@ public class AvroDoubleStrategy : IAvroTypeStrategy
         return type.Name == "Double";
     }
 
-    public object CreateAvroType(Type type, HashSet<string> generatedTypes)
+    public object CreateAvroType(Type type, HashSet<string> generatedTypes, IEnumerable<Dictionary<string, object>> fieldInfos)
     {
         return "double";
     }

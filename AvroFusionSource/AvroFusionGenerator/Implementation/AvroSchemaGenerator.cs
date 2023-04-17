@@ -5,11 +5,11 @@ namespace AvroFusionGenerator.Implementation;
 
 public class AvroSchemaGenerator : IAvroSchemaGenerator
 {
-    private readonly IEnumerable<IAvroTypeStrategy> _avroTypeStrategies;
+    private readonly IAvroTypeStrategyResolver _strategyResolver;
 
-    public AvroSchemaGenerator(IEnumerable<IAvroTypeStrategy> avroTypeStrategies)
+    public AvroSchemaGenerator(IAvroTypeStrategyResolver strategyResolver)
     {
-        _avroTypeStrategies = avroTypeStrategies;
+        _strategyResolver = strategyResolver;
     }
 
     public string GenerateCombinedSchema(IEnumerable<Type> types, string mainClassName, ProgressReporter progressReporter)
@@ -41,14 +41,35 @@ public class AvroSchemaGenerator : IAvroSchemaGenerator
 
     public object GenerateAvroType(Type type, HashSet<string> generatedTypes)
     {
-        foreach (var strategy in _avroTypeStrategies)
+        try
+        {
+        var strategies = _strategyResolver.ResolveStrategies();
+
+        foreach (var strategy in strategies)
         {
             if (strategy.CanHandle(type))
             {
-                return strategy.CreateAvroType(type, generatedTypes);
+                     var fieldInfos = GetFieldInfos(type, generatedTypes);
+                    return strategy.CreateAvroType(type, generatedTypes, fieldInfos);
             }
         }
-
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
         throw new NotSupportedException($"The type '{type.Name}' is not supported.");
     }
+
+    private IEnumerable<Dictionary<string, object>> GetFieldInfos(Type type, HashSet<string> generatedTypes)
+    {
+        return type.GetProperties().Select(prop => new Dictionary<string, object>
+        {
+            { "Name", prop.Name },
+            { "Type", GenerateAvroType(prop.PropertyType, generatedTypes) }
+        });
+    }
+
+
 }

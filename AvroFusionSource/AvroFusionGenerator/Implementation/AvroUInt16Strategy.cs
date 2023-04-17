@@ -9,7 +9,7 @@ public class AvroUInt16Strategy : IAvroTypeStrategy
         return type.Name == "UInt16";
     }
 
-    public object CreateAvroType(Type type, HashSet<string> generatedTypes)
+    public object CreateAvroType(Type type, HashSet<string> generatedTypes, IEnumerable<Dictionary<string, object>> fieldInfos)
     {
         return "int";
     }

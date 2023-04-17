@@ -9,7 +9,7 @@ public class AvroDecimalStrategy : IAvroTypeStrategy
         return type.Name == "Decimal";
     }
 
-    public object CreateAvroType(Type type, HashSet<string> generatedTypes)
+    public object CreateAvroType(Type type, HashSet<string> generatedTypes, IEnumerable<Dictionary<string, object>> fieldInfos)
     {
         return "bytes";
     }

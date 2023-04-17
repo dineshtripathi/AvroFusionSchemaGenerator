@@ -9,7 +9,7 @@ public class AvroEnumTypeStrategy : IAvroTypeStrategy
         return type.IsEnum;
     }
 
-    public object CreateAvroType(Type type, HashSet<string> generatedTypes)
+    public object CreateAvroType(Type type, HashSet<string> generatedTypes, IEnumerable<Dictionary<string, object>> fieldInfos)
     {
         var symbols = Enum.GetNames(type);
         return new Dictionary<string, object>

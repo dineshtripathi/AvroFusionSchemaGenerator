@@ -2,15 +2,16 @@
 
 namespace AvroFusionGenerator.Implementation;
 
-public class AvroStringStrategy : IAvroTypeStrategy
+public class AvroEqualityComparerTypeStrategy : IAvroTypeStrategy
 {
     public bool CanHandle(Type type)
     {
-        return type.Name == "String";
+        return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEqualityComparer<>);
     }
 
     public object CreateAvroType(Type type, HashSet<string> generatedTypes, IEnumerable<Dictionary<string, object>> fieldInfos)
     {
-        return "string";
+        var underlyingType = type.GetGenericArguments()[0];
+        return $"IEqualityComparer<{underlyingType.Name}>";
     }
 }

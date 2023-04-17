@@ -9,7 +9,7 @@ public class AvroInt64Strategy : IAvroTypeStrategy
         return type.Name == "Int64";
     }
 
-    public object CreateAvroType(Type type, HashSet<string> generatedTypes)
+    public object CreateAvroType(Type type, HashSet<string> generatedTypes, IEnumerable<Dictionary<string, object>> fieldInfos)
     {
         return "long";
     }

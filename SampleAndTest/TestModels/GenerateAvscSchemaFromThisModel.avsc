@@ -1,0 +1,257 @@
+{
+  "type": "record",
+  "name": "GenerateAvscSchemaFromThisModel",
+  "namespace": "TestModels",
+  "fields": {
+    "type": "record",
+    "name": "GenerateAvscSchemaFromThisModel",
+    "namespace": "TestModels",
+    "fields": [
+      {
+        "name": "Name",
+        "type": "string"
+      },
+      {
+        "name": "Description",
+        "type": "string"
+      },
+      {
+        "name": "Type",
+        "type": "string"
+      },
+      {
+        "name": "TypeDescription",
+        "type": "string"
+      },
+      {
+        "name": "GenerateDateTime",
+        "type": "long"
+      },
+      {
+        "name": "ValueClass",
+        "type": {
+          "type": "record",
+          "name": "ValueClass",
+          "namespace": "TestModels",
+          "fields": [
+            {
+              "name": "Value",
+              "type": "string"
+            },
+            {
+              "name": "ValueString",
+              "type": "string"
+            },
+            {
+              "name": "ValueInt",
+              "type": "int"
+            },
+            {
+              "name": "ValueDouble",
+              "type": "double"
+            },
+            {
+              "name": "ValueFloat",
+              "type": "float"
+            },
+            {
+              "name": "ValueDateTime",
+              "type": "long"
+            },
+            {
+              "name": "ValueDecimal",
+              "type": "bytes"
+            }
+          ]
+        }
+      },
+      {
+        "name": "DictionaryModel",
+        "type": {
+          "type": "record",
+          "name": "DictionaryModel",
+          "namespace": "TestModels",
+          "fields": [
+            {
+              "name": "DictionaryKeyString",
+              "type": {
+                "type": "map",
+                "values": "string"
+              }
+            },
+            {
+              "name": "DictionaryKeyInt",
+              "type": {
+                "type": "record",
+                "name": "Dictionary`2",
+                "namespace": "System.Collections.Generic",
+                "fields": [
+                  {
+                    "name": "Comparer",
+                    "type": "IEqualityComparer<Int32>"
+                  },
+                  {
+                    "name": "Count",
+                    "type": "int"
+                  },
+                  {
+                    "name": "Keys",
+                    "type": {
+                      "type": "record",
+                      "name": "KeyCollection",
+                      "namespace": "System.Collections.Generic",
+                      "fields": [
+                        {
+                          "name": "Count",
+                          "type": "int"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "Values",
+                    "type": {
+                      "type": "record",
+                      "name": "ValueCollection",
+                      "namespace": "System.Collections.Generic",
+                      "fields": [
+                        {
+                          "name": "Count",
+                          "type": "int"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "Item",
+                    "type": "string"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "DictionaryIntValueClasses",
+              "type": {
+                "type": "record",
+                "name": "Dictionary`2",
+                "namespace": "System.Collections.Generic",
+                "fields": [
+                  {
+                    "name": "Comparer",
+                    "type": "IEqualityComparer<Int32>"
+                  },
+                  {
+                    "name": "Count",
+                    "type": "int"
+                  },
+                  {
+                    "name": "Keys",
+                    "type": {
+                      "type": "record",
+                      "name": "KeyCollection",
+                      "namespace": "System.Collections.Generic",
+                      "fields": [
+                        {
+                          "name": "Count",
+                          "type": "int"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "Values",
+                    "type": {
+                      "type": "record",
+                      "name": "ValueCollection",
+                      "namespace": "System.Collections.Generic",
+                      "fields": [
+                        {
+                          "name": "Count",
+                          "type": "int"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "name": "Item",
+                    "type": "TestModels.ValueClass"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "DictionaryStringValueClasses",
+              "type": {
+                "type": "map",
+                "values": "TestModels.ValueClass"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "ListModel",
+        "type": {
+          "type": "record",
+          "name": "ListModel",
+          "namespace": "TestModels",
+          "fields": [
+            {
+              "name": "ListKeyString",
+              "type": {
+                "type": "array",
+                "items": "string"
+              }
+            },
+            {
+              "name": "ListKeyInt",
+              "type": {
+                "type": "array",
+                "items": "int"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "DictionaryValueClasses",
+        "type": {
+          "type": "map",
+          "values": "TestModels.ValueClass"
+        }
+      },
+      {
+        "name": "enumValueType",
+        "type": {
+          "type": "enum",
+          "name": "ValueType",
+          "namespace": "TestModels",
+          "symbols": [
+            "single",
+            "collection",
+            "list",
+            "tupple",
+            "primitive"
+          ]
+        }
+      }
+    ]
+  },
+  "types": [
+    "TestModels.DictionaryModel",
+    "TestModels.ListModel",
+    "TestModels.ValueClass",
+    {
+      "type": "enum",
+      "name": "ValueType",
+      "namespace": "TestModels",
+      "symbols": [
+        "single",
+        "collection",
+        "list",
+        "tupple",
+        "primitive"
+      ]
+    }
+  ]
+}
