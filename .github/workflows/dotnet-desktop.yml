@@ -90,4 +90,11 @@ jobs:
         Appx_Package_Build_Mode: StoreUpload
         Configuration: ${{ matrix.configuration }}
 
-  
+    - name: Set version number output
+      id: set_version_number
+      run: echo "::set-output name=version_number::1.0.0"
+
+    - name: Set release number output
+      id: set_release_number
+      run: echo "::set-output name=release_number::100"
+

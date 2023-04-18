@@ -1,5 +1,9 @@
 [![.NET Core Desktop](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/dotnet-desktop.yml)
 
+[![Debug Build](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/dotnet-desktop.yml/badge.svg?label=Debug)
+
+[![Release Build](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/dotnet-desktop.yml/badge.svg?label=Release)
+
 Welcome to the AvroFusionSchemaGenerator wiki!
 
 # Avro Fusion Generator
