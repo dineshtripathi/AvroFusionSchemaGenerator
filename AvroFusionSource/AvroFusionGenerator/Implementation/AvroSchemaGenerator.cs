@@ -12,64 +12,90 @@ public class AvroSchemaGenerator : IAvroSchemaGenerator
         _strategyResolver = strategyResolver;
     }
 
-    public string GenerateCombinedSchema(IEnumerable<Type> types, string mainClassName, ProgressReporter progressReporter)
+    
+    public string GenerateCombinedSchema(IEnumerable<Type> types, string mainClassName,
+        ProgressReporter progressReporter)
     {
         var mainType = types.FirstOrDefault(t => t.Name == mainClassName);
         if (mainType == null)
-            throw new InvalidOperationException($"Could not find the main type '{mainClassName}' in the provided types.");
+            throw new InvalidOperationException(
+                $"Could not find the main type '{mainClassName}' in the provided types.");
 
         var generatedTypes = new HashSet<string>();
-        var avroMainType = GenerateAvroType(mainType, generatedTypes);
+        var avroMainType = GenerateAvroType(mainType, generatedTypes) as Dictionary<string, object>;
 
         var generatedSchemas = types
             .Where(t => !t.Equals(mainType))
             .Select(t => GenerateAvroType(t, generatedTypes))
+            .OfType<Dictionary<string, object>>()
             .ToList();
 
-        var combinedSchema = new Dictionary<string, object>
-        {
-            { "type", "record" },
-            { "name", mainType.Name },
-            { "namespace", mainType.Namespace },
-            { "fields", avroMainType },
-            { "types", generatedSchemas }
-        };
-
-        var serializerSettings = new JsonSerializerSettings { Formatting = Newtonsoft.Json.Formatting.Indented };
-        return JsonConvert.SerializeObject(combinedSchema, serializerSettings);
-    }
-
-    public object GenerateAvroType(Type type, HashSet<string> generatedTypes)
-    {
         try
         {
-        var strategies = _strategyResolver.ResolveStrategies();
+            var mainTypeFields = avroMainType["fields"] as IEnumerable<Dictionary<string, object>>;
+            var additionalFields = generatedSchemas
+                .Where(schema => schema.ContainsKey("fields"))
+                .SelectMany(schema => schema["fields"] as IEnumerable<Dictionary<string, object>>)
+                .ToList();
 
-        foreach (var strategy in strategies)
-        {
-            if (strategy.CanHandle(type))
+            var allFields = mainTypeFields.Concat(additionalFields).ToList();
+
+            var combinedSchema = new Dictionary<string, object>
             {
-                     var fieldInfos = GetFieldInfos(type, generatedTypes);
-                    return strategy.CreateAvroType(type, generatedTypes, fieldInfos);
-            }
-        }
+                {"type", "record"},
+                {"namespace", $"{types.First().Namespace}"},
+                {"name", mainClassName},
+                {"fields", allFields}
+            };
+
+            var serializerSettings = new JsonSerializerSettings { Formatting = Formatting.Indented };
+            return JsonConvert.SerializeObject(combinedSchema, serializerSettings);
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             throw;
         }
+    }
+
+
+    public object GenerateAvroType(Type type, HashSet<string> generatedTypes)
+    {
+        try
+        {
+            var strategies = _strategyResolver.ResolveStrategies();
+
+            foreach (var strategy in strategies)
+                if (strategy.CanHandle(type))
+                {
+                    var fieldInfos = GetFieldInfos(type, generatedTypes);
+                    return strategy.CreateAvroType(type, generatedTypes, fieldInfos);
+                }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+
         throw new NotSupportedException($"The type '{type.Name}' is not supported.");
     }
 
     private IEnumerable<Dictionary<string, object>> GetFieldInfos(Type type, HashSet<string> generatedTypes)
     {
-        return type.GetProperties().Select(prop => new Dictionary<string, object>
+        return type.GetProperties().Where(prop => !IsIgnoredType(prop.PropertyType)).Select(prop => new Dictionary<string, object>
         {
-            { "Name", prop.Name },
-            { "Type", GenerateAvroType(prop.PropertyType, generatedTypes) }
+            {"name", prop.Name},
+            {"type", GenerateAvroType(prop.PropertyType, generatedTypes)}
         });
     }
 
+    private bool IsIgnoredType(Type type)
+    {
+        // Add any other types that should should be ignored here.
+        return type.GetInterfaces().Contains(typeof(IEqualityComparer<>)) ||
+               type.Name.EndsWith("UnsupportedType") ||
+               (type.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDictionary<,>)) && type.GetGenericArguments()[0] != typeof(string));
+    }
 
 }

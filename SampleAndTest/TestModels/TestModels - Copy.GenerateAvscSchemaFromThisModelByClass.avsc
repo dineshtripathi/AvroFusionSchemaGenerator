@@ -1,0 +1,158 @@
+﻿{
+  "type": "record",
+  "name": "GenerateAvscSchemaFromThisModelByClass",
+  "namespace": "TestModels",
+  "fields": [
+    {
+      "name": "Name",
+      "type": "string"
+    },
+    {
+      "name": "Description",
+      "type": "string"
+    },
+    {
+      "name": "Type",
+      "type": "string"
+    },
+    {
+      "name": "TypeDescription",
+      "type": "string"
+    },
+    {
+      "name": "GenerateDateTime",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }
+    },
+    {
+      "name": "ValueClass",
+      "type": {
+        "type": "record",
+        "name": "ValueClass",
+        "fields": [
+          {
+            "name": "Value",
+            "type": "string"
+          },
+          {
+            "name": "ValueString",
+            "type": "string"
+          },
+          {
+            "name": "ValueInt",
+            "type": "int"
+          },
+          {
+            "name": "ValueDouble",
+            "type": "double"
+          },
+          {
+            "name": "ValueFloat",
+            "type": "float"
+          },
+          {
+            "name": "ValueDateTime",
+            "type": {
+              "type": "long",
+              "logicalType": "timestamp-millis"
+            }
+          },
+          {
+            "name": "ValueDecimal",
+            "type": {
+              "type": "bytes",
+              "logicalType": "decimal",
+              "precision": 10,
+              "scale": 2
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "DictionaryModel",
+      "type": {
+        "type": "record",
+        "name": "DictionaryModel",
+        "fields": [
+          {
+            "name": "DictionaryKeyString",
+            "type": {
+              "type": "map",
+              "values": "string"
+            }
+          },
+          {
+            "name": "DictionaryKeyInt",
+            "type": {
+              "type": "map",
+              "values": "string",
+              "keys": "int"
+            }
+          },
+          {
+            "name": "DictionaryIntValueClasses",
+            "type": {
+              "type": "map",
+              "values": "ValueClass",
+              "keys": "int"
+            }
+          },
+          {
+            "name": "DictionaryStringValueClasses",
+            "type": {
+              "type": "map",
+              "values": "ValueClass"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "ListModel",
+      "type": {
+        "type": "record",
+        "name": "ListModel",
+        "fields": [
+          {
+            "name": "ListKeyString",
+            "type": {
+              "type": "array",
+              "items": "string"
+            }
+          },
+          {
+            "name": "ListKeyInt",
+            "type": {
+              "type": "array",
+              "items": "int"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "DictionaryValueClasses",
+      "type": {
+        "type": "map",
+        "values": "ValueClass"
+      }
+    },
+    {
+      "name": "enumValueType",
+      "type": {
+        "type": "enum",
+        "name": "ValueType",
+        "symbols": [
+          "single",
+          "collection",
+          "list",
+          "tupple",
+          "primitive"
+        ]
+      }
+    }
+  ]
+}
