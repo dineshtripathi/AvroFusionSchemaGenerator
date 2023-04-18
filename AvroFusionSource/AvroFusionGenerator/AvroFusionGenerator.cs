@@ -9,8 +9,8 @@ namespace AvroFusionGenerator
 {
     public class AvroFusionGenerator : AvroFusionGeneratorBase
     {
-        private static IServiceCollection services;
-        static SpectreServiceProviderTypeRegistrar typeRegistrar;
+        private static IServiceCollection? _services;
+        static SpectreServiceProviderTypeRegistrar _typeRegistrar;
         public AvroFusionGenerator()
             : base()
         {
@@ -25,12 +25,12 @@ namespace AvroFusionGenerator
 
         public async Task<int> Run(string[] args)
         {
-            services = new ServiceCollection();
-            services = ConfigureServices(services);
+            _services = new ServiceCollection();
+            _services = ConfigureServices(_services);
 
-            typeRegistrar = new SpectreServiceProviderTypeRegistrar(services);
+            _typeRegistrar = new SpectreServiceProviderTypeRegistrar(_services);
           
-            var app = new CommandApp(typeRegistrar);
+            var app = new CommandApp(_typeRegistrar);
 
             app.Configure(config =>
             {

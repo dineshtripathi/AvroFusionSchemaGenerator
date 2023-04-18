@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using AvroFusionGenerator.Implementation;
 using AvroFusionGenerator.ServiceInterface;
 using Spectre.Console;
@@ -14,13 +11,13 @@ public class GenerateCommand : AsyncCommand<GenerateCommand.Settings>
     public class Settings : CommandSettings
     {
         [CommandOption("--input-file <INPUT_FILE>")]
-        public string InputFile { get; set; }
+        public string? InputFile { get; set; }
 
         [CommandOption("--output-dir <OUTPUT_DIR>")]
-        public string OutputDir { get; set; }
+        public string? OutputDir { get; set; }
 
         [CommandOption("--namespace <NAMESPACE>")]
-        public string Namespace { get; set; }
+        public string? Namespace { get; set; }
     }
 
     private readonly IAvroSchemaGenerator _avroSchemaGenerator;
@@ -34,21 +31,21 @@ public class GenerateCommand : AsyncCommand<GenerateCommand.Settings>
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
-        string inputFile = settings.InputFile;
-        string outputDir = settings.OutputDir;
-        string @namespace = settings.Namespace;
+        var inputFile = settings.InputFile;
+        var outputDir = settings.OutputDir;
+        var @namespace = settings.Namespace;
 
         // Load types from the input file
-        string sourceCode = await File.ReadAllTextAsync(inputFile);
+        var sourceCode = await File.ReadAllTextAsync(inputFile);
         var types = _compilerService.LoadTypesFromSource(sourceCode);
 
-        // Generate the combined Avro schema
+        // Generate the Avro schema
         var parentType = GetMainParentType(types);
         var progressReporter = new ProgressReporter(); // Create a progress reporter if needed
-        string schemaFromParentClassProperties = _avroSchemaGenerator.GenerateAvroAvscSshema(types, parentType.Name, progressReporter);
+        var schemaFromParentClassProperties = _avroSchemaGenerator.GenerateAvroAvscSshema(types, parentType.Name, progressReporter);
 
         // Save the combined Avro schema to the output directory
-        string outputPath = Path.Combine(outputDir, $"{parentType.Namespace}.{parentType.Name}.avsc");
+        var outputPath = Path.Combine(outputDir, $"{parentType.Namespace}.{parentType.Name}.avsc");
         await File.WriteAllTextAsync(outputPath, schemaFromParentClassProperties);
         RunAvroGen(outputPath);
         AnsiConsole.MarkupLine("[green]Success![/]");
