@@ -55,7 +55,7 @@ jobs:
     runs-on: windows-latest
 
     env:
-      Solution_Name: AvroFusionGenerator
+      Solution_Name: AvroFusionGenerator.sln
 
     steps:
     - name: Checkout
