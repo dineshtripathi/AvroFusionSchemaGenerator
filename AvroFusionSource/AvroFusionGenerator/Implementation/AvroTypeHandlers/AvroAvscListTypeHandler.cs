@@ -1,24 +1,24 @@
 ﻿using AvroFusionGenerator.ServiceInterface;
 
-namespace AvroFusionGenerator.Implementation;
+namespace AvroFusionGenerator.Implementation.AvroTypeHandlers;
 
-public class AvroListTypeStrategy : IAvroTypeStrategy
+public class AvroAvscListTypeHandler : IAvroAvscTypeHandler
 {
     private readonly Lazy<IAvroSchemaGenerator> _avroSchemaGenerator;
 
-    public AvroListTypeStrategy(Lazy<IAvroSchemaGenerator> avroSchemaGenerator)
+    public AvroAvscListTypeHandler(Lazy<IAvroSchemaGenerator> avroSchemaGenerator)
     {
         _avroSchemaGenerator = avroSchemaGenerator;
     }
 
-    public bool CanHandle(Type type)
+    public bool IfCanHandleAvroAvscType(Type type)
     {
         return type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(List<>) || type.GetGenericTypeDefinition() == typeof(IList<>) || type.GetGenericTypeDefinition() == typeof(IEnumerable<>));
     }
 
-    public object CreateAvroType(Type type, HashSet<string> generatedTypes)
+    public object ThenCreateAvroAvscType(Type type, HashSet<string> forAvroAvscGeneratedTypes)
     {
-        var itemType = _avroSchemaGenerator.Value.GenerateAvroType(type.GetGenericArguments()[0], generatedTypes);
+        var itemType = _avroSchemaGenerator.Value.GenerateAvroAvscType(type.GetGenericArguments()[0], forAvroAvscGeneratedTypes);
         return new Dictionary<string, object> { { "type", "array" }, { "items", itemType } };
     }
 }

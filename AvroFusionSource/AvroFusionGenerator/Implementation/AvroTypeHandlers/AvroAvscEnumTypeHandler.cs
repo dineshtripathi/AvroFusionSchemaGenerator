@@ -1,15 +1,15 @@
 ﻿using AvroFusionGenerator.ServiceInterface;
 
-namespace AvroFusionGenerator.Implementation;
+namespace AvroFusionGenerator.Implementation.AvroTypeHandlers;
 
-public class AvroEnumTypeStrategy : IAvroTypeStrategy
+public class AvroAvscEnumTypeHandler : IAvroAvscTypeHandler
 {
-    public bool CanHandle(Type type)
+    public bool IfCanHandleAvroAvscType(Type type)
     {
         return type.IsEnum;
     }
 
-    public object CreateAvroType(Type type, HashSet<string> generatedTypes)
+    public object ThenCreateAvroAvscType(Type type, HashSet<string> forAvroAvscGeneratedTypes)
     {
         var symbols = Enum.GetNames(type);
         return new Dictionary<string, object>

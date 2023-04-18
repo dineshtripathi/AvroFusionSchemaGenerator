@@ -1,15 +1,15 @@
 ﻿using AvroFusionGenerator.ServiceInterface;
 
-namespace AvroFusionGenerator.Implementation;
+namespace AvroFusionGenerator.Implementation.AvroTypeHandlers;
 
-public class AvroPrimitiveTypeStrategy : IAvroTypeStrategy
+public class AvroAvscPrimitiveTypeHandler : IAvroAvscTypeHandler
 {
-    public bool CanHandle(Type type)
+    public bool IfCanHandleAvroAvscType(Type type)
     {
         return type.IsPrimitive || type == typeof(string) || type == typeof(decimal) || type == typeof(DateTime) || type == typeof(DateTimeOffset) || type == typeof(TimeSpan) || type == typeof(Guid);
     }
 
-    public object CreateAvroType(Type type, HashSet<string> generatedTypes)
+    public object ThenCreateAvroAvscType(Type type, HashSet<string> forAvroAvscGeneratedTypes)
     {
         return MapCSharpTypeToAvroType(type);
     }

@@ -1,15 +1,15 @@
 ﻿using AvroFusionGenerator.ServiceInterface;
 
-namespace AvroFusionGenerator.Implementation;
+namespace AvroFusionGenerator.Implementation.AvroTypeHandlers;
 
-public class AvroEqualityComparerTypeStrategy : IAvroTypeStrategy
+public class AvroAvscEqualityComparerTypeHandler : IAvroAvscTypeHandler
 {
-    public bool CanHandle(Type type)
+    public bool IfCanHandleAvroAvscType(Type type)
     {
         return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEqualityComparer<>);
     }
 
-    public object CreateAvroType(Type type, HashSet<string> generatedTypes)
+    public object ThenCreateAvroAvscType(Type type, HashSet<string> forAvroAvscGeneratedTypes)
     {
         var underlyingType = type.GetGenericArguments()[0];
         return $"IEqualityComparer<{underlyingType.Name}>";

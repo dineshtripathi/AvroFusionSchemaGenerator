@@ -1,4 +1,4 @@
-﻿namespace AvroFusionGenerator.Implementation;
+﻿namespace AvroFusionGenerator.Implementation.AvroTypeHandlers;
 
 [AttributeUsage(AttributeTargets.Property)]
 public class AvroUnionTypeAttribute : Attribute

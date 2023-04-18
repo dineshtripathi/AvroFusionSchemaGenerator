@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using AvroFusionGenerator.Implementation;
+using AvroFusionGenerator.Implementation.AvroTypeHandlers;
 using AvroFusionGenerator.ServiceInterface;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,18 +18,18 @@ public class TypeStrategyRegistration : ITypeStrategyRegistration
             Console.WriteLine($" - {type.FullName}");
         }
 
-        // Filter types implementing IAvroTypeStrategy
-        var typeStrategyTypes = allTypes.Where(t => typeof(IAvroTypeStrategy).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract).ToList();
-        Console.WriteLine("Types implementing IAvroTypeStrategy:");
+        // Filter types implementing IAvroAvscTypeHandler
+        var typeStrategyTypes = allTypes.Where(t => typeof(IAvroAvscTypeHandler).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract).ToList();
+        Console.WriteLine("Types implementing IAvroAvscTypeHandler:");
         foreach (var type in typeStrategyTypes)
         {
             Console.WriteLine($" - {type.FullName}");
         }
         
 
-        // Register types implementing IAvroTypeStrategy from the current assembly
+        // Register types implementing IAvroAvscTypeHandler from the current assembly
         builder.RegisterAssemblyTypes(typeof(AvroFusionGenerator).Assembly)
-            .Where(t => typeof(IAvroTypeStrategy).IsAssignableFrom(t))
+            .Where(t => typeof(IAvroAvscTypeHandler).IsAssignableFrom(t))
             .AsImplementedInterfaces().InstancePerDependency();
 
 
@@ -37,32 +37,32 @@ public class TypeStrategyRegistration : ITypeStrategyRegistration
 
     public void RegisterTypeStrategies(IServiceCollection services)
     {
-        services?.AddSingleton<IAvroTypeStrategy, AvroBooleanStrategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroByteStrategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroCharStrategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroDateTimeOffsetStrategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroDateTimeStrategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroDecimalStrategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroDictionaryTypeStrategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroDoubleStrategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroEnumTypeStrategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroGuidStrategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroByteStrategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroInt16Strategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroInt32Strategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroInt64Strategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroListTypeStrategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroUInt16Strategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroUInt32Strategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroUInt64Strategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroStringStrategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroSByteStrategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroSingleStrategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroClassTypeStrategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroCharStrategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroNullableTypeStrategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroTimseSpanStrategy>();
-        services?.AddSingleton<IAvroTypeStrategy, AvroEqualityComparerTypeStrategy>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscBooleanHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscByteHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscCharHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscDateTimeOffsetHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscDateTimeHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscDecimalHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscDictionaryTypeHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscDoubleHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscEnumTypeHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscGuidHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscByteHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscInt16Handler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscInt32Handler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscInt64Handler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscListTypeHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscUInt16Handler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscUInt32Handler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscUInt64Handler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscStringHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscSByteHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscSingleHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscClassTypeHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscCharHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscNullableTypeHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscTimseSpanHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscEqualityComparerTypeHandler>();
 
 
 

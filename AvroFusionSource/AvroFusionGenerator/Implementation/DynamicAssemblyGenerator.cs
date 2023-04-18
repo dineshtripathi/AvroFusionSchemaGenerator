@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.Loader;
+using AvroFusionGenerator.Implementation.AvroTypeHandlers;
 using AvroFusionGenerator.ServiceInterface;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;

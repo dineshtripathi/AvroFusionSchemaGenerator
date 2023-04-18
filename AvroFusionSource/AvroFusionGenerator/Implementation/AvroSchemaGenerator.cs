@@ -13,7 +13,7 @@ public class AvroSchemaGenerator : IAvroSchemaGenerator
     }
 
     
-    public string GenerateCombinedSchema(IEnumerable<Type> types, string mainClassName,
+    public string GenerateAvroAvscSshema(IEnumerable<Type> types, string mainClassName,
         ProgressReporter progressReporter)
     {
         var mainType = types.FirstOrDefault(t => t.Name == mainClassName);
@@ -22,11 +22,11 @@ public class AvroSchemaGenerator : IAvroSchemaGenerator
                 $"Could not find the main type '{mainClassName}' in the provided types.");
 
         var generatedTypes = new HashSet<string>();
-        var avroMainType = GenerateAvroType(mainType, generatedTypes) as Dictionary<string, object>;
+        var avroMainType = GenerateAvroAvscType(mainType, generatedTypes) as Dictionary<string, object>;
 
         var generatedSchemas = types
             .Where(t => !t.Equals(mainType))
-            .Select(t => GenerateAvroType(t, generatedTypes))
+            .Select(t => GenerateAvroAvscType(t, generatedTypes))
             .OfType<Dictionary<string, object>>()
             .ToList();
 
@@ -59,17 +59,17 @@ public class AvroSchemaGenerator : IAvroSchemaGenerator
     }
 
 
-    public object GenerateAvroType(Type type, HashSet<string> generatedTypes)
+    public object GenerateAvroAvscType(Type type, HashSet<string> generatedTypes)
     {
         try
         {
             var strategies = _strategyResolver.ResolveStrategies();
 
             foreach (var strategy in strategies)
-                if (strategy.CanHandle(type))
+                if (strategy.IfCanHandleAvroAvscType(type))
                 {
                    // var fieldInfos = GetFieldInfos(type, generatedTypes);
-                    return strategy.CreateAvroType(type, generatedTypes);
+                    return strategy.ThenCreateAvroAvscType(type, generatedTypes);
                 }
         }
         catch (Exception e)
@@ -86,7 +86,7 @@ public class AvroSchemaGenerator : IAvroSchemaGenerator
         return type.GetProperties().Where(prop => !IsIgnoredType(prop.PropertyType)).Select(prop => new Dictionary<string, object>
         {
             {"name", prop.Name},
-            {"type", GenerateAvroType(prop.PropertyType, generatedTypes)}
+            {"type", GenerateAvroAvscType(prop.PropertyType, generatedTypes)}
         });
     }
 

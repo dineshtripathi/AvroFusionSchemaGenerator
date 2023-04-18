@@ -1,5 +1,6 @@
 ﻿
 using AvroFusionGenerator.Implementation;
+using AvroFusionGenerator.Implementation.AvroTypeHandlers;
 
 namespace TestModels
 {

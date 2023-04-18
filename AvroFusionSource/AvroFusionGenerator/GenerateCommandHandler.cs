@@ -36,7 +36,7 @@ public class GenerateCommandHandler : ICommandHandler
         // Generate the combined Avro schema
         string parentClassModelName = types.First().Name;
         var progressReporter = new ProgressReporter(); // Create a progress reporter if needed
-        string schemaFromParentClassProperties = _avroSchemaGenerator.GenerateCombinedSchema(types, parentClassModelName, progressReporter);
+        string schemaFromParentClassProperties = _avroSchemaGenerator.GenerateAvroAvscSshema(types, parentClassModelName, progressReporter);
 
         // Save the combined Avro schema to the output directory
         string outputPath = Path.Combine(outputDir, $"{parentClassModelName}.avsc");

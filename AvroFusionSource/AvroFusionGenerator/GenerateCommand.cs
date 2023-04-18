@@ -45,7 +45,7 @@ public class GenerateCommand : AsyncCommand<GenerateCommand.Settings>
         // Generate the combined Avro schema
         var parentType = GetMainParentType(types);
         var progressReporter = new ProgressReporter(); // Create a progress reporter if needed
-        string schemaFromParentClassProperties = _avroSchemaGenerator.GenerateCombinedSchema(types, parentType.Name, progressReporter);
+        string schemaFromParentClassProperties = _avroSchemaGenerator.GenerateAvroAvscSshema(types, parentType.Name, progressReporter);
 
         // Save the combined Avro schema to the output directory
         string outputPath = Path.Combine(outputDir, $"{parentType.Namespace}.{parentType.Name}.avsc");
@@ -73,8 +73,8 @@ public class GenerateCommand : AsyncCommand<GenerateCommand.Settings>
         {
             StartInfo = new ProcessStartInfo
             {
-                FileName = "cmd.exe", // Run the command prompt
-                RedirectStandardInput = true, // Allow writing to the command prompt's standard input
+                FileName = "cmd.exe", 
+                RedirectStandardInput = true, 
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
                 CreateNoWindow = true,
@@ -84,7 +84,7 @@ public class GenerateCommand : AsyncCommand<GenerateCommand.Settings>
         process.Start();
 
         // Execute the avrogen command
-        process.StandardInput.WriteLine($"avrogen -s {schemaFilePath} {schemaFileDirectory} --skip-directories");
+        process.StandardInput.WriteLine($"avrogen -s {schemaFilePath} {schemaFileDirectory}\\output --skip-directories");
         process.StandardInput.WriteLine("exit"); // Exit the command prompt
         var output = process.StandardOutput.ReadToEnd();
         process.WaitForExit();

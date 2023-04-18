@@ -5,10 +5,55 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>False</GenerateDocumentationFile>
+    <SignAssembly>False</SignAssembly>
+    <Title>Avro Schema Generator For C# Model Complex Type</Title>
+    <Authors>Dinesh Tripathi </Authors>
+    <Copyright>MIT</Copyright>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Description>Avro Schema Generator for C# is a powerful and easy-to-use library and .NET tool that dynamically generates Avro schemas based on C# source code. With this package, developers can quickly create Avro-compatible data structures without manually writing and maintaining schema files, streamlining their serialization and deserialization processes for data interchange with other systems.
+
+Key features of Avro Schema Generator for C# include:
+
+Dynamic generation of Avro schemas based on C# source code
+Support for complex objects and model classes
+Seamless integration with existing C# projects
+Automatic inclusion of required namespaces and using directives
+By using the Avro Schema Generator for C#, developers can improve the efficiency of their data interchange processes, reducing the need for manual schema creation and maintenance. This tool is designed to simplify working with Avro in C# applications and make it more accessible for developers who want to leverage the benefits of Avro serialization in their projects.</Description>
+    <PackageProjectUrl>https://github.com/dineshtripathi/AvroFusionSchemaGenerator</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dineshtripathi/AvroFusionSchemaGenerator</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Avro:Schema:C#Model:ComplexType</PackageTags>
+    <PackageReleaseNotes>Avro Schema Generator for C# is a powerful and easy-to-use library and .NET tool that dynamically generates Avro schemas based on C# source code. With this package, developers can quickly create Avro-compatible data structures without manually writing and maintaining schema files, streamlining their serialization and deserialization processes for data interchange with other systems.
+
+Key features of Avro Schema Generator for C# include:
+
+Dynamic generation of Avro schemas based on C# source code
+Support for complex objects and model classes
+Seamless integration with existing C# projects
+Automatic inclusion of required namespaces and using directives
+By using the Avro Schema Generator for C#, developers can improve the efficiency of their data interchange processes, reducing the need for manual schema creation and maintenance. This tool is designed to simplify working with Avro in C# applications and make it more accessible for developers who want to leverage the benefits of Avro serialization in their projects.</PackageReleaseNotes>
+    <PackAsTool>True</PackAsTool>
+    <PackageIcon>AVSCGenerator.png</PackageIcon>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="Request\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +68,13 @@
     <PackageReference Include="spectre.console" Version="0.46.0" />
     <PackageReference Include="Spectre.Console.Cli" Version="0.46.0" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Assets\AVSCGenerator.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
