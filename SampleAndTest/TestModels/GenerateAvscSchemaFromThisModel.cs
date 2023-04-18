@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections;
+﻿
+using AvroFusionGenerator.Implementation;
+
 namespace TestModels
 {
     public class GenerateAvscSchemaFromThisModelByClass
@@ -15,6 +15,8 @@ namespace TestModels
         public ListModel ListModel { get; set; }
         public Dictionary<string, ValueClass> DictionaryValueClasses { get; set; }
         public ValueType enumValueType { get; set; }
+        [AvroUnionType(typeof(float), typeof(decimal))]
+        public object FloatDecimalValue { get; set; }
     }
 
 
@@ -24,6 +26,8 @@ namespace TestModels
         public Dictionary<int, string> DictionaryKeyInt { get; set; }
         public Dictionary<int, ValueClass> DictionaryIntValueClasses { get; set; }
         public Dictionary<string, ValueClass> DictionaryStringValueClasses { get; set; }
+        [AvroUnionType(typeof(int), typeof(double))]
+        public object NumericValue { get; set; }
     }
 
     public class ListModel

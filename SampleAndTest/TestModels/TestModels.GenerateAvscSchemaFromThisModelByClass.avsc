@@ -81,6 +81,14 @@
               "type": "map",
               "values": "TestModels.ValueClass"
             }
+          },
+          {
+            "name": "NumericValue",
+            "type": [
+              "int",
+              "double",
+              "null"
+            ]
           }
         ]
       }
@@ -130,6 +138,14 @@
           "primitive"
         ]
       }
+    },
+    {
+      "name": "FloatDecimalValue",
+      "type": [
+        "float",
+        "bytes",
+        "null"
+      ]
     }
   ]
 }

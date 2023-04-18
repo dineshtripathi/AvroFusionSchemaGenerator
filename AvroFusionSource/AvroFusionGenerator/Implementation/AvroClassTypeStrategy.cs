@@ -1,4 +1,5 @@
 ﻿using AvroFusionGenerator.ServiceInterface;
+using System.Reflection;
 
 namespace AvroFusionGenerator.Implementation;
 
@@ -26,7 +27,7 @@ public class AvroClassTypeStrategy : IAvroTypeStrategy
             .Select(prop => new
             {
                 name = prop.Name,
-                type = _avroSchemaGenerator.Value.GenerateAvroType(prop.PropertyType, generatedTypes)
+                type = GenerateUnionTypeIfRequired(prop, generatedTypes)
             });
 
         var avroType = new Dictionary<string, object>
@@ -53,4 +54,18 @@ public class AvroClassTypeStrategy : IAvroTypeStrategy
                (type.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDictionary<,>)) && type.GetGenericArguments()[0] != typeof(string));
     }
 
+    private object GenerateUnionTypeIfRequired(PropertyInfo prop, HashSet<string> generatedTypes)
+    {
+        var avroUnionAttribute = prop.GetCustomAttribute<AvroUnionTypeAttribute>();
+
+        if (avroUnionAttribute != null)
+        {
+            var unionTypes = avroUnionAttribute.UnionTypes.Select(unionType =>
+                _avroSchemaGenerator.Value.GenerateAvroType(unionType, generatedTypes)).ToList();
+            unionTypes.Add("null"); // You can include 'null' if you want to allow null values
+            return unionTypes;
+        }
+
+        return _avroSchemaGenerator.Value.GenerateAvroType(prop.PropertyType, generatedTypes);
+    }
 }
