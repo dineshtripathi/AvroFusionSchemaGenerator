@@ -16,7 +16,7 @@ public class AvroNullableTypeStrategy : IAvroTypeStrategy
         return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
     }
 
-    public object CreateAvroType(Type type, HashSet<string> generatedTypes, IEnumerable<Dictionary<string, object>> fieldInfos)
+    public object CreateAvroType(Type type, HashSet<string> generatedTypes)
     {
         var underlyingType = Nullable.GetUnderlyingType(type);
         var underlyingAvroType = _avroSchemaGenerator.Value.GenerateAvroType(underlyingType, generatedTypes);

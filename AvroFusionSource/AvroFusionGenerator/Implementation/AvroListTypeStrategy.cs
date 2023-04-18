@@ -16,7 +16,7 @@ public class AvroListTypeStrategy : IAvroTypeStrategy
         return type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(List<>) || type.GetGenericTypeDefinition() == typeof(IList<>) || type.GetGenericTypeDefinition() == typeof(IEnumerable<>));
     }
 
-    public object CreateAvroType(Type type, HashSet<string> generatedTypes, IEnumerable<Dictionary<string, object>> fieldInfos)
+    public object CreateAvroType(Type type, HashSet<string> generatedTypes)
     {
         var itemType = _avroSchemaGenerator.Value.GenerateAvroType(type.GetGenericArguments()[0], generatedTypes);
         return new Dictionary<string, object> { { "type", "array" }, { "items", itemType } };

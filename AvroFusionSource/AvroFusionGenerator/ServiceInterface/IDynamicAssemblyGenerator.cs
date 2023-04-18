@@ -2,5 +2,5 @@
 
 public interface IDynamicAssemblyGenerator
 {
-    List<Type> GenerateDynamicAssembly(string sourceCode);
+    List<Type> GenerateDynamicAssembly(string csharpModelParentClass);
 }

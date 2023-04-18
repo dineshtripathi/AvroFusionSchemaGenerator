@@ -9,7 +9,7 @@ public class AvroDateTimeStrategy : IAvroTypeStrategy
         return type.Name == "DateTime";
     }
 
-    public object CreateAvroType(Type type, HashSet<string> generatedTypes, IEnumerable<Dictionary<string, object>> fieldInfos)
+    public object CreateAvroType(Type type, HashSet<string> generatedTypes)
     {
         return "long";
     }

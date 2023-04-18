@@ -17,7 +17,7 @@ public class AvroDictionaryTypeStrategy : IAvroTypeStrategy
                type.GetGenericArguments()[0] == typeof(string);
     }
 
-    public object CreateAvroType(Type type, HashSet<string> generatedTypes, IEnumerable<Dictionary<string, object>> fieldInfos)
+    public object CreateAvroType(Type type, HashSet<string> generatedTypes)
     {
         var valueType = _avroSchemaGenerator.Value.GenerateAvroType(type.GetGenericArguments()[1], generatedTypes);
         return new Dictionary<string, object> { { "type", "map" }, { "values", valueType } };

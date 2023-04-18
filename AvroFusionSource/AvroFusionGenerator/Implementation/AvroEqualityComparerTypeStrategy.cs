@@ -9,7 +9,7 @@ public class AvroEqualityComparerTypeStrategy : IAvroTypeStrategy
         return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEqualityComparer<>);
     }
 
-    public object CreateAvroType(Type type, HashSet<string> generatedTypes, IEnumerable<Dictionary<string, object>> fieldInfos)
+    public object CreateAvroType(Type type, HashSet<string> generatedTypes)
     {
         var underlyingType = type.GetGenericArguments()[0];
         return $"IEqualityComparer<{underlyingType.Name}>";

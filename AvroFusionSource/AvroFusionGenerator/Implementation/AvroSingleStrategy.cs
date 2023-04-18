@@ -9,7 +9,7 @@ public class AvroSingleStrategy : IAvroTypeStrategy
         return type.Name == "Single";
     }
 
-    public object CreateAvroType(Type type, HashSet<string> generatedTypes, IEnumerable<Dictionary<string, object>> fieldInfos)
+    public object CreateAvroType(Type type, HashSet<string> generatedTypes)
     {
         return "float";
     }

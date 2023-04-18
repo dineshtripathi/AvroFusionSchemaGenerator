@@ -68,8 +68,8 @@ public class AvroSchemaGenerator : IAvroSchemaGenerator
             foreach (var strategy in strategies)
                 if (strategy.CanHandle(type))
                 {
-                    var fieldInfos = GetFieldInfos(type, generatedTypes);
-                    return strategy.CreateAvroType(type, generatedTypes, fieldInfos);
+                   // var fieldInfos = GetFieldInfos(type, generatedTypes);
+                    return strategy.CreateAvroType(type, generatedTypes);
                 }
         }
         catch (Exception e)

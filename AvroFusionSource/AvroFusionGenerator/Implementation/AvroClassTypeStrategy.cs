@@ -16,7 +16,7 @@ public class AvroClassTypeStrategy : IAvroTypeStrategy
         return type.IsClass && !type.Equals(typeof(string));
     }
 
-    public object CreateAvroType(Type type, HashSet<string> generatedTypes, IEnumerable<Dictionary<string, object>> fieldInfos)
+    public object CreateAvroType(Type type, HashSet<string> generatedTypes)
     {
         if (generatedTypes.Contains(type.FullName))
             return type.FullName;
@@ -34,7 +34,6 @@ public class AvroClassTypeStrategy : IAvroTypeStrategy
         {
             { "type", "record" },
             { "name", type.Name },
-          //   {"fields",fieldInfos},
             { "namespace", type.Namespace },
             { "fields", fieldInf.Select(fieldInfo => new Dictionary<string, object>
                 {
@@ -48,7 +47,6 @@ public class AvroClassTypeStrategy : IAvroTypeStrategy
     }
     private bool IsIgnoredType(Type type)
     {
-        // Add any other types that should should be ignored here.
         return type.GetInterfaces().Contains(typeof(IEqualityComparer<>)) ||
                type.Name.EndsWith("UnsupportedType") ||
                (type.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDictionary<,>)) && type.GetGenericArguments()[0] != typeof(string));
@@ -62,7 +60,7 @@ public class AvroClassTypeStrategy : IAvroTypeStrategy
         {
             var unionTypes = avroUnionAttribute.UnionTypes.Select(unionType =>
                 _avroSchemaGenerator.Value.GenerateAvroType(unionType, generatedTypes)).ToList();
-            unionTypes.Add("null"); // You can include 'null' if you want to allow null values
+            unionTypes.Add("null"); 
             return unionTypes;
         }
 

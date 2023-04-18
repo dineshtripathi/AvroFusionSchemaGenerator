@@ -9,7 +9,7 @@ public class AvroGuidStrategy : IAvroTypeStrategy
         return type.Name == "Guid";
     }
 
-    public object CreateAvroType(Type type, HashSet<string> generatedTypes, IEnumerable<Dictionary<string, object>> fieldInfos)
+    public object CreateAvroType(Type type, HashSet<string> generatedTypes)
     {
         return "fixed";
     }

@@ -9,7 +9,7 @@ public class AvroBooleanStrategy : IAvroTypeStrategy
         return type.Name == "Boolean";
     }
 
-    public object CreateAvroType(Type type, HashSet<string> generatedTypes, IEnumerable<Dictionary<string, object>> fieldInfos)
+    public object CreateAvroType(Type type, HashSet<string> generatedTypes)
     {
         return "boolean";
     }

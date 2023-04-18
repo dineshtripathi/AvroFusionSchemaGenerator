@@ -9,7 +9,7 @@ public class AvroUInt32Strategy : IAvroTypeStrategy
         return type.Name == "UInt32";
     }
 
-    public object CreateAvroType(Type type, HashSet<string> generatedTypes, IEnumerable<Dictionary<string, object>> fieldInfos)
+    public object CreateAvroType(Type type, HashSet<string> generatedTypes)
     {
         return "long";
     }
