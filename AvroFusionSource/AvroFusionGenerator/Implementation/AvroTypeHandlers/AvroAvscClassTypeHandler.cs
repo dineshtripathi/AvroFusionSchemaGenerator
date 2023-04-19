@@ -42,7 +42,8 @@ public class AvroAvscClassTypeHandler : IAvroAvscTypeHandler
             .Select(prop => new
             {
                 name = prop.Name,
-                type = GenerateUnionTypeIfRequired(prop, forAvroAvscGeneratedTypes)
+                type = GenerateUnionTypeIfRequired(prop, forAvroAvscGeneratedTypes),
+                aliasAttribute = prop.GetCustomAttribute<AvroDuplicateFieldAliasAttribute>()
             });
 
         var createAvroAvscType = new Dictionary<string, object>
@@ -51,10 +52,20 @@ public class AvroAvscClassTypeHandler : IAvroAvscTypeHandler
             {"name", type.Name},
             {"namespace", type.Namespace},
             {
-                "fields", avroFieldInfo.Select(fieldInfo => new Dictionary<string, object>
+                "fields", avroFieldInfo.Select(fieldInfo =>
                 {
-                    {"name", fieldInfo.name},
-                    {"type", fieldInfo.type}
+                    var field = new Dictionary<string, object>
+                    {
+                        {"name", fieldInfo.name},
+                        {"type", fieldInfo.type}
+                    };
+
+                    if (fieldInfo.aliasAttribute != null)
+                    {
+                        field["aliases"] = new List<string> { fieldInfo.aliasAttribute.Alias };
+                    }
+
+                    return field;
                 }).ToList()
             }
         };

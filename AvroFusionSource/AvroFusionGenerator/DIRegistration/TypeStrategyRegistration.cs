@@ -66,5 +66,11 @@ public class TypeStrategyRegistration : ITypeStrategyRegistration
         services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscNullableTypeHandler>();
         services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscTimseSpanHandler>();
         services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscEqualityComparerTypeHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscIDictionaryTypeHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscIListTypeHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscIQueryableTypeHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscIEnumerableTypeHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscHashSetTypeHandler>();
+
     }
 }
