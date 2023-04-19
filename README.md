@@ -9,6 +9,10 @@ Welcome to the AvroFusionSchemaGenerator wiki!
 # Avro Fusion Generator
 Avro Fusion Generator is a tool to generate Avro schemas from C# classes. It uses a combination of reflection and type strategies to create Avro schemas that represent the structure of the input C# types.
 
+### Nuget package (Dot net tool)
+To download the latest release of AvroFusionGenerator, [Download Avro Fusion Generator Nuget package - click here](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12340400059/artifacts/654844548).
+
+
 ## Features
 * Support for primitive types, nullable types, enums, lists, and dictionaries.
 * Strategy pattern to handle different C# types easily and extendibly.
