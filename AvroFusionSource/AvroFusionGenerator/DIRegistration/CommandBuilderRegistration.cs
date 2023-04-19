@@ -4,9 +4,16 @@ using Microsoft.Extensions.DependencyInjection;
 using static AvroFusionGenerator.GenerateCommand;
 
 namespace AvroFusionGenerator.DIRegistration;
+/// <summary>
+/// The command builder registration.
+/// </summary>
 
 public class CommandBuilderRegistration : ICommandBuilderRegistration
 {
+    /// <summary>
+    /// Registers the command builder.
+    /// </summary>
+    /// <param name="services">The services.</param>
     public void RegisterCommandBuilder(IServiceCollection? services)
     {
         services?.AddSingleton<CommandBuilder, AvroFusionCommandBuilder>();

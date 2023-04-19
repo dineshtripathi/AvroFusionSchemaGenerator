@@ -1,10 +1,16 @@
 ﻿using System.CommandLine;
-using System.CommandLine.Parsing;
-using System.ComponentModel.DataAnnotations;
-using AvroFusionGenerator.Abstraction;
+
+namespace AvroFusionGenerator.Abstraction;
+/// <summary>
+/// The avro fusion command builder.
+/// </summary>
 
 public class AvroFusionCommandBuilder : CommandBuilder
 {
+    /// <summary>
+    /// Builds the root command.
+    /// </summary>
+    /// <returns>A RootCommand.</returns>
     public override RootCommand BuildRootCommand()
     {
         var rootCommand = new RootCommand();
@@ -12,20 +18,18 @@ public class AvroFusionCommandBuilder : CommandBuilder
             new Argument<string>("input-file")
             {
                 Description = "Input file path.",
-                Arity = ArgumentArity.ExactlyOne,
+                Arity = ArgumentArity.ExactlyOne
             });
         rootCommand.AddArgument(new Argument<string>("output-dir")
-            {
-                Description = "Output directory path.",
-                Arity = ArgumentArity.ExactlyOne,
-            });
+        {
+            Description = "Output directory path.",
+            Arity = ArgumentArity.ExactlyOne
+        });
         rootCommand.AddArgument(new Argument<string>("namespace")
         {
             Description = "The namespace of the generated Avro schemas.",
-            Arity = ArgumentArity.ZeroOrOne,
+            Arity = ArgumentArity.ZeroOrOne
         });
-        // Add other arguments as needed
-        
         return rootCommand;
     }
 }

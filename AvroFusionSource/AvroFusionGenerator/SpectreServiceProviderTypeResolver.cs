@@ -2,6 +2,9 @@
 using Spectre.Console.Cli;
 
 namespace AvroFusionGenerator;
+/// <summary>
+/// The spectre service provider type resolver.
+/// </summary>
 
 public class SpectreServiceProviderTypeResolver : ITypeResolver
 {
@@ -12,6 +15,11 @@ public class SpectreServiceProviderTypeResolver : ITypeResolver
         _serviceProvider = serviceProvider;
     }
 
+    /// <summary>
+    /// Resolves the.
+    /// </summary>
+    /// <param name="type">The type.</param>
+    /// <returns>An object.</returns>
     public object Resolve(Type? type)
     {
         return _serviceProvider?.GetRequiredService(type);

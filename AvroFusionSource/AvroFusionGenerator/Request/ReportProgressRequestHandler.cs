@@ -2,6 +2,9 @@
 using MediatR;
 
 namespace AvroFusionGenerator.Request;
+/// <summary>
+/// The report progress request handler.
+/// </summary>
 
 public class ReportProgressRequestHandler : IRequestHandler<ReportProgressRequest>
 {
@@ -12,6 +15,12 @@ public class ReportProgressRequestHandler : IRequestHandler<ReportProgressReques
         _progressReporter = progressReporter;
     }
 
+    /// <summary>
+    /// Handles the.
+    /// </summary>
+    /// <param name="request">The request.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A Task.</returns>
     public Task Handle(ReportProgressRequest request, CancellationToken cancellationToken)
     {
         _progressReporter.UpdateProgress(request.Progress, request.Message);

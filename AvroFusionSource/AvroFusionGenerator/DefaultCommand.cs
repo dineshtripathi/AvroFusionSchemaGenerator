@@ -1,6 +1,9 @@
 ﻿using AvroFusionGenerator.ServiceInterface;
 
 namespace AvroFusionGenerator;
+/// <summary>
+/// The default command.
+/// </summary>
 
 public class DefaultCommand : GenerateCommand
 {

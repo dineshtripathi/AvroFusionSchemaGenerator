@@ -1,40 +1,43 @@
 ﻿using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using AvroFusionGenerator.Implementation.AvroTypeHandlers;
 using AvroFusionGenerator.ServiceInterface;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AvroFusionGenerator.DIRegistration;
+/// <summary>
+/// The type strategy registration.
+/// </summary>
 
 public class TypeStrategyRegistration : ITypeStrategyRegistration
 {
+    /// <summary>
+    /// Registers the type strategies.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
     public void RegisterTypeStrategies(ContainerBuilder builder)
     {
         // Get all types from the current assembly
         var allTypes = typeof(AvroFusionGenerator).Assembly.GetTypes();
         Console.WriteLine("All types in assembly:");
-        foreach (var type in allTypes)
-        {
-            Console.WriteLine($" - {type.FullName}");
-        }
+        foreach (var type in allTypes) Console.WriteLine($" - {type.FullName}");
 
         // Filter types implementing IAvroAvscTypeHandler
-        var typeStrategyTypes = allTypes.Where(t => typeof(IAvroAvscTypeHandler).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract).ToList();
+        var typeStrategyTypes = allTypes
+            .Where(t => typeof(IAvroAvscTypeHandler).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract).ToList();
         Console.WriteLine("Types implementing IAvroAvscTypeHandler:");
-        foreach (var type in typeStrategyTypes)
-        {
-            Console.WriteLine($" - {type.FullName}");
-        }
-        
+        foreach (var type in typeStrategyTypes) Console.WriteLine($" - {type.FullName}");
+
 
         // Register types implementing IAvroAvscTypeHandler from the current assembly
         builder.RegisterAssemblyTypes(typeof(AvroFusionGenerator).Assembly)
             .Where(t => typeof(IAvroAvscTypeHandler).IsAssignableFrom(t))
             .AsImplementedInterfaces().InstancePerDependency();
-
-
     }
 
+    /// <summary>
+    /// Registers the type strategies.
+    /// </summary>
+    /// <param name="services">The services.</param>
     public void RegisterTypeStrategies(IServiceCollection services)
     {
         services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscBooleanHandler>();
@@ -63,8 +66,5 @@ public class TypeStrategyRegistration : ITypeStrategyRegistration
         services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscNullableTypeHandler>();
         services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscTimseSpanHandler>();
         services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscEqualityComparerTypeHandler>();
-
-
-
     }
 }

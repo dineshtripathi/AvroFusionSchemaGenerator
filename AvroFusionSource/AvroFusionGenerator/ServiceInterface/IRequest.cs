@@ -1,4 +1,7 @@
 ﻿namespace AvroFusionGenerator.ServiceInterface;
+/// <summary>
+/// The request.
+/// </summary>
 
 public interface IRequest
 {

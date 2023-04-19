@@ -1,13 +1,20 @@
-﻿using Autofac;
-using AvroFusionGenerator.DIRegistration;
+﻿using AvroFusionGenerator.DIRegistration;
 using AvroFusionGenerator.Implementation;
 using AvroFusionGenerator.ServiceInterface;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AvroFusionGenerator;
+/// <summary>
+/// The dependency injection helper.
+/// </summary>
 
 public static class DependencyInjectionHelper
 {
+    /// <summary>
+    /// Registers the all services.
+    /// </summary>
+    /// <param name="services">The services.</param>
+    /// <returns>An IServiceProvider.</returns>
     public static IServiceProvider RegisterAllServices(IServiceCollection? services)
     {
         ITypeStrategyRegistration typeStrategyRegistration = new TypeStrategyRegistration();
