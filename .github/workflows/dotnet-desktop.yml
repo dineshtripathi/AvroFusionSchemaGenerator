@@ -95,7 +95,7 @@ jobs:
     
     - name: Create NuGet package
       run: dotnet pack --configuration Release
-      working-directory: AvroFusionGenerator/AvroFusionSource/AvroFusionGenerator.csproj
+      working-directory: AvroFusionGenerator\AvroFusionSource\AvroFusionGenerator\AvroFusionGenerator.csproj
 
     - name: Publish NuGet package
       uses: actions/upload-artifact@v2
