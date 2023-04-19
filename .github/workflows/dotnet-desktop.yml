@@ -97,11 +97,16 @@ jobs:
       run: dotnet pack --configuration Release
       working-directory: AvroFusionSource\AvroFusionGenerator
 
+    - name: List NuGet package file
+      run: ls -R AvroFusionSource\AvroFusionGenerator\nupkg\
+
+
     - name: Publish NuGet package
       uses: actions/upload-artifact@v2
       with:
         name: NuGetPackage
         path: AvroFusionGenerator/nupkg/*.nupkg
+        if-no-files-found: warn
 
     - name: Set version number output
       id: set_version_number
