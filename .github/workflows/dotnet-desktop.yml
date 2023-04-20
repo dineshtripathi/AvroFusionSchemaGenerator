@@ -132,7 +132,7 @@ jobs:
       run: |
        git config --local user.email "action@github.com"
        git config --local user.name "GitHub Action"
-       git tag "v${release_number}-b${build_number}-g${short_hash}-r${{ github.run_id }}"
+       git tag "v${release_number}-b${build_number}-g${short_hash}-r${{ github.run_id }}-d${current_date_time}"
        git push https://${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git --tags
       shell: bash
 
