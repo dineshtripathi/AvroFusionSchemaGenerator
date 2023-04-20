@@ -1,8 +1,4 @@
-[![.NET Core Desktop](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/dotnet-desktop.yml)
-
-[![Debug Build](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/dotnet-desktop.yml/badge.svg?label=Debug)
-
-[![Release Build](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/dotnet-desktop.yml/badge.svg?label=Release)
+[![.NET Core Desktop](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/dotnet-desktop.yml/badge.svg?branch=main)](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/dotnet-desktop.yml) [![.NET Core Release](https://img.shields.io/badge/.NET%20Core-Release-blue)](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/dotnet-desktop.yml/badge.svg?label=Release)  [![.NET Core Debug](https://img.shields.io/badge/.NET%20Core-Debug-yellow)](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/dotnet-desktop.yml/badge.svg?label=debug)
 
 Welcome to the AvroFusionSchemaGenerator wiki!
 
@@ -23,46 +19,730 @@ To use the Avro Fusion Generator, follow these steps:
 1. Clone the repository.
 1. Build the solution.
 1. Run the console application with your input C# types as arguments.
+
+Create a Model Class File 
+
+Example `GenerateAvscSchemaFromThisModel.cs`
+And Create a Model
+
 Example
 Consider the following C# class:
-```csharp
-public class Person
-{
-    public string Name { get; set; }
-    public int Age { get; set; }
-    public DateTime BirthDate { get; set; }
-    public List<string> Hobbies { get; set; }
-}
-```
 
-Run the Avro Fusion Generator with `Person` class as input:
+ ```csharp
+ File Name - `GenerateAvscSchemaFromThisModel.cs`
+        namespace TestModels
+        {
+            /// <summary>
+            /// 
+            /// </summary>
+            public class ResourceGroup
+            {
+                public string? ResourceGroupName { get; set; }
+                public string? ResourceGroupSubscriptionId { get; set; }
+                public DateTime CreationDate { get; set; }
+                public List<AppService>? AppServices { get; set; }
+                public Dictionary<string, string>? ResourceGroupTags { get; set; }
+                public Dictionary<string, StorageAccount>? StorageAccounts { get; set; }
+                public Dictionary<string, VirtualMachine>? VirtualMachines { get; set; }
+                public List<DataFactoryPipeline>? DataFactoryPipelines { get; set; }
+                [AvroUnionType(typeof(int), typeof(double))]
+                public object? DataFactoryPipelineCount { get; set; }
+                public List<EventHub>? EventHubs { get; set; }
+                public List<EventGrid>? EventGrids { get; set; }
+                public List<SchemaGroup>? SchemaGroups { get; set; }
+                public List<Schema>? Schemas { get; set; }
+                public Dictionary<string, CosmosDb>? CosmosDBs { get; set; }
+                public AzureResource? AzureResources { get; set; }
+            }
+            /// <summary>
+            /// 
+            /// </summary>
+            public class AppService
+            {
+                public string? AppServiceName { get; set; }
+                public string? Plan { get; set; }
+                public string? OperatingSystem { get; set; }
+                public string? RuntimeStack { get; set; }
+                public AppServiceStatus Status { get; set; }
+            }
+            /// <summary>
+            /// 
+            /// </summary>
+            public class StorageAccount
+            {
+                public string? StorageAccountName { get; set; }
+                public string? AccountType { get; set; }
+                public string? AccessTier { get; set; }
+                public bool IsSecureTransferEnabled { get; set; }
+            }
+            /// <summary>
+            /// 
+            /// </summary>
+            public class VirtualMachine
+            {
+                public string? VirtualMachineName { get; set; }
+                public string? Size { get; set; }
+                public string? OperatingSystem { get; set; }
+                public VirtualMachineStatus Status { get; set; }
+            }
+            /// <summary>
+            /// 
+            /// </summary>
+            public enum AppServiceStatus
+            {
+                Running,
+                Stopped,
+                Restarting,
+                Scaling
+            }
+            /// <summary>
+            /// 
+            /// </summary>
+            public enum VirtualMachineStatus
+            {
+                Running,
+                Stopped,
+                Deallocated,
+                Deleting
+            }
+            /// <summary>
+            /// 
+            /// </summary>
+            public class DataFactoryPipeline
+            {
+                public string? PipelineName { get; set; }
+                public string? Description { get; set; }
+                public DateTime LastModified { get; set; }
+            }
+            /// <summary>
+            /// 
+            /// </summary>
+            public class EventHub
+            {
+                public string? EventHubName { get; set; }
+                public int PartitionCount { get; set; }
+                public TimeSpan MessageRetention { get; set; }
+            }
+            /// <summary>
+            /// 
+            /// </summary>
+            public class EventGrid
+            {
+                public string? EventGridName { get; set; }
+                public string? TopicType { get; set; }
+                public string? InputSchema { get; set; }
+            }
+            /// <summary>
+            /// 
+            /// </summary>
+            public class SchemaGroup
+            {
+                public string? GroupName { get; set; }
+                public string? Description { get; set; }
+                public List<Schema>? Schemas { get; set; }
+            }
 
-```dotnet run --project AvroFusionGenerator -- Person```
+            public record Schema(string? SchemaName, string? SchemaVersion, string? SerializationType) : AzureResource;
+
+            /// <summary>
+            /// The cosmos d b.
+            /// </summary>
+            /// <param name="CosmosDbName"></param>
+            /// <param name="AccountType"></param>
+            /// <param name="APIType"></param>
+            /// <param name="Databases"></param>
+            public record CosmosDb(string? CosmosDbName, string? AccountType, string? APIType, List<Database>? Databases) : AzureResource;
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="DatabaseName"></param>
+            /// <param name="Containers"></param>
+            public record Database(string? DatabaseName, List<Container>? Containers) : AzureResource;
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="ContainerName"></param>
+            /// <param name="PartitionKey"></param>
+            public record Container(string? ContainerName, string? PartitionKey) : AzureResource;
+            /// <summary>
+            /// 
+            /// </summary>
+            public record AzureResource
+            {
+                public string? Name { get; set; }
+                public string? ResourceType { get; set; }
+                public string? Location { get; set; }
+                public string? ResourceGroup { get; set; }
+                [AvroDuplicateFieldAlias("AzureResourceSubscriptionId")]
+                public string? SubscriptionId { get; set; }
+                public string? ETag { get; set; }
+                public IDictionary<string, string>? AzureResourceTags { get; set; }
+                [AvroUnionType(typeof(int), typeof(double))]
+                public object? ProvisioningState { get; set; }
+            }
+
+        }
+ ```
+
+Run the Avro Fusion Generator with `GenerateAvscSchemaFromThisModel.cs` file as input:
+
+```AvroFusionGenerator generate <path\`GenerateAvscSchemaFromThisModel.cs`> --<outputDirectory>```
 
 The generated Avro schema would be:
 
 ```avsc
 {
   "type": "record",
-  "name": "Person",
+  "namespace": "TestModels",
+  "name": "ResourceGroup",
   "fields": [
     {
-      "name": "Name",
+      "name": "ResourceGroupName",
       "type": "string"
     },
     {
-      "name": "Age",
-      "type": "int"
+      "name": "ResourceGroupSubscriptionId",
+      "type": "string"
     },
     {
-      "name": "BirthDate",
+      "name": "CreationDate",
       "type": "long"
     },
     {
-      "name": "Hobbies",
+      "name": "AppServices",
       "type": {
         "type": "array",
-        "items": "string"
+        "items": {
+          "type": "record",
+          "name": "AppService",
+          "namespace": "TestModels",
+          "fields": [
+            {
+              "name": "AppServiceName",
+              "type": "string"
+            },
+            {
+              "name": "Plan",
+              "type": "string"
+            },
+            {
+              "name": "OperatingSystem",
+              "type": "string"
+            },
+            {
+              "name": "RuntimeStack",
+              "type": "string"
+            },
+            {
+              "name": "Status",
+              "type": {
+                "type": "enum",
+                "name": "AppServiceStatus",
+                "namespace": "TestModels",
+                "symbols": [
+                  "Running",
+                  "Stopped",
+                  "Restarting",
+                  "Scaling"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "ResourceGroupTags",
+      "type": {
+        "type": "map",
+        "values": "string"
+      }
+    },
+    {
+      "name": "StorageAccounts",
+      "type": {
+        "type": "map",
+        "values": {
+          "type": "record",
+          "name": "StorageAccount",
+          "namespace": "TestModels",
+          "fields": [
+            {
+              "name": "StorageAccountName",
+              "type": "string"
+            },
+            {
+              "name": "AccountType",
+              "type": "string"
+            },
+            {
+              "name": "AccessTier",
+              "type": "string"
+            },
+            {
+              "name": "IsSecureTransferEnabled",
+              "type": "boolean"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "VirtualMachines",
+      "type": {
+        "type": "map",
+        "values": {
+          "type": "record",
+          "name": "VirtualMachine",
+          "namespace": "TestModels",
+          "fields": [
+            {
+              "name": "VirtualMachineName",
+              "type": "string"
+            },
+            {
+              "name": "Size",
+              "type": "string"
+            },
+            {
+              "name": "OperatingSystem",
+              "type": "string"
+            },
+            {
+              "name": "Status",
+              "type": {
+                "type": "enum",
+                "name": "VirtualMachineStatus",
+                "namespace": "TestModels",
+                "symbols": [
+                  "Running",
+                  "Stopped",
+                  "Deallocated",
+                  "Deleting"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "DataFactoryPipelines",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "DataFactoryPipeline",
+          "namespace": "TestModels",
+          "fields": [
+            {
+              "name": "PipelineName",
+              "type": "string"
+            },
+            {
+              "name": "Description",
+              "type": "string"
+            },
+            {
+              "name": "LastModified",
+              "type": "long"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "DataFactoryPipelineCount",
+      "type": [
+        "int",
+        "double",
+        "null"
+      ]
+    },
+    {
+      "name": "EventHubs",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "EventHub",
+          "namespace": "TestModels",
+          "fields": [
+            {
+              "name": "EventHubName",
+              "type": "string"
+            },
+            {
+              "name": "PartitionCount",
+              "type": "int"
+            },
+            {
+              "name": "MessageRetention",
+              "type": "long"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "EventGrids",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "EventGrid",
+          "namespace": "TestModels",
+          "fields": [
+            {
+              "name": "EventGridName",
+              "type": "string"
+            },
+            {
+              "name": "TopicType",
+              "type": "string"
+            },
+            {
+              "name": "InputSchema",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "SchemaGroups",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "SchemaGroup",
+          "namespace": "TestModels",
+          "fields": [
+            {
+              "name": "GroupName",
+              "type": "string"
+            },
+            {
+              "name": "Description",
+              "type": "string"
+            },
+            {
+              "name": "Schemas",
+              "type": {
+                "type": "array",
+                "items": {
+                  "type": "record",
+                  "name": "Schema",
+                  "namespace": "TestModels",
+                  "fields": [
+                    {
+                      "name": "SchemaName",
+                      "type": "string"
+                    },
+                    {
+                      "name": "SchemaVersion",
+                      "type": "string"
+                    },
+                    {
+                      "name": "SerializationType",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Name",
+                      "type": "string"
+                    },
+                    {
+                      "name": "ResourceType",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Location",
+                      "type": "string"
+                    },
+                    {
+                      "name": "ResourceGroup",
+                      "type": "string"
+                    },
+                    {
+                      "name": "SubscriptionId",
+                      "type": "string",
+                      "aliases": [
+                        "AzureResourceSubscriptionId"
+                      ]
+                    },
+                    {
+                      "name": "ETag",
+                      "type": "string"
+                    },
+                    {
+                      "name": "AzureResourceTags",
+                      "type": {
+                        "type": "map",
+                        "values": "string"
+                      }
+                    },
+                    {
+                      "name": "ProvisioningState",
+                      "type": [
+                        "int",
+                        "double",
+                        "null"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Schemas",
+      "type": {
+        "type": "array",
+        "items": "TestModels.Schema"
+      }
+    },
+    {
+      "name": "CosmosDBs",
+      "type": {
+        "type": "map",
+        "values": {
+          "type": "record",
+          "name": "CosmosDB",
+          "namespace": "TestModels",
+          "fields": [
+            {
+              "name": "CosmosDBName",
+              "type": "string"
+            },
+            {
+              "name": "AccountType",
+              "type": "string"
+            },
+            {
+              "name": "APIType",
+              "type": "string"
+            },
+            {
+              "name": "Databases",
+              "type": {
+                "type": "array",
+                "items": {
+                  "type": "record",
+                  "name": "Database",
+                  "namespace": "TestModels",
+                  "fields": [
+                    {
+                      "name": "DatabaseName",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Containers",
+                      "type": {
+                        "type": "array",
+                        "items": {
+                          "type": "record",
+                          "name": "Container",
+                          "namespace": "TestModels",
+                          "fields": [
+                            {
+                              "name": "ContainerName",
+                              "type": "string"
+                            },
+                            {
+                              "name": "PartitionKey",
+                              "type": "string"
+                            },
+                            {
+                              "name": "Name",
+                              "type": "string"
+                            },
+                            {
+                              "name": "ResourceType",
+                              "type": "string"
+                            },
+                            {
+                              "name": "Location",
+                              "type": "string"
+                            },
+                            {
+                              "name": "ResourceGroup",
+                              "type": "string"
+                            },
+                            {
+                              "name": "SubscriptionId",
+                              "type": "string",
+                              "aliases": [
+                                "AzureResourceSubscriptionId"
+                              ]
+                            },
+                            {
+                              "name": "ETag",
+                              "type": "string"
+                            },
+                            {
+                              "name": "AzureResourceTags",
+                              "type": {
+                                "type": "map",
+                                "values": "string"
+                              }
+                            },
+                            {
+                              "name": "ProvisioningState",
+                              "type": [
+                                "int",
+                                "double",
+                                "null"
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "name": "Name",
+                      "type": "string"
+                    },
+                    {
+                      "name": "ResourceType",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Location",
+                      "type": "string"
+                    },
+                    {
+                      "name": "ResourceGroup",
+                      "type": "string"
+                    },
+                    {
+                      "name": "SubscriptionId",
+                      "type": "string",
+                      "aliases": [
+                        "AzureResourceSubscriptionId"
+                      ]
+                    },
+                    {
+                      "name": "ETag",
+                      "type": "string"
+                    },
+                    {
+                      "name": "AzureResourceTags",
+                      "type": {
+                        "type": "map",
+                        "values": "string"
+                      }
+                    },
+                    {
+                      "name": "ProvisioningState",
+                      "type": [
+                        "int",
+                        "double",
+                        "null"
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Name",
+              "type": "string"
+            },
+            {
+              "name": "ResourceType",
+              "type": "string"
+            },
+            {
+              "name": "Location",
+              "type": "string"
+            },
+            {
+              "name": "ResourceGroup",
+              "type": "string"
+            },
+            {
+              "name": "SubscriptionId",
+              "type": "string",
+              "aliases": [
+                "AzureResourceSubscriptionId"
+              ]
+            },
+            {
+              "name": "ETag",
+              "type": "string"
+            },
+            {
+              "name": "AzureResourceTags",
+              "type": {
+                "type": "map",
+                "values": "string"
+              }
+            },
+            {
+              "name": "ProvisioningState",
+              "type": [
+                "int",
+                "double",
+                "null"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "AzureResources",
+      "type": {
+        "type": "record",
+        "name": "AzureResource",
+        "namespace": "TestModels",
+        "fields": [
+          {
+            "name": "Name",
+            "type": "string"
+          },
+          {
+            "name": "ResourceType",
+            "type": "string"
+          },
+          {
+            "name": "Location",
+            "type": "string"
+          },
+          {
+            "name": "ResourceGroup",
+            "type": "string"
+          },
+          {
+            "name": "SubscriptionId",
+            "type": "string",
+            "aliases": [
+              "AzureResourceSubscriptionId"
+            ]
+          },
+          {
+            "name": "ETag",
+            "type": "string"
+          },
+          {
+            "name": "AzureResourceTags",
+            "type": {
+              "type": "map",
+              "values": "string"
+            }
+          },
+          {
+            "name": "ProvisioningState",
+            "type": [
+              "int",
+              "double",
+              "null"
+            ]
+          }
+        ]
       }
     }
   ]
