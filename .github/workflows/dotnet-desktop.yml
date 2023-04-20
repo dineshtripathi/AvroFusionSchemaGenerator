@@ -35,7 +35,6 @@
 # For more information on GitHub Actions, refer to https://github.com/features/actions
 # For a complete CI/CD sample to get started with GitHub Action workflows for Desktop Applications,
 # refer to https://github.com/microsoft/github-actions-for-desktop-apps
-
 name: .NET Core Desktop
 
 on:
@@ -71,6 +70,7 @@ jobs:
 
     - name: Restore dependencies
       run: dotnet restore
+      shell: bash
 
     # Add MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
@@ -81,8 +81,7 @@ jobs:
       run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
       env:
         Configuration: ${{ matrix.configuration }}
-
-
+      shell: bash
 
     # Create the app package by building and packaging the Windows Application Packaging project
     - name: Create the app package
@@ -112,37 +111,20 @@ jobs:
       run: |
         echo "GITHUB_OUTPUT=${{ runner.temp }}/github_output.env" >> $GITHUB_ENV
 
-    - name: Set version number output
-      id: set_version_number
-      run: echo "version_number=1.0.0" >> $GITHUB_OUTPUT
-
-    - name: Set release number output
-      id: set_release_number
-      run: echo "release_number=100" >> $GITHUB_OUTPUT
-
-    - name: Use version and release numbers
-      run: |
-        export $(cat $GITHUB_OUTPUT | xargs)
-        echo "The version number is: $version_number"
-        echo "The release number is: $release_number"
-
-    - name: Create GITHUB_OUTPUT file
-      run: |
-        echo "GITHUB_OUTPUT=${{ runner.temp }}/github_output.env" >> $GITHUB_ENV
-
     - name: Get latest commit short hash
       run: echo "short_hash=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       
     - name: Get total number of commits on main branch
       run: echo "commit_count=$(git rev-list --count HEAD)" >> $GITHUB_OUTPUT
-      
+
     - name: Use output values
       run: |
-        export $(cat $GITHUB_OUTPUT | xargs)
+        source <(cat $GITHUB_OUTPUT)
         build_number=$(($commit_count + 1))
         release_number="1.0.$build_number"
         echo "Build number: $build_number"
         echo "Release number: $release_number"
+      shell: bash
       
     - name: Create Git tag
       run: |
@@ -150,6 +132,22 @@ jobs:
         git config --local user.name "GitHub Action"
         git tag "v${release_number}-b${build_number}-g${short_hash}"
         git push --tags
+      shell: bash
+
+    - name: Set version number output
+      run: echo "version_number=1.0.0" >> $GITHUB_OUTPUT
+
+    - name: Set release number output
+      run: echo "release_number=100" >> $GITHUB_OUTPUT
+
+    - name: Use version and release numbers
+      run: |
+        source <(cat $GITHUB_OUTPUT)
+        echo "The version number is: $version_number"
+        echo "The release number is: $release_number"
+      shell: bash
+
+
 
 
 
