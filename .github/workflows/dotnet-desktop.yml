@@ -127,14 +127,15 @@ jobs:
         echo "Release number: $release_number"
       shell: bash
       
+    
     - name: Create Git tag
       run: |
        git config --local user.email "action@github.com"
        git config --local user.name "GitHub Action"
        git tag "v${release_number}-b${build_number}-g${short_hash}"
-       git remote set-url origin https://${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git
-       git push --tags
-      shell: bash
+       git push https://${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git --tags
+       shell: bash
+
 
 
     - name: Set version number output
