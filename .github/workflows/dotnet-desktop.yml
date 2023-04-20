@@ -78,10 +78,11 @@ jobs:
 
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the application
-      run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
+      run: dotnet build $Solution_Name --configuration $Configuration
       env:
         Configuration: ${{ matrix.configuration }}
       shell: bash
+
 
     # Create the app package by building and packaging the Windows Application Packaging project
     - name: Create the app package
@@ -126,13 +127,15 @@ jobs:
         echo "Release number: $release_number"
       shell: bash
       
+    
     - name: Create Git tag
       run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git tag "v${release_number}-b${build_number}-g${short_hash}"
-        git push --tags
+       git config --local user.email "action@github.com"
+       git config --local user.name "GitHub Action"
+       git tag "v${release_number}-b${build_number}-g${short_hash}-r${{ github.run_id }}-d${current_date_time}"
+       git push https://${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git --tags
       shell: bash
+
 
     - name: Set version number output
       run: echo "version_number=1.0.0" >> $GITHUB_OUTPUT
