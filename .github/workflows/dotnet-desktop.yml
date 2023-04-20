@@ -134,8 +134,15 @@ jobs:
        git config --local user.name "GitHub Action"
        git tag "v${release_number}-b${build_number}-g${short_hash}"
        git push https://${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git --tags
-       shell: bash
+      shell: bash
 
+    - name: Create Git tag
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git tag "v${release_number}-b${build_number}-g${short_hash}"
+        git push https://${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git --tags
+      shell: bash
 
 
     - name: Set version number output
