@@ -55,7 +55,7 @@ jobs:
 
     env:
       Solution_Name: AvroFusionGenerator.sln
-      Project_Name: AvroFusionSource/AvroFusionGenerator
+      Project_Name: AvroFusionGenerator
       Project_Directory: AvroFusionSource/AvroFusionGenerator
 
 
@@ -84,7 +84,7 @@ jobs:
 
     # Create the app package by building and packaging the Windows Application Packaging project
     - name: Create the app package
-      run:  dotnet msbuild ${{ env.Project_Directory }}/${{ env.Project_Name }}.proj /p:Configuration=${{ matrix.configuration }} /t:Publish
+      run: dotnet msbuild ${{ env.Project_Directory }}/${{ env.Project_Name }}.csproj /p:Configuration=${{ matrix.configuration }} /t:Publish
       shell: bash
     
     - name: Create NuGet package
