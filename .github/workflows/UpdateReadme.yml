@@ -33,10 +33,14 @@ jobs:
         dotnet-version: '7.0.x'
 
     - name: Restore dependencies
-      run: dotnet msbuild ${{ env.Project_Directory }}/${{ env.Project_Name }}.csproj 
+      run: dotnet restore
+      shell: bash
 
-    - name: Build
-      run: dotnet msbuild ${{ env.Project_Directory }}/${{ env.Project_Name }}.csproj /p:Configuration=${{ matrix.configuration }}
+    - name: Build the solution
+      run: dotnet build $Solution_Name --configuration $Configuration
+      env:
+        Configuration: ${{ matrix.configuration }}
+      shell: bash
 
     - name: Update README.md
       run: dotnet msbuild ${{ env.Project_Directory }}/${{ env.Project_Name }}.csproj /p:Configuration=${{ matrix.configuration }}
