@@ -54,6 +54,7 @@ jobs:
           else
            cd ${{ env.Project_Directory }}/bin/Release/net7.0/
           fi
+          pwd
           chmod +x AvroFusionGeneratorReadMeUpdater.exe
           ls -l
           ./AvroFusionGeneratorReadMeUpdater.exe
