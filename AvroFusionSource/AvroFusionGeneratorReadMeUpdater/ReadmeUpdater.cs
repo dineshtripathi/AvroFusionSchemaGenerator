@@ -3,9 +3,12 @@ public class ReadmeUpdater : IReadmeUpdater
 {
     public void GetPackage()
     {
+        string workspacePath = Environment.GetEnvironmentVariable("GITHUB_WORKSPACE");
+        string nugetPackagePath = Environment.GetEnvironmentVariable("NUGET_PACKAGE_PATH");
+        string workSpacewithPackagePath = Path.Combine(workspacePath, nugetPackagePath);
 
-        const string packageDirectory = "AvroFusionSource/AvroFusionGenerator/nupkg/";
-        var latestNuGetPackage = Directory.GetFiles(packageDirectory, "*.nupkg").MaxBy(f => new FileInfo(f).CreationTime);
+
+        var latestNuGetPackage = Directory.GetFiles(workSpacewithPackagePath, "*.nupkg").MaxBy(f => new FileInfo(f).CreationTime);
 
         if (!string.IsNullOrEmpty(latestNuGetPackage))
         {
