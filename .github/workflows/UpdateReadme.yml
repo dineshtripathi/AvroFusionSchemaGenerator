@@ -49,17 +49,20 @@ jobs:
 
     - name: Run the executable
       run: |
-          if [ "${{ matrix.configuration }}" == "Debug" ]; then
+          - name: Run the executable
+    - run: |
+        if [ "${{ matrix.configuration }}" == "Debug" ]; then
            cd ${{ env.Project_Directory }}/bin/Debug/net7.0/
-          else
+        else
            cd ${{ env.Project_Directory }}/bin/Release/net7.0/
-          fi
-          pwd
-          chmod +x AvroFusionGeneratorReadMeUpdater.exe
-          ls -l
-          ./AvroFusionGeneratorReadMeUpdater.exe
+        fi
+        pwd
+        chmod +x AvroFusionGeneratorReadMeUpdater.exe
+        ls -l
+        ./AvroFusionGeneratorReadMeUpdater.exe
       working-directory: ${{ env.Project_Directory }}
       shell: bash
+
 
     - name: Update README.md
       run: dotnet run ${{ env.Project_Directory }}/${{ env.Project_Name }}.csproj
