@@ -4,7 +4,7 @@ public class ReadmeUpdater : IReadmeUpdater
     public void GetPackage()
     {
 
-        var packageDirectory = "AvroFusionSource/AvroFusionGenerator/nupkg/";
+        const string packageDirectory = "AvroFusionSource/AvroFusionGenerator/nupkg/";
         var latestNuGetPackage = Directory.GetFiles(packageDirectory, "*.nupkg").MaxBy(f => new FileInfo(f).CreationTime);
 
         if (!string.IsNullOrEmpty(latestNuGetPackage))
