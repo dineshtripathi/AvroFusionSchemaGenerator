@@ -4,11 +4,23 @@ public class ReadmeUpdater : IReadmeUpdater
     public void GetPackage()
     {
         string workspacePath = Environment.GetEnvironmentVariable("GITHUB_WORKSPACE");
+        Console.WriteLine("-----------------------------");
+        Console.WriteLine($"GITHUB_WORKSPACE :{workspacePath}");
+        Console.WriteLine("-----------------------------");
+
         string nugetPackagePath = Environment.GetEnvironmentVariable("NUGET_PACKAGE_PATH");
+
+        Console.WriteLine($"NUGET_PACKAGE_PATH :{nugetPackagePath}");
+        Console.WriteLine("-----------------------------");
         string workSpacewithPackagePath = Path.Combine(workspacePath, nugetPackagePath);
 
+        Console.WriteLine($"WorkSpaceWithPackagePath :- {workSpacewithPackagePath}");
+        Console.WriteLine("-----------------------------");
 
         var latestNuGetPackage = Directory.GetFiles(workSpacewithPackagePath, "*.nupkg").MaxBy(f => new FileInfo(f).CreationTime);
+
+        Console.WriteLine($"latestNuGetPackage :- {latestNuGetPackage}");
+        Console.WriteLine("-----------------------------");
 
         if (!string.IsNullOrEmpty(latestNuGetPackage))
         {
