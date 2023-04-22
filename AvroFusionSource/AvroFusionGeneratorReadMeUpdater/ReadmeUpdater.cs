@@ -1,5 +1,30 @@
-﻿public class ReadmeUpdater : IReadmeUpdater
+﻿using NuGet.Versioning;
+public class ReadmeUpdater : IReadmeUpdater
 {
+    public void GetPackage()
+    {
+
+        const string packageDirectory = "AvroFusionSource/AvroFusionGenerator/nupkg/";
+        var latestNuGetPackage = Directory.GetFiles(packageDirectory, "*.nupkg").MaxBy(f => new FileInfo(f).CreationTime);
+
+        if (!string.IsNullOrEmpty(latestNuGetPackage))
+        {
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(latestNuGetPackage);
+            var nameAndVersion = fileNameWithoutExtension.Split('.');
+
+            var packageName = string.Join(".", nameAndVersion.Take(nameAndVersion.Length - 1));
+            var packageVersion = string.Join(".", nameAndVersion.Skip(nameAndVersion.Length - 1));
+
+            var tag = "v" + packageVersion;
+
+            UpdateReadmeFile(packageName, packageVersion, tag);
+        }
+        else
+        {
+            Console.WriteLine("No NuGet package found in the specified directory.");
+        }
+
+    }
     public void UpdateReadmeFile(string packageName, string packageVersion, string tag)
     {
         var workspacePath = Environment.GetEnvironmentVariable("GITHUB_WORKSPACE");
