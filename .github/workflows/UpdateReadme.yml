@@ -44,7 +44,11 @@ jobs:
 
     - name: Run the executable
       run: |
-          cd ${{ env.Project_Directory }}/bin/${{ matrix.configuration }}/net7.0/
+          if [ "${{ matrix.configuration }}" == "Debug" ]; then
+           cd ${{ env.Project_Directory }}/bin/Debug/net7.0/
+          else
+           cd ${{ env.Project_Directory }}/bin/Release/net7.0/
+          fi
           chmod +x AvroFusionGeneratorReadMeUpdater.exe
           ./AvroFusionGeneratorReadMeUpdater.exe
       working-directory: ${{ env.Project_Directory }}
