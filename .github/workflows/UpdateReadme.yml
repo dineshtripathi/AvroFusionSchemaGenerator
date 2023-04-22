@@ -42,15 +42,8 @@ jobs:
         Configuration: ${{ matrix.configuration }}
       shell: bash
 
-    - name: List build output directory contents
-      run: |
-       if [ "${{ matrix.configuration }}" == "Debug" ]; then
-        cd ${{ env.Project_Directory }}/bin/Debug/net7.0/
-       else
-        cd ${{ env.Project_Directory }}/bin/Release/net7.0/
-       fi
-       ls -l
-      working-directory: ${{ env.Project_Directory }}
+    - name: Print build output directory contents
+      run: ls -l ${{ env.Project_Directory }}/bin/${{ matrix.configuration }}/net7.0/
       shell: bash
 
 
