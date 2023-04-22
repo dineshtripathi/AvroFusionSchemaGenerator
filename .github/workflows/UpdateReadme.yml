@@ -49,8 +49,6 @@ jobs:
 
     - name: Run the executable
       run: |
-          - name: Run the executable
-    - run: |
         if [ "${{ matrix.configuration }}" == "Debug" ]; then
            cd ${{ env.Project_Directory }}/bin/Debug/net7.0/
         else
