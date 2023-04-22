@@ -46,6 +46,15 @@ jobs:
       run: ls -l ${{ env.Project_Directory }}/bin/${{ matrix.configuration }}/net7.0/
       shell: bash
 
+    - name: Download NuGet package build by AvroFusionGenerator
+      uses: actions/download-artifact@v2
+      with:
+        name: nuget-package
+        path: artifacts
+
+    - name: Move NuGet package to read the location
+      run: |
+        mv artifacts/AvroFusionGenerator.1.0.0.nupkg AvroFusionSchemaGenerator/AvroFusionSource/AvroFusionGenerator/nupkg/AvroFusionGenerator.1.0.0.nupkg
 
     - name: Run the executable and update Update README.md
       working-directory: AvroFusionSource/AvroFusionGeneratorReadMeUpdater/bin/${{ matrix.configuration }}/net7.0
