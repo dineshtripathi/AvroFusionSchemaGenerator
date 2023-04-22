@@ -47,7 +47,7 @@ jobs:
       shell: bash
 
 
-    - name: Run the executable
+    - name: Run the executable and update Update README.md
       working-directory: AvroFusionSource/AvroFusionGeneratorReadMeUpdater/bin/${{ matrix.configuration }}/net7.0
       env:
        BUILD_TAGGING_ACCESS_TOKEN: ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}
@@ -56,10 +56,6 @@ jobs:
        ls -l
        ./AvroFusionGeneratorReadMeUpdater
       shell: bash
-
-
-    - name: Update README.md
-      run: dotnet run ${{ env.Project_Directory }}/${{ env.Project_Name }}.csproj
 
     - name: Commit updated README.md
       run: |
