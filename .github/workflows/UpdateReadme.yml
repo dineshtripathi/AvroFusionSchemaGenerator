@@ -42,6 +42,14 @@ jobs:
         Configuration: ${{ matrix.configuration }}
       shell: bash
 
+    - name: Run the executable
+      run: |
+          cd ${{ env.Project_Directory }}/bin/${{ matrix.configuration }}/net7.0/
+          chmod +x AvroFusionGeneratorReadMeUpdater.exe
+          ./AvroFusionGeneratorReadMeUpdater.exe
+      working-directory: ${{ env.Project_Directory }}
+      shell: bash
+
     - name: Update README.md
       run: dotnet run ${{ env.Project_Directory }}/${{ env.Project_Name }}.csproj
 
