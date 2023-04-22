@@ -9,8 +9,20 @@ on:
       - main
 
 jobs:
-  update-avrofusion-readme:
+
+  build:
+    name: Build ${{ matrix.configuration }}
+    strategy:
+      matrix:
+       configuration: [Debug, Release]
+
     runs-on: ubuntu-latest
+
+    env:
+      Solution_Name: AvroFusionGenerator.sln
+      Project_Name: AvroFusionGeneratorReadMeUpdater
+      Project_Directory: AvroFusionSource/AvroFusionGeneratorReadMeUpdater
+
     steps:
     - name: Check out repository
       uses: actions/checkout@v2
@@ -21,13 +33,13 @@ jobs:
         dotnet-version: '7.0.x'
 
     - name: Restore dependencies
-      run: dotnet restore path/to/AvroFusionGeneratorReadMeUpdater/AvroFusionGeneratorReadMeUpdater.csproj
+      run: dotnet msbuild ${{ env.Project_Directory }}/${{ env.Project_Name }}.csproj 
 
     - name: Build
-      run: dotnet build path/to/AvroFusionGeneratorReadMeUpdater/AvroFusionGeneratorReadMeUpdater.csproj --configuration Release --no-restore
+      run: dotnet msbuild ${{ env.Project_Directory }}/${{ env.Project_Name }}.csproj /p:Configuration=${{ matrix.configuration }}
 
     - name: Update README.md
-      run: dotnet run --project path/to/AvroFusionGeneratorReadMeUpdater/AvroFusionGeneratorReadMeUpdater.csproj
+      run: dotnet msbuild ${{ env.Project_Directory }}/${{ env.Project_Name }}.csproj /p:Configuration=${{ matrix.configuration }}
 
     - name: Commit updated README.md
       run: |
