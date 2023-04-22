@@ -83,23 +83,23 @@ jobs:
     # Create the app package by building and packaging the Windows Application Packaging project
     - name: Create the app package
       run: | 
-       working_directory="AvroFusionSource/${{ env.Project_Name }}"
-       dotnet msbuild $working_directory/${{ env.Project_Name }}.proj /p:Configuration=${{ matrix.configuration }} /t:Publish
+        working_directory="${{ env.Project_Name }}"
+        dotnet msbuild $working_directory/${{ env.Project_Name }}.proj /p:Configuration=${{ matrix.configuration }} /t:Publish
       shell: bash
     
     - name: Create NuGet package
       run: dotnet pack --configuration Release
-      working-directory: AvroFusionSource\AvroFusionGenerator
+      working-directory: AvroFusionSource/AvroFusionGenerator
 
     - name: List NuGet package file
-      run: ls -R AvroFusionSource\AvroFusionGenerator\nupkg\
+      run: ls -R AvroFusionSource/AvroFusionGenerator/nupkg/
 
 
     - name: Publish NuGet package
       uses: actions/upload-artifact@v2
       with:
         name: NuGetPackage
-        path: AvroFusionSource\AvroFusionGenerator/nupkg/*.nupkg
+        path: AvroFusionSource/AvroFusionGenerator/nupkg/*.nupkg
         if-no-files-found: warn
 
     - name: Create GITHUB_OUTPUT file
