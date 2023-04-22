@@ -43,7 +43,7 @@ jobs:
       shell: bash
 
     - name: Update README.md
-      run: dotnet msbuild ${{ env.Project_Directory }}/${{ env.Project_Name }}.csproj /p:Configuration=${{ matrix.configuration }}
+      run: dotnet run ${{ env.Project_Directory }}/${{ env.Project_Name }}.csproj
 
     - name: Commit updated README.md
       run: |
