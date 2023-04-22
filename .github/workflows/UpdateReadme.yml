@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set NuGet package path as environment variable
-        run: echo "PACKAGE_NAME=AvroFusionSource/AvroFusionGenerator/nupkg/" >> $GITHUB_ENV
+        run: echo "PACKAGE_PATH=AvroFusionSource/AvroFusionGenerator/nupkg/" >> $GITHUB_ENV
 
       - name: Display NuGet package path
         run: |

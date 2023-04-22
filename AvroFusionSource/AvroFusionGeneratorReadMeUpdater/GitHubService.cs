@@ -15,10 +15,10 @@ public class GitHubService : IGitHubService
 
     public async Task<(string packageVersion, string tag)> GetPackageVersionAndTagAsync()
     {
-        string repository = Environment.GetEnvironmentVariable("GITHUB_REPOSITORY");
+        var repository = Environment.GetEnvironmentVariable("GITHUB_REPOSITORY");
 
         Console.WriteLine($"GitHub Repository :{repository}");
-        string refName = Environment.GetEnvironmentVariable("GITHUB_REF");
+        var refName = Environment.GetEnvironmentVariable("GITHUB_REF");
 
         Console.WriteLine($"GITHUB REFERENCE : {refName}");
         
@@ -27,22 +27,31 @@ public class GitHubService : IGitHubService
         var repoName = repoDetails[1];
         var repo = await _github.Repository.Get(owner, repoName);
 
-        if (refName.StartsWith("refs/tags"))
+        if (refName != null && refName.StartsWith("refs/tags"))
         {
             var release = await _github.Repository.Release.GetLatest( repo.Id);
             return (release.Name, release.TagName);
         }
-        else
-        {
-            var branch = await _github.Repository.Branch.Get(repo.Id, "main");
-            var commit = branch.Commit;
-            return ("Development", commit.Sha.Substring(0, 7));
-        }
+
+        var branch = await _github.Repository.Branch.Get(repo.Id, "main");
+        var commit = branch.Commit;
+        return ("Development", commit.Sha.Substring(0, 7));
     }
 
     public string GetPackageName()
     {
-        return Environment.GetEnvironmentVariable("PACKAGE_NAME");
+        var avroFusionGeneratorPackagePath= Environment.GetEnvironmentVariable("PACKAGE_PATH");
+        if (avroFusionGeneratorPackagePath != null)
+        {
+            var files = Directory.GetFiles(avroFusionGeneratorPackagePath, "*.nupkg");
+            var packageName = Path.GetFileName(files[0]);
+            if (files.Length > 0)
+            {
+                return packageName;
+            }
+        }
+
+        throw new FileNotFoundException($"No .nupkg file found in the specified folder. {avroFusionGeneratorPackagePath}");
 
     }
 }
