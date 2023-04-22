@@ -48,24 +48,11 @@ jobs:
 
 
     - name: Run the executable
+      working-directory: AvroFusionSource/AvroFusionGeneratorReadMeUpdater/bin/${{ matrix.configuration }}/net7.0
       run: |
-        if [ "${{ matrix.configuration }}" == "Debug" ]; then
-           cd ${{ env.Project_Directory }}/bin/Debug/net7.0/
-           echo "Changing to Debug directory"
-           pwd
-           echo "Current Debug directory: $(pwd)"
-        else
-           cd ${{ env.Project_Directory }}/bin/Release/net7.0/
-           echo "Changing to Release directory"
-           pwd
-           echo "Current Release directory: $(pwd)"
-        fi
-        pwd
-        echo "Current directory: $(pwd)"
-        chmod +x AvroFusionGeneratorReadMeUpdater.exe
-        ls -l
-        ./AvroFusionGeneratorReadMeUpdater.exe
-      working-directory: ${{ env.Project_Directory }}
+       chmod +x AvroFusionGeneratorReadMeUpdater
+       ls -l
+       ./AvroFusionGeneratorReadMeUpdater
       shell: bash
 
 
