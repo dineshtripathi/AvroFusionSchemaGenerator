@@ -21,10 +21,18 @@ jobs:
         dotnet-version: '7.0.x'
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore path/to/AvroFusionGeneratorReadMeUpdater/AvroFusionGeneratorReadMeUpdater.csproj
 
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build path/to/AvroFusionGeneratorReadMeUpdater/AvroFusionGeneratorReadMeUpdater.csproj --configuration Release --no-restore
 
-    - name: Test
-      run: dotnet test --no-restore --verbosity normal
+    - name: Update README.md
+      run: dotnet run --project path/to/AvroFusionGeneratorReadMeUpdater/AvroFusionGeneratorReadMeUpdater.csproj
+
+    - name: Commit updated README.md
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add README.md
+        git commit -m "Update README.md"
+        git push
