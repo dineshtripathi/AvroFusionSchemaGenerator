@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-var token = Environment.GetEnvironmentVariable("AVROFUSIONGENERATOR_TOKEN");
-
+var token = Environment.GetEnvironmentVariable("BUILD_TAGGING_ACCESS_TOKEN");
+Console.WriteLine($"GITHUB ACCESS TOKEN :{token}");
 var serviceProvider = new ServiceCollection()
     .AddTransient<IReadmeUpdater, ReadmeUpdater>()
     .AddTransient<IGitHubService>(provider => new GitHubService(token))

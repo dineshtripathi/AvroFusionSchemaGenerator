@@ -16,8 +16,12 @@ public class GitHubService : IGitHubService
     public async Task<(string packageVersion, string tag)> GetPackageVersionAndTagAsync()
     {
         string repository = Environment.GetEnvironmentVariable("GITHUB_REPOSITORY");
+
+        Console.WriteLine($"GitHub Repository :{repository}");
         string refName = Environment.GetEnvironmentVariable("GITHUB_REF");
 
+        Console.WriteLine($"GITHUB REFERENCE : {refName}");
+        
         var repoDetails = repository.Split('/');
         var owner = repoDetails[0];
         var repoName = repoDetails[1];
