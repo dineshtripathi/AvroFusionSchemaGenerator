@@ -2,7 +2,10 @@
 {
     public void UpdateReadmeFile(string packageName, string packageVersion, string tag)
     {
-        var lines = File.ReadAllLines("README.md");
+        var workspacePath = Environment.GetEnvironmentVariable("GITHUB_WORKSPACE");
+        var readmeFilePath = Path.Combine(workspacePath, "README.md");
+
+        var lines = File.ReadAllLines(readmeFilePath);
         var updatedLines = InsertRowInReadmeTable(lines, packageName, packageVersion, tag);
         File.WriteAllLines("README.md", updatedLines);
     }
@@ -14,7 +17,7 @@
    
     private string[] InsertRowInReadmeTable(string[] lines, string packageName, string packageVersion, string tag)
     {
-        int headerLine = FindHeaderLine(lines);
+        var headerLine = FindHeaderLine(lines);
 
         if (headerLine == -1)
         {
