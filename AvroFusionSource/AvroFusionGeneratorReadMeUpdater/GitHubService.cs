@@ -5,7 +5,7 @@ public class GitHubService : IGitHubService
 {
     private readonly GitHubClient _github;
 
-    public GitHubService(string token)
+    public GitHubService(string? token)
     {
         _github = new GitHubClient(new Octokit.ProductHeaderValue("UpdateReadme"))
         {
@@ -34,5 +34,11 @@ public class GitHubService : IGitHubService
             var commit = branch.Commit;
             return ("Development", commit.Sha.Substring(0, 7));
         }
+    }
+
+    public string GetPackageName()
+    {
+        return Environment.GetEnvironmentVariable("PACKAGE_NAME");
+
     }
 }

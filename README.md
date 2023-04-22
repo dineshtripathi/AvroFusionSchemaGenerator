@@ -10,6 +10,9 @@ It Follows the AVRO Schema Specfication guidlines .See the specification here [A
 ### Nuget package (Dot net tool)
 To download the latest release of AvroFusionGenerator, [Download Avro Fusion Generator Nuget package - click here](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12340400059/artifacts/654844548).
 
+| Package Name    | Package Version | Tag |
+|-----------------|-----------------|-----|
+
 
 ## Features
 * Support for primitive types, nullable types, enums, lists, and dictionaries.

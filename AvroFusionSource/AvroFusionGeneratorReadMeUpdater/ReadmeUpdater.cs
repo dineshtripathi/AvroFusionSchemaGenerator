@@ -1,29 +1,37 @@
 ﻿public class ReadmeUpdater : IReadmeUpdater
 {
-    public void UpdateReadmeFile(string packageVersion, string tag)
+    public void UpdateReadmeFile(string packageName, string packageVersion, string tag)
     {
         var lines = File.ReadAllLines("README.md");
-
-        // Find the line number of the table header
-        int headerLine = -1;
-        for (int i = 0; i < lines.Length; i++)
-        {
-            if (lines[i].Contains("| Package Version | Tag |"))
-            {
-                headerLine = i;
-                break;
-            }
-        }
-
-        if (headerLine != -1)
-        {
-            // Insert a new row to the table with package version and tag
-            var newRow = $"| {packageVersion} | {tag} |";
-            var newLines = new string[lines.Length + 1];
-            Array.Copy(lines, 0, newLines, 0, headerLine + 2);
-            newLines[headerLine + 2] = newRow;
-            Array.Copy(lines, headerLine + 2, newLines, headerLine + 3, lines.Length - headerLine - 2);
-            File.WriteAllLines("README.md", newLines);
-        }
+        var updatedLines = InsertRowInReadmeTable(lines, packageName, packageVersion, tag);
+        File.WriteAllLines("README.md", updatedLines);
     }
+
+    private int FindHeaderLine(string[] lines)
+    {
+        return Array.FindIndex(lines, line => line.Contains("| Package Name    | Package Version | Tag |"));
+    }
+   
+    private string[] InsertRowInReadmeTable(string[] lines, string packageName, string packageVersion, string tag)
+    {
+        int headerLine = FindHeaderLine(lines);
+
+        if (headerLine == -1)
+        {
+            return lines;
+        }
+
+        var newRow = $"| {packageName} | {packageVersion} | {tag} |";
+        return InsertRowInLines(lines, headerLine + 2, newRow);
+    }
+
+    private string[] InsertRowInLines(string[] lines, int index, string newRow)
+    {
+        var newLines = new string[lines.Length + 1];
+        Array.Copy(lines, 0, newLines, 0, index);
+        newLines[index] = newRow;
+        Array.Copy(lines, index, newLines, index + 1, lines.Length - index);
+        return newLines;
+    }
+
 }
