@@ -40,10 +40,15 @@ public class GitHubService : IGitHubService
 
     public string GetPackageName()
     {
-        var avroFusionGeneratorPackagePath= Environment.GetEnvironmentVariable("PACKAGE_PATH");
+        var avroFusionGeneratorPackagePath = Environment.GetEnvironmentVariable("NUGET_PACKAGE_PATH");
+        Console.WriteLine("-----------------------------");
+        Console.WriteLine($"NUGET PACKAGE PATH : {avroFusionGeneratorPackagePath}");
+        Console.WriteLine("-----------------------------");
         if (avroFusionGeneratorPackagePath != null)
         {
             var files = Directory.GetFiles(avroFusionGeneratorPackagePath, "*.nupkg");
+            Console.WriteLine($"GITHUB NUGET_PACKAGE_PATH : {files}");
+            Console.WriteLine("-----------------------------");
             var packageName = Path.GetFileName(files[0]);
             if (files.Length > 0)
             {
