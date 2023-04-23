@@ -65,36 +65,36 @@ jobs:
 
     - name: Get target workflow ID
       run: |
-        workflow_data=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "https://api.github.com/repos/$TARGET_REPO/actions/workflows")
-        target_workflow_id=$(echo "$workflow_data" | jq --arg target_wf_name "$TARGET_WORKFLOW_NAME" '.workflows[] | select(.name==$target_wf_name) | .id')
-        echo "TARGET_WORKFLOW_ID=$target_workflow_id" >> $GITHUB_ENV
+       workflow_data=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "https://api.github.com/repos/$TARGET_REPO/actions/workflows")
+       target_workflow_id=$(echo "$workflow_data" | jq --arg target_wf_name "$TARGET_WORKFLOW_NAME" '.workflows[] | select(.name==$target_wf_name) | .id')
+       echo "TARGET_WORKFLOW_ID=$target_workflow_id" >> $GITHUB_ENV
 
     - name: Get last successful run ID
       run: |
-        last_successful_run_id=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "https://api.github.com/repos/$TARGET_REPO/actions/workflows/$TARGET_WORKFLOW_ID/runs?status=success&per_page=1" | jq '.workflow_runs[0].id')
-        echo "LAST_SUCCESSFUL_RUN_ID=$last_successful_run_id" >> $GITHUB_ENV
+       last_successful_run_id=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "https://api.github.com/repos/$TARGET_REPO/actions/workflows/$TARGET_WORKFLOW_ID/runs?status=success&per_page=1" | jq '.workflow_runs[0].id')
+       echo "LAST_SUCCESSFUL_RUN_ID=$last_successful_run_id" >> $GITHUB_ENV
+      shell: bash
 
     - name: Download artifact from the last successful run
       run: |
-        api_response=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "https://api.github.com/repos/$TARGET_REPO/actions/runs/$LAST_SUCCESSFUL_RUN_ID/artifacts")
-        echo "API Response: $api_response"
-        artifact_url=$(echo "$api_response" | jq -r '.artifacts[] | select(.name=="NuGetPackage") | .archive_download_url')
-        echo "Artifact URL: $artifact_url"
-        curl -L -o artifact.zip -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "$artifact_url"
-        unzip_output=$(unzip -Z1 artifact.zip)
-        echo  "Unzip Output : $unzip_output"
-        full_version_string=$(echo "$unzip_output" | grep -Eo '\d+\.\d+\.\d+-[^.]+')
-        echo "Full Version String: $full_version_string"
-
-        package_version=$(echo "$full_version_string" | sed -E 's/(-[^.]+)$//')
-        echo "Package Version: $package_version"
-    
-        release_number=$(echo "$full_version_string" | grep -Eo '\d{12}' | head -1)
-        echo "Release Number: $release_number"
-        package_name=$(echo "$unzip_output" | grep -Eo '^[^.]+' | head -1)
-        echo "PACKAGE_NAME=$package_name" >> $GITHUB_ENV
-        echo "PACKAGE_VERSION=$package_version" >> $GITHUB_ENV
-        echo "RELEASE_NUMBER=$release_number" >> $GITHUB_ENV
+       api_response=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "https://api.github.com/repos/$TARGET_REPO/actions/runs/$LAST_SUCCESSFUL_RUN_ID/artifacts")
+       echo "API Response: $api_response"
+       artifact_url=$(echo "$api_response" | jq -r '.artifacts[] | select(.name=="NuGetPackage") | .archive_download_url')
+       echo "Artifact URL: $artifact_url"
+       curl -L -o artifact.zip -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "$artifact_url"
+       unzip_output=$(unzip -Z1 artifact.zip)
+       echo  "Unzip Output : $unzip_output"
+       full_version_string=$(echo "$unzip_output" | grep -Eo '\d+\.\d+\.\d+-[^.]+')
+       echo "Full Version String: $full_version_string"
+       package_version=$(echo "$full_version_string" | sed -E 's/(-[^.]+)$//')
+       echo "Package Version: $package_version"
+       release_number=$(echo "$full_version_string" | grep -Eo '\d{12}' | head -1)
+       echo "Release Number: $release_number"
+       package_name=$(echo "$unzip_output" | grep -Eo '^[^.]+' | head -1)
+       echo "PACKAGE_NAME=$package_name" >> $GITHUB_ENV
+       echo "PACKAGE_VERSION=$package_version" >> $GITHUB_ENV
+       echo "RELEASE_NUMBER=$release_number" >> $GITHUB_ENV
+      shell: bash
 
 
 
