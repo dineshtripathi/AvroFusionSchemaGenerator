@@ -1,5 +1,5 @@
 ﻿public interface IReadmeUpdater
 {
-    void GetPackage();
+   // void GetPackage();
     void UpdateReadmeFile(string packageName, string packageVersion, string tag);
 }

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -37,7 +37,8 @@ By using the Avro Schema Generator for C#, developers can improve the efficiency
 	  <ToolCommandName>AvroFusionGenerator</ToolCommandName>
 	  <PackageId>AvroFusionGenerator</PackageId>
 	  <PackageOutputPath>./nupkg</PackageOutputPath>
-    <PackageIcon>.\Assets\AVSCGenerator.png</PackageIcon>
+      <PackageIcon>.\Assets\AVSCGenerator.png</PackageIcon>
+	  <Version>1.0.0-beta$(VersionSuffix)</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
