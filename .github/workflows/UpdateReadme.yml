@@ -76,10 +76,13 @@ jobs:
 
     - name: Download artifact from the last successful run
       run: |
-       artifact_url=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ***" "https://api.github.com/repos/$TARGET_REPO/actions/runs/$LAST_SUCCESSFUL_RUN_ID/artifacts" | jq -r '.artifacts[] | select(.name=="NuGetPackage") | .archive_download_url')
+       api_response=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ***" "https://api.github.com/repos/$TARGET_REPO/actions/runs/$LAST_SUCCESSFUL_RUN_ID/artifacts")
+       echo "API Response: $api_response"
+       artifact_url=$(echo "$api_response" | jq -r '.artifacts[] | select(.name=="NuGetPackage") | .archive_download_url')
+       echo "Artifact URL: $artifact_url"
        curl -L -o artifact.zip -H "Authorization: token ***" "$artifact_url"
        unzip_output=$(unzip -Z1 artifact.zip)
-       echo "$unzip_output"
+       echo  "Unzip Output :$unzip_output"
        package_name=$(echo "$unzip_output" | grep -Eo '^[^.]+' | head -1)
        package_version=$(echo "$unzip_output" | grep -Eo '\d+\.\d+\.\d+(-[^.]+)?' | head -1)
        release_number=$(echo "$unzip_output" | grep -Eo '\d{12}' | head -1)
