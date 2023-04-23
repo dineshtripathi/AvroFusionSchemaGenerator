@@ -85,7 +85,7 @@ jobs:
         curl -L -o artifact.zip -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "$artifact_url"
         unzip_output=$(unzip -Z1 artifact.zip)
         echo  "Unzip Output :$unzip_output"
-        full_version_string=$(echo "$unzip_output" | grep -Eo "\d+\.\d+\.\d+(-[^.]+)?")
+        full_version_string=$(echo "$unzip_output" | grep -Eo '\d+\.\d+\.\d+(-[^.]+)?')
         echo "Full Version String: $full_version_string"
 
         package_version=$(echo "$full_version_string" | sed -E 's/(-[^.]+)$//')
