@@ -1,48 +1,41 @@
 ﻿using NuGet.Versioning;
+
 public class ReadmeUpdater : IReadmeUpdater
 {
-    public void GetPackage()
-    {
-        string workspacePath = Environment.GetEnvironmentVariable("GITHUB_WORKSPACE");
-        Console.WriteLine("-----------------------------");
-        Console.WriteLine($"GITHUB_WORKSPACE :{workspacePath}");
-        Console.WriteLine("-----------------------------");
+    //public void GetPackage()
+    //{
+    //    string workspacePath = GetEnvironmentVariableWithMessage("GITHUB_WORKSPACE", "GITHUB_WORKSPACE");
+    //    string nugetPackagePath = GetEnvironmentVariableWithMessage("NUGET_PACKAGE_PATH", "NUGET_PACKAGE_PATH");
+    //    string workSpacewithPackagePath = Path.Combine(workspacePath, nugetPackagePath);
 
-        string nugetPackagePath = Environment.GetEnvironmentVariable("NUGET_PACKAGE_PATH");
+    //    LogMessage($"WorkSpaceWithPackagePath :- {workSpacewithPackagePath}");
 
-        Console.WriteLine($"NUGET_PACKAGE_PATH :{nugetPackagePath}");
-        Console.WriteLine("-----------------------------");
-        string workSpacewithPackagePath = Path.Combine(workspacePath, nugetPackagePath);
+    //    var latestNuGetPackage = Directory.GetFiles(workSpacewithPackagePath, "*.nupkg")
+    //        .MaxBy(f => new FileInfo(f).CreationTime);
 
-        Console.WriteLine($"WorkSpaceWithPackagePath :- {workSpacewithPackagePath}");
-        Console.WriteLine("-----------------------------");
+    //    LogMessage($"latestNuGetPackage :- {latestNuGetPackage}");
 
-        var latestNuGetPackage = Directory.GetFiles(workSpacewithPackagePath, "*.nupkg").MaxBy(f => new FileInfo(f).CreationTime);
+    //    if (!string.IsNullOrEmpty(latestNuGetPackage))
+    //    {
+    //        var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(latestNuGetPackage);
+    //        var nameAndVersion = fileNameWithoutExtension.Split('.');
 
-        Console.WriteLine($"latestNuGetPackage :- {latestNuGetPackage}");
-        Console.WriteLine("-----------------------------");
+    //        var packageName = string.Join(".", nameAndVersion.Take(nameAndVersion.Length - 1));
+    //        var packageVersion = string.Join(".", nameAndVersion.Skip(nameAndVersion.Length - 1));
 
-        if (!string.IsNullOrEmpty(latestNuGetPackage))
-        {
-            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(latestNuGetPackage);
-            var nameAndVersion = fileNameWithoutExtension.Split('.');
+    //        var tag = "v" + packageVersion;
 
-            var packageName = string.Join(".", nameAndVersion.Take(nameAndVersion.Length - 1));
-            var packageVersion = string.Join(".", nameAndVersion.Skip(nameAndVersion.Length - 1));
+    //        UpdateReadmeFile(packageName, packageVersion, tag);
+    //    }
+    //    else
+    //    {
+    //        Console.WriteLine("No NuGet package found in the specified directory.");
+    //    }
+    //}
 
-            var tag = "v" + packageVersion;
-
-            UpdateReadmeFile(packageName, packageVersion, tag);
-        }
-        else
-        {
-            Console.WriteLine("No NuGet package found in the specified directory.");
-        }
-
-    }
     public void UpdateReadmeFile(string packageName, string packageVersion, string tag)
     {
-        var workspacePath = Environment.GetEnvironmentVariable("GITHUB_WORKSPACE");
+        var workspacePath = GetEnvironmentVariableWithMessage("GITHUB_WORKSPACE", "GITHUB_WORKSPACE");
         var readmeFilePath = Path.Combine(workspacePath, "README.md");
 
         var lines = File.ReadAllLines(readmeFilePath);
@@ -54,7 +47,7 @@ public class ReadmeUpdater : IReadmeUpdater
     {
         return Array.FindIndex(lines, line => line.Contains("| Package Name    | Package Version | Tag |"));
     }
-   
+
     private string[] InsertRowInReadmeTable(string[] lines, string packageName, string packageVersion, string tag)
     {
         var headerLine = FindHeaderLine(lines);
@@ -77,4 +70,17 @@ public class ReadmeUpdater : IReadmeUpdater
         return newLines;
     }
 
+    private string GetEnvironmentVariableWithMessage(string variable, string message)
+    {
+        var value = Environment.GetEnvironmentVariable(variable);
+        Console.WriteLine($"{message} : {value}");
+        return value;
+    }
+
+    private void LogMessage(string message)
+    {
+        Console.WriteLine("-----------------------------");
+        Console.WriteLine(message);
+        Console.WriteLine("-----------------------------");
+    }
 }

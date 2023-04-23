@@ -15,13 +15,9 @@ public class GitHubService : IGitHubService
 
     public async Task<(string packageVersion, string tag)> GetPackageVersionAndTagAsync()
     {
-        var repository = Environment.GetEnvironmentVariable("GITHUB_REPOSITORY");
+        var repository = GetEnvironmentVariableWithMessage("GITHUB_REPOSITORY", "GitHub Repository");
+        var refName = GetEnvironmentVariableWithMessage("GITHUB_REF", "GITHUB REFERENCE");
 
-        Console.WriteLine($"GitHub Repository :{repository}");
-        var refName = Environment.GetEnvironmentVariable("GITHUB_REF");
-
-        Console.WriteLine($"GITHUB REFERENCE : {refName}");
-        
         var repoDetails = repository.Split('/');
         var owner = repoDetails[0];
         var repoName = repoDetails[1];
@@ -29,7 +25,8 @@ public class GitHubService : IGitHubService
 
         if (refName != null && refName.StartsWith("refs/tags"))
         {
-            var release = await _github.Repository.Release.GetLatest( repo.Id);
+            var release = await _github.Repository.Release.GetLatest(repo.Id);
+            LogMessage($"RELEASE NAME :{release.Name} , RELEASE TAGNAME :{release.TagName}");
             return (release.Name, release.TagName);
         }
 
@@ -40,25 +37,33 @@ public class GitHubService : IGitHubService
 
     public string GetPackageName()
     {
+        var avroFusionGeneratorPackagePath = GetEnvironmentVariableWithMessage("NUGET_PACKAGE_PATH", "NUGET PACKAGE PATH");
 
+        var files = Directory.GetFiles(avroFusionGeneratorPackagePath, "*.nupkg");
+        LogMessage($"GITHUB NUGET_PACKAGE_PATH : {files}");
 
-        var avroFusionGeneratorPackagePath = Environment.GetEnvironmentVariable("NUGET_PACKAGE_PATH");
-        Console.WriteLine("-----------------------------");
-        Console.WriteLine($"NUGET PACKAGE PATH : {avroFusionGeneratorPackagePath}");
-        Console.WriteLine("-----------------------------");
-        if (avroFusionGeneratorPackagePath != null)
+        var packageName = Path.GetFileName(files[0]);
+        if (files.Length > 0)
         {
-            var files = Directory.GetFiles(avroFusionGeneratorPackagePath, "*.nupkg");
-            Console.WriteLine($"GITHUB NUGET_PACKAGE_PATH : {files}");
-            Console.WriteLine("-----------------------------");
-            var packageName = Path.GetFileName(files[0]);
-            if (files.Length > 0)
-            {
-                return packageName;
-            }
+            return packageName;
         }
 
         throw new FileNotFoundException($"No .nupkg file found in the specified folder. {avroFusionGeneratorPackagePath}");
+    }
 
+    private string GetEnvironmentVariableWithMessage(string variable, string message)
+    {
+        var value = Environment.GetEnvironmentVariable(variable);
+        Console.WriteLine($"{message} : {value}");
+        return value;
+    }
+
+    private void LogMessage(string message)
+    {
+        Console.WriteLine("-----------------------------");
+        Console.WriteLine(message);
+        Console.WriteLine("-----------------------------");
     }
 }
+
+
