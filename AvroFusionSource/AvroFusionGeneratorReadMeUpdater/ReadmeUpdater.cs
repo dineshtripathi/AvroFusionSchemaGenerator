@@ -6,10 +6,14 @@ public class ReadmeUpdater : IReadmeUpdater
     public void UpdateReadmeFile(string packageName, string packageVersion, string tag)
     {
         var workspacePath = GetEnvironmentVariableWithMessage("GITHUB_WORKSPACE", "GITHUB_WORKSPACE");
+        LogMessage(workspacePath);
         var readmeFilePath = Path.Combine(workspacePath, "README.md");
-
+        LogMessage(readmeFilePath);
         var lines = File.ReadAllLines(readmeFilePath);
         var updatedLines = InsertRowInReadmeTable(lines, packageName, packageVersion, tag);
+        LogMessage(updatedLines.FirstOrDefault());
+        LogMessage(packageName);
+        LogMessage(tag);
         File.WriteAllLines("README.md", updatedLines);
     }
 
@@ -21,13 +25,14 @@ public class ReadmeUpdater : IReadmeUpdater
     private string[] InsertRowInReadmeTable(string[] lines, string packageName, string packageVersion, string tag)
     {
         var headerLine = FindHeaderLine(lines);
-
+      
         if (headerLine == -1)
         {
             return lines;
         }
 
         var newRow = $"| {packageName} | {packageVersion} | {tag} |";
+        LogMessage(newRow);
         return InsertRowInLines(lines, headerLine + 2, newRow);
     }
 
