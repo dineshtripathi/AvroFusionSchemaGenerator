@@ -10,6 +10,7 @@ on:
 
 jobs:
  job1:
+    name: Get and set Nuget Package Path
     runs-on: ubuntu-latest
     steps:
       - name: Set NuGet package path as environment variable
@@ -19,6 +20,7 @@ jobs:
         run: |
             echo "NuGet Package Path: ${{ env.PACKAGE_NAME }}"
  job2:
+   name: Update Readme with the Nugetpackage Id 
    runs-on: ubuntu-latest
    needs: job1
    strategy:
@@ -30,6 +32,9 @@ jobs:
       Project_Name: AvroFusionGeneratorReadMeUpdater
       Project_Directory: AvroFusionSource/AvroFusionGeneratorReadMeUpdater
       NUGET_PACKAGE_PATH: AvroFusionSource/AvroFusionGenerator/nupkg/
+      TARGET_REPO: 'dineshtripathi/AvroFusionSchemaGenerator'
+      TARGET_WORKFLOW_NAME: '.NET 7 AVRO Fusion Generator'
+
 
    steps:
     - name: Check out repository
@@ -39,6 +44,9 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '7.0.x'
+
+    - name: Install jq
+      run: sudo apt-get install jq
 
     - name: Restore dependencies
       run: dotnet restore
@@ -54,7 +62,12 @@ jobs:
       run: ls -l ${{ env.Project_Directory }}/bin/${{ matrix.configuration }}/net7.0/
       shell: bash
 
-      
+    - name: Get target workflow ID
+      run: |
+       workflow_data=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$TARGET_REPO/actions/workflows")
+       target_workflow_id=$(echo "$workflow_data" | jq '.workflows[] | select(.name=="'$TARGET_WORKFLOW_NAME'") | .id')
+       echo "TARGET_WORKFLOW_ID=$target_workflow_id" >> $GITHUB_ENV
+
 
 
     - name: Run the executable and update Update README.md

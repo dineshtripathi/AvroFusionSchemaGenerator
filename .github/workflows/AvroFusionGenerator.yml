@@ -70,6 +70,12 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 7.0.x
+    - name: Install jq
+      run: sudo apt-get install jq
+
+    - name: Increment version suffix
+      run: |
+        echo "VersionSuffix=$(date +%y%m%d%H%M%S)" >> $GITHUB_ENV
 
     - name: Restore dependencies
       run: dotnet restore
