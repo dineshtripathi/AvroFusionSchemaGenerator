@@ -9,15 +9,15 @@ public class GitHubService : IGitHubService
     {
         _github = new GitHubClient(new Octokit.ProductHeaderValue("UpdateReadme"))
         {
-            Credentials = new Credentials(token)
+            Credentials = new Credentials("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")
         };
     }
 
     public async Task<(string packageVersion, string packageName,string releaseNumber)> GetPackageVersionAndTagAsync()
     {
-        var packageVersion = GetEnvironmentVariableWithMessage("PACKAGE_VERSION", "PACKAGE_VERSION");
-        var packageName = GetEnvironmentVariableWithMessage("PACKAGE_NAME", "GITHUB PACKAGE_NAME");
-        var releaseNumber= GetEnvironmentVariableWithMessage("RELEASE_NUMBER", "GITHUB RELEASE_NUMBER"); 
+        var packageVersion = "1.0.0";// GetEnvironmentVariableWithMessage("PACKAGE_VERSION", "PACKAGE_VERSION");
+        var packageName = "AvroFusionGenerator";//GetEnvironmentVariableWithMessage("PACKAGE_NAME", "GITHUB PACKAGE_NAME");
+        var releaseNumber = "beta3333333";//GetEnvironmentVariableWithMessage("RELEASE_NUMBER", "GITHUB RELEASE_NUMBER"); 
         //var repoDetails = repository.Split('/');
         //var owner = repoDetails[0];
         //var repoName = repoDetails[1];
