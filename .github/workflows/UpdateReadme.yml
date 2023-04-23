@@ -82,7 +82,7 @@ jobs:
         artifact_url=$(echo "$api_response" | jq -r '.artifacts[] | select(.name=="NuGetPackage") | .archive_download_url')
         echo "Artifact URL: $artifact_url"
         curl -L -o artifact.zip -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "$artifact_url"
-        unzip_output=$(unzip artifact.zip)
+        unzip_output=$(unzip -Z1 artifact.zip)
         echo  "Unzip Output :$unzip_output"
         echo "$unzip_output" | grep -Eo '^[^\.]+'
         package_name=$(echo "$unzip_output" | grep -Eo '^[^\.]+')
