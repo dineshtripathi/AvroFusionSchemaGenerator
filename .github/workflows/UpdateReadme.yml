@@ -81,10 +81,11 @@ jobs:
        unzip_output=$(unzip -Z1 artifact.zip)
        package_name=$(echo "$unzip_output" | grep -Eo '^[^.]+' | head -1)
        package_version=$(echo "$unzip_output" | grep -Eo '\d+\.\d+\.\d+(-[^.]+)?' | head -1)
-       release_number=$(echo "$package_version" | sed 's/.*beta//')
+       release_number=$(echo "$unzip_output" | grep -Eo '\d{12}' | head -1)
        echo "PACKAGE_NAME=$package_name" >> $GITHUB_ENV
        echo "PACKAGE_VERSION=$package_version" >> $GITHUB_ENV
        echo "RELEASE_NUMBER=$release_number" >> $GITHUB_ENV
+
 
 
 
