@@ -87,9 +87,9 @@ jobs:
         echo "$unzip_output" | grep -Eo '^[^\.]+'
         package_name=$(echo "$unzip_output" | grep -Eo '^[^\.]+')
         echo "Full Version String: $package_name"
-        package_version=$(echo "$unzip_output" | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+-[^.]+')
+        package_version=$(echo "$unzip_output" | grep -Eo '^[^.]+\.([0-9]+\.)+[0-9]+' | sed 's/.$//')
         echo "Package Version: $package_version"
-        release_number=$(echo "$unzip_output" | grep -Eo '-[0-9]{12}\.' | sed 's/-//' | sed 's/\.//')
+        release_number=$(echo "$unzip_output" | grep -Eo '\-[0-9]{12}\.' | sed 's/-//' | sed 's/\.$//')
         echo "Release Number: $release_number"
         echo "PACKAGE_NAME=$package_name" >> $GITHUB_ENV
         echo "PACKAGE_VERSION=$package_version" >> $GITHUB_ENV
