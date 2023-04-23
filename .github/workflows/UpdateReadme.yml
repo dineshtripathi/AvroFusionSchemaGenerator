@@ -98,14 +98,6 @@ jobs:
         echo "PACKAGE_VERSION=$package_version" >> $GITHUB_ENV
         echo "RELEASE_NUMBER=$release_number" >> $GITHUB_ENV
 
-
-
-
-
-
-
-
-
     #- name: Get package information
     #  run: |
     #   package_name=$(jq -r '.packageName' artifact_data.json)
