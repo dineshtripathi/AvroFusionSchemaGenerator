@@ -13,26 +13,26 @@ public class GitHubService : IGitHubService
         };
     }
 
-    public async Task<(string packageVersion, string tag)> GetPackageVersionAndTagAsync()
+    public async Task<(string packageVersion, string packageName,string releaseNumber)> GetPackageVersionAndTagAsync()
     {
-        var repository = GetEnvironmentVariableWithMessage("GITHUB_REPOSITORY", "GitHub Repository");
-        var refName = GetEnvironmentVariableWithMessage("GITHUB_REF", "GITHUB REFERENCE");
+        var packageVersion = GetEnvironmentVariableWithMessage("PACKAGE_VERSION", "PACKAGE_VERSION");
+        var packageName = GetEnvironmentVariableWithMessage("PACKAGE_NAME", "GITHUB PACKAGE_NAME");
+        var releaseNumber= GetEnvironmentVariableWithMessage("RELEASE_NUMBER", "GITHUB RELEASE_NUMBER"); 
+        //var repoDetails = repository.Split('/');
+        //var owner = repoDetails[0];
+        //var repoName = repoDetails[1];
+        //var repo = await _github.Repository.Get(owner, repoName);
 
-        var repoDetails = repository.Split('/');
-        var owner = repoDetails[0];
-        var repoName = repoDetails[1];
-        var repo = await _github.Repository.Get(owner, repoName);
+        //if (refName != null && refName.StartsWith("refs/tags"))
+        //{
+        //    var release = await _github.Repository.Release.GetLatest(repo.Id);
+        //    LogMessage($"RELEASE NAME :{release.Name} , RELEASE TAGNAME :{release.TagName}");
+        //    return (release.Name, release.TagName);
+        //}
 
-        if (refName != null && refName.StartsWith("refs/tags"))
-        {
-            var release = await _github.Repository.Release.GetLatest(repo.Id);
-            LogMessage($"RELEASE NAME :{release.Name} , RELEASE TAGNAME :{release.TagName}");
-            return (release.Name, release.TagName);
-        }
-
-        var branch = await _github.Repository.Branch.Get(repo.Id, "main");
-        var commit = branch.Commit;
-        return ("Development", commit.Sha.Substring(0, 7));
+        //var branch = await _github.Repository.Branch.Get(repo.Id, "main");
+        //var commit = branch.Commit;
+        return (packageVersion,packageName,releaseNumber);
     }
 
     public string GetPackageName()
