@@ -84,8 +84,8 @@ jobs:
        unzip_output=$(unzip -Z1 artifact.zip)
        echo  "Unzip Output : $unzip_output"
        full_version_string=$(echo "$unzip_output" | grep -Eo '\d+\.\d+\.\d+(-[^.]+){1}' | head -1)
-       package_version=$(echo "$full_version_string" | sed -E 's/^.*?(\d+\.\d+\.\d+).*$/\1/')
-       release_number=$(echo "$full_version_string" | grep -Eo '-\D*(\d+)' | head -1 | sed 's/-\D*//')
+       package_version=$(echo "$full_version_string" | sed -E 's/(-[^.]+)$//')
+       release_number=$(echo "$full_version_string" | grep -Eo '\d{12}' | head -1)
        echo "Package Version: $package_version"
        echo "Release Number: $release_number"
        package_name=$(echo "$unzip_output" | grep -Eo '^[^.]+' | head -1)
