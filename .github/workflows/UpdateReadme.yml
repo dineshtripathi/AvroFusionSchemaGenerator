@@ -86,15 +86,10 @@ jobs:
         curl -L -o artifact.zip -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "$artifact_url"
         unzip_output=$(unzip -Z1 artifact.zip)
         echo  "Unzip Output :$unzip_output"
-        package_name_regex = r'^([^\.]+)'
-        release_version_regex = r'^.*?(\d+\.\d+\.\d+)'
-        release_number_regex = r'^.*?(\d{12})'
-        package_name_match = re.match(package_name_regex, $unzip_output)
-        release_version_match = re.match(release_version_regex, $unzip_output)
-        release_number_match = re.match(release_number_regex, $unzip_output)
-        package_name = package_name_match.group(1)
-        package_version = release_version_match.group(1)
-        release_number = release_number_match.group(1)
+        package_name=$(echo "unzip_output" | grep -Eo '^[^\.]+')
+        $package_version=$(echo "unzip_output" | grep -Eo '\d+\.\d+\.\d+(-[^.]+)?' | sed -E 's/(-[^.]+)$//')
+        release_number=$(echo "unzip_output" | grep -Eo '\d{12}')
+
 
         #full_version_string=$(echo "$unzip_output" | grep -Eo '\d+\.\d+\.\d+(-[^.]+)?')
         echo "Full Version String: $package_name"
