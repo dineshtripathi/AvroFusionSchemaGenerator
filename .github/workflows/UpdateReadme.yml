@@ -80,7 +80,7 @@ jobs:
        echo "API Response: $api_response"
        artifact_url=$(echo "$api_response" | jq -r '.artifacts[] | select(.name=="NuGetPackage") | .archive_download_url')
        echo "Artifact URL: $artifact_url"
-       curl -L -o artifact.zip -H "Authorization: token ***" "$artifact_url"
+       curl -L -o artifact.zip -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "$artifact_url"
        unzip_output=$(unzip -Z1 artifact.zip)
        echo  "Unzip Output :$unzip_output"
        package_name=$(echo "$unzip_output" | grep -Eo '^[^.]+' | head -1)
