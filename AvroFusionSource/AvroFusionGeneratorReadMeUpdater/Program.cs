@@ -9,7 +9,14 @@ var serviceProvider = new ServiceCollection()
 
 var readmeUpdater = serviceProvider.GetService<IReadmeUpdater>();
 var gitHubService = serviceProvider.GetService<IGitHubService>();
-
-var (packageVersion, packageName,releaseNumber) = await gitHubService?.GetPackageVersionAndTagAsync();
-readmeUpdater?.UpdateReadmeFile(packageName,packageVersion,releaseNumber);
+try
+{
+    var (packageVersion, packageName, releaseNumber) = await gitHubService?.GetPackageVersionAndTagAsync();
+    readmeUpdater?.UpdateReadmeFile(packageName, packageVersion, releaseNumber);
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex.Message);
+    Console.WriteLine(ex.StackTrace);
+}
 
