@@ -77,6 +77,7 @@ jobs:
 
     - name: Download artifact from the last successful run
       run: |
+        import re
         set -eux
         api_response=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "https://api.github.com/repos/$TARGET_REPO/actions/runs/$LAST_SUCCESSFUL_RUN_ID/artifacts")
         echo "API Response: $api_response"
@@ -85,15 +86,25 @@ jobs:
         curl -L -o artifact.zip -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "$artifact_url"
         unzip_output=$(unzip -Z1 artifact.zip)
         echo  "Unzip Output :$unzip_output"
-        full_version_string=$(echo "$unzip_output" | grep -Eo '\d+\.\d+\.\d+(-[^.]+)?')
-        echo "Full Version String: $full_version_string"
+        package_name_regex = r'^([^\.]+)'
+        release_version_regex = r'^.*?(\d+\.\d+\.\d+)'
+        release_number_regex = r'^.*?(\d{12})'
+        package_name_match = re.match(package_name_regex, $unzip_output)
+        release_version_match = re.match(release_version_regex, $unzip_output)
+        release_number_match = re.match(release_number_regex, $unzip_output)
+        package_name = package_name_match.group(1)
+        package_version = release_version_match.group(1)
+        release_number = release_number_match.group(1)
 
-        package_version=$(echo "$full_version_string" | sed -E 's/(-[^.]+)$//')
+        #full_version_string=$(echo "$unzip_output" | grep -Eo '\d+\.\d+\.\d+(-[^.]+)?')
+        echo "Full Version String: $package_name"
+
+        #package_version=$(echo "$full_version_string" | sed -E 's/(-[^.]+)$//')
         echo "Package Version: $package_version"
 
-        release_number=$(echo "$full_version_string" | grep -Eo '\d{12}' | head -1)
+        #release_number=$(echo "$full_version_string" | grep -Eo '\d{12}' | head -1)
         echo "Release Number: $release_number"
-        package_name=$(echo "$unzip_output" | grep -Eo '^[^.]+' | head -1)
+        # package_name=$(echo "$unzip_output" | grep -Eo '^[^.]+' | head -1)
         echo "PACKAGE_NAME=$package_name" >> $GITHUB_ENV
         echo "PACKAGE_VERSION=$package_version" >> $GITHUB_ENV
         echo "RELEASE_NUMBER=$release_number" >> $GITHUB_ENV
