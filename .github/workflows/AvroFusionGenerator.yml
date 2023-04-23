@@ -57,6 +57,7 @@ jobs:
       Solution_Name: AvroFusionGenerator.sln
       Project_Name: AvroFusionGenerator
       Project_Directory: AvroFusionSource/AvroFusionGenerator
+      Pipeline_Token: ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}
 
 
     steps:

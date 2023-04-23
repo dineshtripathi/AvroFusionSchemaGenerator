@@ -34,7 +34,7 @@ jobs:
       NUGET_PACKAGE_PATH: AvroFusionSource/AvroFusionGenerator/nupkg/
       TARGET_REPO: 'dineshtripathi/AvroFusionSchemaGenerator'
       TARGET_WORKFLOW_NAME: '.NET 7 AVRO Fusion Generator'
-
+      Pipeline_Token: ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}
 
    steps:
     - name: Check out repository
@@ -64,7 +64,7 @@ jobs:
 
     - name: Get target workflow ID
       run: |
-       workflow_data=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$TARGET_REPO/actions/workflows")
+       workflow_data=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "https://api.github.com/repos/$TARGET_REPO/actions/workflows")
        target_workflow_id=$(echo "$workflow_data" | jq '.workflows[] | select(.name=="'$TARGET_WORKFLOW_NAME'") | .id')
        echo "TARGET_WORKFLOW_ID=$target_workflow_id" >> $GITHUB_ENV
 
