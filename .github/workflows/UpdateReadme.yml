@@ -80,21 +80,22 @@ jobs:
        curl -L -o artifact.zip -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "$artifact_url"
        unzip_output=$(unzip -Z1 artifact.zip)
        package_name=$(echo "$unzip_output" | grep -Eo '^[^.]+' | head -1)
-       package_version=$(echo "$unzip_output" | grep -Eo '\d+\.\d+\.\d+(-\w+)?' | head -1)
+       package_version=$(echo "$unzip_output" | grep -Eo '\d+\.\d+\.\d+(-[^.]+)?' | head -1)
        release_number=$(echo "$package_version" | sed 's/.*beta//')
        echo "PACKAGE_NAME=$package_name" >> $GITHUB_ENV
        echo "PACKAGE_VERSION=$package_version" >> $GITHUB_ENV
        echo "RELEASE_NUMBER=$release_number" >> $GITHUB_ENV
 
 
-    - name: Get package information
-      run: |
-       package_name=$(jq -r '.packageName' artifact_data.json)
-       package_version=$(jq -r '.packageVersion' artifact_data.json)
-       release_number=$(jq -r '.releaseNumber' artifact_data.json)
-       echo "PACKAGE_NAME=$package_name" >> $GITHUB_ENV
-       echo "PACKAGE_VERSION=$package_version" >> $GITHUB_ENV
-       echo "RELEASE_NUMBER=$release_number" >> $GITHUB_ENV
+
+    #- name: Get package information
+    #  run: |
+    #   package_name=$(jq -r '.packageName' artifact_data.json)
+    #   package_version=$(jq -r '.packageVersion' artifact_data.json)
+    #   release_number=$(jq -r '.releaseNumber' artifact_data.json)
+    #   echo "PACKAGE_NAME=$package_name" >> $GITHUB_ENV
+    #   echo "PACKAGE_VERSION=$package_version" >> $GITHUB_ENV
+    #   echo "RELEASE_NUMBER=$release_number" >> $GITHUB_ENV
 
 
     - name: Run the executable and update Update README.md
