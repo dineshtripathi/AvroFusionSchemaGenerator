@@ -83,9 +83,10 @@ jobs:
        curl -L -o artifact.zip -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "$artifact_url"
        unzip_output=$(unzip -Z1 artifact.zip)
        echo  "Unzip Output :$unzip_output"
+       IFS='-.' read -a parts <<< "$(echo "$unzip_output" | grep -oP '\d+\.\d+\.\d+-\K[^.]+' | head -1)"
+       package_version="${parts[0]}.${parts[1]}.${parts[2]}-${parts[3]}"
+       release_number="${parts[4]}"
        package_name=$(echo "$unzip_output" | grep -Eo '^[^.]+' | head -1)
-       package_version=$(echo "$unzip_output" | grep -Eo '\d+\.\d+\.\d+(-[^.]+)' | sed -n '1p')
-       release_number=$(echo "$unzip_output" | grep -Eo '\d{12}' | sed -n '1p')
        echo "PACKAGE_NAME=$package_name" >> $GITHUB_ENV
        echo "PACKAGE_VERSION=$package_version" >> $GITHUB_ENV
        echo "RELEASE_NUMBER=$release_number" >> $GITHUB_ENV
