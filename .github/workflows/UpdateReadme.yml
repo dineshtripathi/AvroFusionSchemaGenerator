@@ -76,15 +76,17 @@ jobs:
 
     - name: Download artifact from the last successful run
       run: |
-       artifact_url=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "https://api.github.com/repos/$TARGET_REPO/actions/runs/$LAST_SUCCESSFUL_RUN_ID/artifacts" | jq -r '.artifacts[] | select(.name=="NuGetPackage") | .archive_download_url')
-       curl -L -o artifact.zip -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "$artifact_url"
+       artifact_url=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ***" "https://api.github.com/repos/$TARGET_REPO/actions/runs/$LAST_SUCCESSFUL_RUN_ID/artifacts" | jq -r '.artifacts[] | select(.name=="NuGetPackage") | .archive_download_url')
+       curl -L -o artifact.zip -H "Authorization: token ***" "$artifact_url"
        unzip_output=$(unzip -Z1 artifact.zip)
+       echo "$unzip_output"
        package_name=$(echo "$unzip_output" | grep -Eo '^[^.]+' | head -1)
        package_version=$(echo "$unzip_output" | grep -Eo '\d+\.\d+\.\d+(-[^.]+)?' | head -1)
        release_number=$(echo "$unzip_output" | grep -Eo '\d{12}' | head -1)
        echo "PACKAGE_NAME=$package_name" >> $GITHUB_ENV
        echo "PACKAGE_VERSION=$package_version" >> $GITHUB_ENV
        echo "RELEASE_NUMBER=$release_number" >> $GITHUB_ENV
+
 
 
 
