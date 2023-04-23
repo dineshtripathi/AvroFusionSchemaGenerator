@@ -82,33 +82,18 @@ jobs:
         artifact_url=$(echo "$api_response" | jq -r '.artifacts[] | select(.name=="NuGetPackage") | .archive_download_url')
         echo "Artifact URL: $artifact_url"
         curl -L -o artifact.zip -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "$artifact_url"
-        unzip_output=$(unzip -Z1 artifact.zip)
+        unzip_output=$(unzip artifact.zip)
         echo  "Unzip Output :$unzip_output"
+        echo "$unzip_output" | grep -Eo '^[^\.]+'
         package_name=$(echo "$unzip_output" | grep -Eo '^[^\.]+')
-        package_version=$(echo "$unzip_output" | grep -Eo '\d+\.\d+\.\d+(-[^.]+)?' | sed -E 's/(-[^.]+)$//')
-        release_number=$(echo "$unzip_output" | grep -Eo '\d{12}')
-
-        #full_version_string=$(echo "$unzip_output" | grep -Eo '\d+\.\d+\.\d+(-[^.]+)?')
         echo "Full Version String: $package_name"
-
-        #package_version=$(echo "$full_version_string" | sed -E 's/(-[^.]+)$//')
+        package_version=$(echo "$unzip_output" | grep -Eo '\d+\.\d+\.\d+(-[^.]+)?' | sed -E 's/(-[^.]+)$//')
         echo "Package Version: $package_version"
-
-        #release_number=$(echo "$full_version_string" | grep -Eo '\d{12}' | head -1)
+        release_number=$(echo "$unzip_output" | grep -Eo '\d{12}')
         echo "Release Number: $release_number"
-        # package_name=$(echo "$unzip_output" | grep -Eo '^[^.]+' | head -1)
         echo "PACKAGE_NAME=$package_name" >> $GITHUB_ENV
         echo "PACKAGE_VERSION=$package_version" >> $GITHUB_ENV
         echo "RELEASE_NUMBER=$release_number" >> $GITHUB_ENV
-
-    #- name: Get package information
-    #  run: |
-    #   package_name=$(jq -r '.packageName' artifact_data.json)
-    #   package_version=$(jq -r '.packageVersion' artifact_data.json)
-    #   release_number=$(jq -r '.releaseNumber' artifact_data.json)
-    #   echo "PACKAGE_NAME=$package_name" >> $GITHUB_ENV
-    #   echo "PACKAGE_VERSION=$package_version" >> $GITHUB_ENV
-    #   echo "RELEASE_NUMBER=$release_number" >> $GITHUB_ENV
 
 
     - name: Run the executable and update Update README.md
