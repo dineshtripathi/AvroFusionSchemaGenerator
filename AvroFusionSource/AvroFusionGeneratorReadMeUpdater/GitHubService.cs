@@ -40,6 +40,8 @@ public class GitHubService : IGitHubService
 
     public string GetPackageName()
     {
+
+
         var avroFusionGeneratorPackagePath = Environment.GetEnvironmentVariable("NUGET_PACKAGE_PATH");
         Console.WriteLine("-----------------------------");
         Console.WriteLine($"NUGET PACKAGE PATH : {avroFusionGeneratorPackagePath}");
