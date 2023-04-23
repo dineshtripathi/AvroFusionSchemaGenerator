@@ -10,8 +10,6 @@ var serviceProvider = new ServiceCollection()
 var readmeUpdater = serviceProvider.GetService<IReadmeUpdater>();
 var gitHubService = serviceProvider.GetService<IGitHubService>();
 
-var (packageVersion, tag) = await gitHubService?.GetPackageVersionAndTagAsync();
-var packageName = gitHubService.GetPackageName();
-
-readmeUpdater?.UpdateReadmeFile(packageName,packageVersion,tag);
+var (packageVersion, packageName,releaseNumber) = await gitHubService?.GetPackageVersionAndTagAsync();
+readmeUpdater?.UpdateReadmeFile(packageName,packageVersion,releaseNumber);
 
