@@ -25,7 +25,7 @@ jobs:
    needs: job1
    strategy:
       matrix:
-        configuration: [Debug, Release]
+        configuration: [Release]
    
    env:
       Solution_Name: AvroFusionGenerator.sln
