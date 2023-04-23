@@ -106,7 +106,17 @@ jobs:
       run: |
        chmod +x AvroFusionGeneratorReadMeUpdater
        ls -l
-       ./AvroFusionGeneratorReadMeUpdater
+       ./AvroFusionGeneratorReadMeUpdater > output.txt
+      shell: bash
+
+    - name: Set output variable
+      id: output
+      run: echo "::set-output name=console_output::$(cat output.txt)"
+      shell: bash
+
+    - name: Use output variable
+      run: |
+       echo "Console output: ${{ steps.output.outputs.console_output }}"
       shell: bash
 
     - name: Commit updated README.md
