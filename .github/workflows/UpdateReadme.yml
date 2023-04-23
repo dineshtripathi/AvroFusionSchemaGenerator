@@ -91,9 +91,12 @@ jobs:
         echo "Package Version: $package_version"
         release_number=$(echo "$unzip_output" | grep -Eo '\-[0-9]{12}\.' | sed 's/-//' | sed 's/\.$//')
         echo "Release Number: $release_number"
-        echo "PACKAGE_NAME=$package_name" >> $GITHUB_ENV
-        echo "PACKAGE_VERSION=$package_version" >> $GITHUB_ENV
-        echo "RELEASE_NUMBER=$release_number" >> $GITHUB_ENV
+        #echo "PACKAGE_NAME=$package_name" >> $GITHUB_ENV
+        #echo "PACKAGE_VERSION=$package_version" >> $GITHUB_ENV
+        #echo "RELEASE_NUMBER=$release_number" >> $GITHUB_ENV
+        echo "PACKAGE_NAME=AvroFusionGenerator" >> $GITHUB_ENV
+        echo "PACKAGE_VERSION=1.0.0" >> $GITHUB_ENV
+        echo "RELEASE_NUMBER=beta333333" >> $GITHUB_ENV
 
 
     - name: Run the executable and update Update README.md
