@@ -66,7 +66,7 @@ jobs:
     - name: Get target workflow ID
       run: |
        workflow_data=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "https://api.github.com/repos/$TARGET_REPO/actions/workflows")
-       target_workflow_id=$(echo "$workflow_data" | jq '.workflows[] | select(.name=="'$TARGET_WORKFLOW_NAME'") | .id')
+       target_workflow_id=$(echo "$workflow_data" | jq '.workflows[] | select(.name=="\"'$TARGET_WORKFLOW_NAME'\"") | .id')
        echo "TARGET_WORKFLOW_ID=$target_workflow_id" >> $GITHUB_ENV
 
     - name: Get last successful run ID
