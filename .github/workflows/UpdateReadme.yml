@@ -78,7 +78,14 @@ jobs:
       run: |
        artifact_url=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "https://api.github.com/repos/$TARGET_REPO/actions/runs/$LAST_SUCCESSFUL_RUN_ID/artifacts" | jq -r '.artifacts[] | select(.name=="NuGetPackage") | .archive_download_url')
        curl -L -o artifact.zip -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "$artifact_url"
-       unzip artifact.zip
+       unzip_output=$(unzip -Z1 artifact.zip)
+       package_name=$(echo "$unzip_output" | grep -Eo '^[^.]+' | head -1)
+       package_version=$(echo "$unzip_output" | grep -Eo '\d+\.\d+\.\d+(-\w+)?' | head -1)
+       release_number=$(echo "$package_version" | sed 's/.*beta//')
+       echo "PACKAGE_NAME=$package_name" >> $GITHUB_ENV
+       echo "PACKAGE_VERSION=$package_version" >> $GITHUB_ENV
+       echo "RELEASE_NUMBER=$release_number" >> $GITHUB_ENV
+
 
     - name: Get package information
       run: |
