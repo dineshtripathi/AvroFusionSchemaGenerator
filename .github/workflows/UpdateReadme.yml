@@ -77,8 +77,6 @@ jobs:
 
     - name: Download artifact from the last successful run
       run: |
-        import re
-        set -eux
         api_response=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "https://api.github.com/repos/$TARGET_REPO/actions/runs/$LAST_SUCCESSFUL_RUN_ID/artifacts")
         echo "API Response: $api_response"
         artifact_url=$(echo "$api_response" | jq -r '.artifacts[] | select(.name=="NuGetPackage") | .archive_download_url')
