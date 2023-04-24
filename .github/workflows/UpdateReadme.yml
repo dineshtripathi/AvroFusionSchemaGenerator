@@ -98,6 +98,9 @@ jobs:
         api_response=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "https://api.github.com/repos/$TARGET_REPO/actions/runs/$LAST_SUCCESSFUL_RUN_ID/artifacts")
         echo "API Response: $api_response"
         artifact_zip=$(echo "$api_response" | jq -r '.artifacts[] | select(.name=="NuGetPackage") | .archive_download_url')
+         echo "Artifact URL: $artifact_url"
+        curl -L -o artifact.zip -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "$artifact_zip"
+        unzip_output=$(unzip -Z1 artifact.zip)
         unzip_output=$(unzip -Z1 artifact.zip)
         echo  "Unzip Output :$unzip_output"
         echo "$unzip_output" | grep -Eo '^[^\.]+'
