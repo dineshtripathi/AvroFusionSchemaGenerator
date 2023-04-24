@@ -90,7 +90,9 @@ jobs:
       run: |
         api_response=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "https://api.github.com/repos/$TARGET_REPO/actions/runs/$LAST_SUCCESSFUL_RUN_ID/artifacts")
         artifact_id=$(echo "$api_response" | jq -r '.artifacts[] | select(.name=="NuGetPackage") | .id')
-        artifact_url="https://github.com/$TARGET_REPO/suites/$LAST_SUCCESSFUL_RUN_SUITE_ID/artifacts/$artifact_id"
+        echo "Download Artifact Id :$artifact_id"
+        echo "Download LAST_SUCCESSFUL_RUN_SUITE_ID : $LAST_SUCCESSFUL_RUN_SUITE_ID"
+        artifact_url="https://github.com/${TARGET_REPO}/suites/${LAST_SUCCESSFUL_RUN_SUITE_ID}/artifacts/${artifact_id}"
         echo "Artifact URL: $artifact_url"
         echo "PACKAGE_URL=$artifact_url" >> $GITHUB_ENV
         api_response=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "https://api.github.com/repos/$TARGET_REPO/actions/runs/$LAST_SUCCESSFUL_RUN_ID/artifacts")
