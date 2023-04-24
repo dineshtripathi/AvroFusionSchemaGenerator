@@ -76,8 +76,23 @@ jobs:
        echo "LAST_SUCCESSFUL_RUN_ID=$last_successful_run_id" >> $GITHUB_ENV
       shell: bash
 
+
+    - name: Get last successful run ID
+      run: |
+        last_successful_run=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "https://api.github.com/repos/$TARGET_REPO/actions/workflows/$TARGET_WORKFLOW_ID/runs?status=success&per_page=1")
+        last_successful_run_id=$(echo "$last_successful_run" | jq '.workflow_runs[0].id')
+        last_successful_run_suite_id=$(echo "$last_successful_run" | jq '.workflow_runs[0].check_suite_id')
+        echo "LAST_SUCCESSFUL_RUN_ID=$last_successful_run_id" >> $GITHUB_ENV
+        echo "LAST_SUCCESSFUL_RUN_SUITE_ID=$last_successful_run_suite_id" >> $GITHUB_ENV
+
+
     - name: Download artifact from the last successful run
       run: |
+        api_response=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "https://api.github.com/repos/$TARGET_REPO/actions/runs/$LAST_SUCCESSFUL_RUN_ID/artifacts")
+        artifact_id=$(echo "$api_response" | jq -r '.artifacts[] | select(.name=="NuGetPackage") | .id')
+        artifact_url="https://github.com/$TARGET_REPO/suites/$LAST_SUCCESSFUL_RUN_SUITE_ID/artifacts/$artifact_id"
+        echo "Artifact URL: $artifact_url"
+        echo "PACKAGE_URL=$artifact_url" >> $GITHUB_ENV
         api_response=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "https://api.github.com/repos/$TARGET_REPO/actions/runs/$LAST_SUCCESSFUL_RUN_ID/artifacts")
         echo "API Response: $api_response"
         artifact_url=$(echo "$api_response" | jq -r '.artifacts[] | select(.name=="NuGetPackage") | .archive_download_url')
