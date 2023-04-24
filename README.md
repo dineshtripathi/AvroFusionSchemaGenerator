@@ -10,6 +10,10 @@ It Follows the AVRO Schema Specfication guidlines .See the specification here [A
 ### Nuget package (Dot net tool)
 To download the latest release of AvroFusionGenerator, [Download Avro Fusion Generator Nuget package - click here](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12340400059/artifacts/654844548).
 
+[![NuGet Package Download](./artifact_badge.svg)](./artifact_badge.svg)
+![NuGet Package Download](./artifact_badge.svg)
+
+
 | Download Package| Package Name    | Package Version | Tag |
 |-----------------|-----------------|-----------------|-----|
 |[PackageLink](https://api.github.com/repos/dineshtripathi/AvroFusionSchemaGenerator/actions/artifacts/662750830/zip)| AvroFusionGenerator.1.0.0-beta230424171504.nupkg | 1.0.0 | beta333333 |
