@@ -12,6 +12,7 @@ To download the latest release of AvroFusionGenerator, [Download Avro Fusion Gen
 
 | Download Package| Package Name    | Package Version | Tag |
 |-----------------|-----------------|-----------------|-----|
+|[PackageLink](https://api.github.com/repos/dineshtripathi/AvroFusionSchemaGenerator/actions/artifacts/662750830/zip)| AvroFusionGenerator.1.0.0-beta230424171504.nupkg | 1.0.0 | beta333333 |
 
 
 ## Features
