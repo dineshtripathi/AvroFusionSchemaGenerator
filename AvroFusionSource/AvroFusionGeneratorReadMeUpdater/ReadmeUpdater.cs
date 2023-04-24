@@ -1,6 +1,4 @@
-﻿using NuGet.Versioning;
-
-public class ReadmeUpdater : IReadmeUpdater
+﻿public class ReadmeUpdater : IReadmeUpdater
 {
     
     public void UpdateReadmeFile(string packageUrl, string packageName, string packageVersion, string tag)
@@ -9,20 +7,17 @@ public class ReadmeUpdater : IReadmeUpdater
         LogMessage(workspacePath);
         var readmeFilePath = Path.Combine(workspacePath, "README.md");
         LogMessage(readmeFilePath);
-        var lines = File.ReadAllLines(readmeFilePath);
+        string?[] lines = File.ReadAllLines(readmeFilePath);
         var updatedLines = InsertRowInReadmeTable(lines, packageUrl,packageName, packageVersion, tag);
-        LogMessage(updatedLines.FirstOrDefault());
-        LogMessage(packageName);
-        LogMessage(tag);
         File.WriteAllLines("README.md", updatedLines);
     }
 
-    private int FindHeaderLine(string[] lines)
+    private static int FindHeaderLine(string?[] lines)
     {
         return Array.FindIndex(lines, line => line.Contains("| Download Package| Package Name    | Package Version | Tag |"));
     }
 
-    private string[] InsertRowInReadmeTable(string[] lines, string packageUrl,string packageName, string packageVersion, string tag)
+    private static string?[] InsertRowInReadmeTable(string?[] lines, string packageUrl,string packageName, string packageVersion, string tag)
     {
         var headerLine = FindHeaderLine(lines);
       
@@ -35,23 +30,23 @@ public class ReadmeUpdater : IReadmeUpdater
         return InsertRowInLines(lines, headerLine + 2, newRow);
     }
 
-    private string[] InsertRowInLines(string[] lines, int index, string newRow)
+    private static string?[] InsertRowInLines(string?[] lines, int index, string? newRow)
     {
-        var newLines = new string[lines.Length + 1];
+        var newLines = new string?[lines.Length + 1];
         Array.Copy(lines, 0, newLines, 0, index);
         newLines[index] = newRow;
         Array.Copy(lines, index, newLines, index + 1, lines.Length - index);
         return newLines;
     }
 
-    private string GetEnvironmentVariableWithMessage(string variable, string message)
+    private static string? GetEnvironmentVariableWithMessage(string variable, string message)
     {
         var value = Environment.GetEnvironmentVariable(variable);
         Console.WriteLine($"{message} : {value}");
         return value;
     }
 
-    private void LogMessage(string message)
+    private static void LogMessage(string? message)
     {
         Console.WriteLine("-----------------------------");
         Console.WriteLine(message);
