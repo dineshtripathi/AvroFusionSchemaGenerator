@@ -8,10 +8,9 @@ Avro Fusion Generator is a tool to generate Avro schemas from C# classes. It use
 It Follows the AVRO Schema Specfication guidlines .See the specification here [Avro Schema Spefication -Apache](https://avro.apache.org/docs/1.11.1/specification/)
 
 ### Nuget package (Dot net tool)
-To download the latest release of AvroFusionGenerator, [Download Avro Fusion Generator Nuget package - click here](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12340400059/artifacts/654844548).
+To download the latest release of AvroFusionGenerator, 
 
-[![NuGet Package Download](./artifact_badge.svg)](./artifact_badge.svg)
-![NuGet Package Download](./artifact_badge.svg)
+#### Download Avro Fusion Generator Nuget package from the list 
 
 
 | Download Package| Package Name    | Package Version | Tag |

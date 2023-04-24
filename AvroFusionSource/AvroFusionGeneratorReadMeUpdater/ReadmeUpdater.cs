@@ -30,7 +30,7 @@ public class ReadmeUpdater : IReadmeUpdater
         {
             return lines;
         }
-        var newRow = $"|[PackageLink]({new Uri(packageUrl)})| {packageName} | {packageVersion} | {tag} |";
+        var newRow = $"|[Avro Fusion Generator]({new Uri(packageUrl)})| {packageName} | {packageVersion} | {tag} |";
         LogMessage(newRow);
         return InsertRowInLines(lines, headerLine + 2, newRow);
     }
