@@ -1,5 +1,6 @@
 ﻿using Octokit;
 using System.Net.Http.Headers;
+using System.Text.RegularExpressions;
 
 public class GitHubService : IGitHubService
 {
@@ -15,24 +16,17 @@ public class GitHubService : IGitHubService
 
     public async Task<(string packageVersion, string packageName,string releaseNumber,string packageUrl)> GetPackageVersionAndTagAsync()
     {
-        var packageVersion =  GetEnvironmentVariableWithMessage("PACKAGE_VERSION", "PACKAGE_VERSION");
+       // var packageVersion =  GetEnvironmentVariableWithMessage("PACKAGE_VERSION", "PACKAGE_VERSION");
         var packageName = GetEnvironmentVariableWithMessage("PACKAGE_NAME", "GITHUB PACKAGE_NAME");
-        var releaseNumber = GetEnvironmentVariableWithMessage("RELEASE_NUMBER", "GITHUB RELEASE_NUMBER");
+        //var releaseNumber = GetEnvironmentVariableWithMessage("RELEASE_NUMBER", "GITHUB RELEASE_NUMBER");
         var packageUrl = GetEnvironmentVariableWithMessage("PACKAGE_URL", "ARTIFACT PACKAGE URL");
-        //var repoDetails = repository.Split('/');
-        //var owner = repoDetails[0];
-        //var repoName = repoDetails[1];
-        //var repo = await _github.Repository.Get(owner, repoName);
+        var pattern = @"(?<name>[^\.]+)\.(?<version>[0-9.]+)-beta(?<number>\d+)\.nupkg";
+        Match match = Regex.Match(packageName, pattern);
 
-        //if (refName != null && refName.StartsWith("refs/tags"))
-        //{
-        //    var release = await _github.Repository.Release.GetLatest(repo.Id);
-        //    LogMessage($"RELEASE NAME :{release.Name} , RELEASE TAGNAME :{release.TagName}");
-        //    return (release.Name, release.TagName);
-        //}
+        var packageVersion = match.Groups["version"].Value;
+        var releaseNumber = match.Groups["number"].Value;
+        packageName= match.Groups["name"].Value;
 
-        //var branch = await _github.Repository.Branch.Get(repo.Id, "main");
-        //var commit = branch.Commit;
         return (packageVersion,packageName,releaseNumber,packageUrl);
     }
 
