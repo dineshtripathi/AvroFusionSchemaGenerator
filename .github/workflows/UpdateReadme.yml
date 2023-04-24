@@ -36,6 +36,7 @@ jobs:
       TARGET_WORKFLOW_NAME: '.NET 7 AVRO Fusion Generator'
       Pipeline_Token: ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}
       GITHUB_WORKSPACE: ${{ github.workspace }}
+      BUILD_TAGGING_ACCESS_TOKEN: ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}
 
    steps:
     - name: Check out repository
@@ -99,15 +100,23 @@ jobs:
         echo "RELEASE_NUMBER=beta333333" >> $GITHUB_ENV
 
 
-    - name: Run the executable and update Update README.md
-      working-directory: AvroFusionSource/AvroFusionGeneratorReadMeUpdater/bin/${{ matrix.configuration }}/net7.0
-      env:
-       BUILD_TAGGING_ACCESS_TOKEN: ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}
+    #- name: Run the executable and update Update README.md
+    #  working-directory: AvroFusionSource/AvroFusionGeneratorReadMeUpdater/bin/${{ matrix.configuration }}/net7.0
+    #  run: |
+    #   chmod +x AvroFusionGeneratorReadMeUpdater
+    #   ls -l
+    #   ./AvroFusionGeneratorReadMeUpdater > output.txt
+    #  shell: bash
+
+    - name: Run .NET Console App
+      id: run_app
       run: |
-       chmod +x AvroFusionGeneratorReadMeUpdater
-       ls -l
-       ./AvroFusionGeneratorReadMeUpdater > output.txt
-      shell: bash
+        OUTPUT=$(dotnet run --project AvroFusionSource/AvroFusionGeneratorReadMeUpdater/AvroFusionGeneratorReadMeUpdater.csproj)
+        echo "::set-output name=console_output::$OUTPUT"
+
+    - name: Use captured output
+      run: |
+          echo "Captured output from .NET console app: ${{ steps.run_app.outputs.console_output }}"
 
     - name: Set output variable
       id: output
