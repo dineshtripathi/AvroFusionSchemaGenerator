@@ -90,16 +90,16 @@ jobs:
       run: |
         api_response=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "https://api.github.com/repos/$TARGET_REPO/actions/runs/$LAST_SUCCESSFUL_RUN_ID/artifacts")
         artifact_id=$(echo "$api_response" | jq -r '.artifacts[] | select(.name=="NuGetPackage") | .id')
-        echo "Download Artifact Id :$artifact_id"
+        echo "Download Artifact Id=$artifact_id"
         echo "Download LAST_SUCCESSFUL_RUN_SUITE_ID : $LAST_SUCCESSFUL_RUN_SUITE_ID"
         artifact_url="https://github.com/${TARGET_REPO}/suites/${LAST_SUCCESSFUL_RUN_SUITE_ID}/artifacts/${artifact_id}"
-        echo "Artifact URL: $artifact_url"
+        echo "Artifact URL=$artifact_url"
         echo "PACKAGE_URL=$artifact_url" >> $GITHUB_ENV
         api_response=$(curl -s -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "https://api.github.com/repos/$TARGET_REPO/actions/runs/$LAST_SUCCESSFUL_RUN_ID/artifacts")
         echo "API Response: $api_response"
-        artifact_url=$(echo "$api_response" | jq -r '.artifacts[] | select(.name=="NuGetPackage") | .archive_download_url')
+        artifact_zip=$(echo "$api_response" | jq -r '.artifacts[] | select(.name=="NuGetPackage") | .archive_download_url')
         echo "Artifact URL: $artifact_url"
-        curl -L -o artifact.zip -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "$artifact_url"
+        curl -L -o artifact.zip -H "Authorization: token ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}" "$artifact_zip"
         unzip_output=$(unzip -Z1 artifact.zip)
         echo  "Unzip Output :$unzip_output"
         echo "$unzip_output" | grep -Eo '^[^\.]+'
