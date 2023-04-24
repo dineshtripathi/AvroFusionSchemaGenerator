@@ -11,8 +11,8 @@ var readmeUpdater = serviceProvider.GetService<IReadmeUpdater>();
 var gitHubService = serviceProvider.GetService<IGitHubService>();
 try
 {
-    var (packageVersion, packageName, releaseNumber) = await gitHubService?.GetPackageVersionAndTagAsync();
-    readmeUpdater?.UpdateReadmeFile(packageName, packageVersion, releaseNumber);
+    var (packageVersion, packageName, releaseNumber,packageUrl) = await gitHubService?.GetPackageVersionAndTagAsync();
+    readmeUpdater?.UpdateReadmeFile(packageUrl,packageName, packageVersion, releaseNumber);
 }
 catch (Exception ex)
 {

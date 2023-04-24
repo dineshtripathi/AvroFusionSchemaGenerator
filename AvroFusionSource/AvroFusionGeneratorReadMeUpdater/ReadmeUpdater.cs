@@ -3,14 +3,14 @@
 public class ReadmeUpdater : IReadmeUpdater
 {
     
-    public void UpdateReadmeFile(string packageName, string packageVersion, string tag)
+    public void UpdateReadmeFile(string packageUrl, string packageName, string packageVersion, string tag)
     {
         var workspacePath = GetEnvironmentVariableWithMessage("GITHUB_WORKSPACE", "GITHUB_WORKSPACE");
         LogMessage(workspacePath);
         var readmeFilePath = Path.Combine(workspacePath, "README.md");
         LogMessage(readmeFilePath);
         var lines = File.ReadAllLines(readmeFilePath);
-        var updatedLines = InsertRowInReadmeTable(lines, packageName, packageVersion, tag);
+        var updatedLines = InsertRowInReadmeTable(lines, packageUrl,packageName, packageVersion, tag);
         LogMessage(updatedLines.FirstOrDefault());
         LogMessage(packageName);
         LogMessage(tag);
@@ -19,10 +19,10 @@ public class ReadmeUpdater : IReadmeUpdater
 
     private int FindHeaderLine(string[] lines)
     {
-        return Array.FindIndex(lines, line => line.Contains("| Package Name    | Package Version | Tag |"));
+        return Array.FindIndex(lines, line => line.Contains("| Download Package| Package Name    | Package Version | Tag |"));
     }
 
-    private string[] InsertRowInReadmeTable(string[] lines, string packageName, string packageVersion, string tag)
+    private string[] InsertRowInReadmeTable(string[] lines, string packageUrl,string packageName, string packageVersion, string tag)
     {
         var headerLine = FindHeaderLine(lines);
       
@@ -30,8 +30,7 @@ public class ReadmeUpdater : IReadmeUpdater
         {
             return lines;
         }
-
-        var newRow = $"| {packageName} | {packageVersion} | {tag} |";
+        var newRow = $"|[PackageLink]({new Uri(packageUrl)})| {packageName} | {packageVersion} | {tag} |";
         LogMessage(newRow);
         return InsertRowInLines(lines, headerLine + 2, newRow);
     }
