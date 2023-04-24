@@ -109,13 +109,13 @@ jobs:
         path: AvroFusionSource/AvroFusionGenerator/nupkg/*.nupkg
         if-no-files-found: warn
 
-    - name: Generate badge link
-      uses: timoschwarzer/actions-badge-link@v1
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        artifact-name: 'NuGetPackage'
-        workflow-name: '.NET 7 AVRO Fusion Generator'
-        badge-filename: 'artifact_badge.svg'
+    #- name: Generate badge link
+    #  uses: timoschwarzer/actions-badge-link@v1
+    #  with:
+    #    repo-token: ${{ secrets.GITHUB_TOKEN }}
+    #    artifact-name: 'NuGetPackage'
+    #    workflow-name: '.NET 7 AVRO Fusion Generator'
+    #    badge-filename: 'artifact_badge.svg'
 
     - name: Create GITHUB_OUTPUT file
       run: |
