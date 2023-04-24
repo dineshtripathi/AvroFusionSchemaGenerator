@@ -15,6 +15,7 @@ To download the latest release of AvroFusionGenerator,
 
 | Download Package| Package Name    | Package Version | Tag |
 |-----------------|-----------------|-----------------|-----|
+|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12450946380/artifacts/662983620)| AvroFusionGenerator | 1.0.0 | 230424193144 |
 |[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12449796466/artifacts/662897396)| AvroFusionGenerator | 1.0.0 | 230424184023 |
 
 
