@@ -95,9 +95,10 @@ jobs:
         #echo "PACKAGE_NAME=$package_name" >> $GITHUB_ENV
         #echo "PACKAGE_VERSION=$package_version" >> $GITHUB_ENV
         #echo "RELEASE_NUMBER=$release_number" >> $GITHUB_ENV
-        echo "PACKAGE_NAME=AvroFusionGenerator" >> $GITHUB_ENV
+        echo "PACKAGE_NAME=$unzip_output" >> $GITHUB_ENV
         echo "PACKAGE_VERSION=1.0.0" >> $GITHUB_ENV
         echo "RELEASE_NUMBER=beta333333" >> $GITHUB_ENV
+        echo "PACKAGE_URL=$artifact_url" >>$GITHUB_ENV
 
 
     #- name: Run the executable and update Update README.md

@@ -13,11 +13,12 @@ public class GitHubService : IGitHubService
         };
     }
 
-    public async Task<(string packageVersion, string packageName,string releaseNumber)> GetPackageVersionAndTagAsync()
+    public async Task<(string packageVersion, string packageName,string releaseNumber,string packageUrl)> GetPackageVersionAndTagAsync()
     {
         var packageVersion =  GetEnvironmentVariableWithMessage("PACKAGE_VERSION", "PACKAGE_VERSION");
         var packageName = GetEnvironmentVariableWithMessage("PACKAGE_NAME", "GITHUB PACKAGE_NAME");
-        var releaseNumber = GetEnvironmentVariableWithMessage("RELEASE_NUMBER", "GITHUB RELEASE_NUMBER"); 
+        var releaseNumber = GetEnvironmentVariableWithMessage("RELEASE_NUMBER", "GITHUB RELEASE_NUMBER");
+        var packageUrl = GetEnvironmentVariableWithMessage("PACKAGE_URL", "ARTIFACT PACKAGE URL");
         //var repoDetails = repository.Split('/');
         //var owner = repoDetails[0];
         //var repoName = repoDetails[1];
@@ -32,7 +33,7 @@ public class GitHubService : IGitHubService
 
         //var branch = await _github.Repository.Branch.Get(repo.Id, "main");
         //var commit = branch.Commit;
-        return (packageVersion,packageName,releaseNumber);
+        return (packageVersion,packageName,releaseNumber,packageUrl);
     }
 
     public string GetPackageName()
