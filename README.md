@@ -15,6 +15,7 @@ To download the latest release of AvroFusionGenerator,
 
 | Download Package| Package Name    | Package Version | Tag |
 |-----------------|-----------------|-----------------|-----|
+|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12449796466/artifacts/662897396)| AvroFusionGenerator | 1.0.0 | 230424184023 |
 |[PackageLink](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12449795043/artifacts/662896982)| AvroFusionGenerator.1.0.0-beta230424184020.nupkg | 1.0.0 | beta333333 |
 |[PackageLink](https://api.github.com/repos/dineshtripathi/AvroFusionSchemaGenerator/actions/artifacts/662882467/zip)| AvroFusionGenerator.1.0.0-beta230424183103.nupkg | 1.0.0 | beta333333 |
 |[PackageLink](https://api.github.com/repos/dineshtripathi/AvroFusionSchemaGenerator/actions/artifacts/662854087/zip)| AvroFusionGenerator.1.0.0-beta230424181532.nupkg | 1.0.0 | beta333333 |
