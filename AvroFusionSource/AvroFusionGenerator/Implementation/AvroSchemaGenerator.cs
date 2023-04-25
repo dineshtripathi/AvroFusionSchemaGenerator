@@ -10,6 +10,10 @@ public class AvroSchemaGenerator : IAvroSchemaGenerator
 {
     private readonly IAvroTypeStrategyResolver _strategyResolver;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AvroSchemaGenerator"/> class.
+    /// </summary>
+    /// <param name="strategyResolver">The strategy resolver.</param>
     public AvroSchemaGenerator(IAvroTypeStrategyResolver strategyResolver)
     {
         _strategyResolver = strategyResolver;
@@ -23,10 +27,11 @@ public class AvroSchemaGenerator : IAvroSchemaGenerator
     /// <param name="mainClassName">The main class name.</param>
     /// <param name="progressReporter">The progress reporter.</param>
     /// <returns>A string.</returns>
-    public string GenerateAvroAvscSshema(IEnumerable<Type> types, string mainClassName,
+    public string? GenerateAvroAvscSchema(IEnumerable<Type?> types, string mainClassName,
         ProgressReporter progressReporter)
     {
-        var mainType = types.FirstOrDefault(t => t.Name == mainClassName);
+        var enumerable = types.ToList();
+        var mainType = enumerable.FirstOrDefault(t => t?.Name == mainClassName);
         if (mainType == null)
             throw new InvalidOperationException(
                 $"Could not find the main type '{mainClassName}' in the provided types.");
@@ -34,38 +39,43 @@ public class AvroSchemaGenerator : IAvroSchemaGenerator
         var generatedTypes = new HashSet<string>();
         var avroMainType = GenerateAvroAvscType(mainType, generatedTypes) as Dictionary<string, object>;
 
-        var generatedSchemas = types
-            .Where(t => !t.Equals(mainType))
+        var generatedSchemas = enumerable
+            .Where(t => t != mainType)
             .Select(t => GenerateAvroAvscType(t, generatedTypes))
             .OfType<Dictionary<string, object>>()
             .ToList();
 
         try
         {
-            var mainTypeFields = avroMainType["fields"] as IEnumerable<Dictionary<string, object>>;
+            var mainTypeFields = avroMainType?["fields"] as IEnumerable<Dictionary<string, object>>;
             var additionalFields = generatedSchemas
                 .Where(schema => schema.ContainsKey("fields"))
-                .SelectMany(schema => schema["fields"] as IEnumerable<Dictionary<string, object>>)
+                .SelectMany(schema => (IEnumerable<Dictionary<string, object?>>)schema["fields"])
                 .ToList();
 
-            var allFields = mainTypeFields.Concat(additionalFields).ToList();
-
-            var combinedSchema = new Dictionary<string, object>
+            if (mainTypeFields != null)
             {
-                {"type", "record"},
-                {"namespace", $"{types.First().Namespace}"},
-                {"name", mainClassName},
-                {"fields", allFields}
-            };
+                var allFields = mainTypeFields.Concat(additionalFields!).ToList();
 
-            var serializerSettings = new JsonSerializerSettings {Formatting = Formatting.Indented};
-            return JsonConvert.SerializeObject(combinedSchema, serializerSettings);
+                var combinedSchema = new Dictionary<string, object>
+                {
+                    {"type", "record"},
+                    {"namespace", $"{enumerable.First()?.Namespace}"},
+                    {"name", mainClassName},
+                    {"fields", allFields}
+                };
+
+                var serializerSettings = new JsonSerializerSettings {Formatting = Formatting.Indented};
+                return JsonConvert.SerializeObject(combinedSchema, serializerSettings);
+            }
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             throw;
         }
+
+        return null;
     }
 
 
@@ -75,7 +85,7 @@ public class AvroSchemaGenerator : IAvroSchemaGenerator
     /// <param name="type">The type.</param>
     /// <param name="generatedTypes">The generated types.</param>
     /// <returns>An object.</returns>
-    public object GenerateAvroAvscType(Type type, HashSet<string> generatedTypes)
+    public object? GenerateAvroAvscType(Type? type, HashSet<string> generatedTypes)
     {
         try
         {
@@ -92,7 +102,7 @@ public class AvroSchemaGenerator : IAvroSchemaGenerator
             throw;
         }
 
-        throw new NotSupportedException($"The type '{type.Name}' is not supported.");
+        throw new NotSupportedException($"The type '{type?.Name}' is not supported.");
     }
 
     /// <summary>
@@ -101,10 +111,10 @@ public class AvroSchemaGenerator : IAvroSchemaGenerator
     /// <param name="type">The type.</param>
     /// <param name="generatedTypes">The generated types.</param>
     /// <returns>A list of Dictionary.</returns>
-    private IEnumerable<Dictionary<string, object>> GetFieldInfos(Type type, HashSet<string> generatedTypes)
+    private IEnumerable<Dictionary<string, object?>> GetFieldInfos(Type type, HashSet<string> generatedTypes)
     {
         return type.GetProperties().Where(prop => !IsIgnoredType(prop.PropertyType)).Select(prop =>
-            new Dictionary<string, object>
+            new Dictionary<string, object?>
             {
                 {"name", prop.Name},
                 {"type", GenerateAvroAvscType(prop.PropertyType, generatedTypes)}
@@ -116,11 +126,11 @@ public class AvroSchemaGenerator : IAvroSchemaGenerator
     /// </summary>
     /// <param name="type">The type.</param>
     /// <returns>A bool.</returns>
-    private bool IsIgnoredType(Type type)
+    private static bool IsIgnoredType(Type type)
     {
         // Add any other types that should should be ignored here.
         return type.GetInterfaces().Contains(typeof(IEqualityComparer<>)) ||
-               type.Name.EndsWith("UnsupportedType") ||
+               type.Name.EndsWith("UnsupportedType", StringComparison.Ordinal) ||
                (type.GetInterfaces()
                     .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDictionary<,>)) &&
                 type.GetGenericArguments()[0] != typeof(string));
