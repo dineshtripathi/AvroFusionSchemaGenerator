@@ -54,11 +54,10 @@ public class DynamicAssemblyGenerator : IDynamicAssemblyGenerator
     /// <param name="sourceCode">The source code.</param>
     /// <param name="usingDirectives">The using directives.</param>
     /// <returns>A SyntaxTree.</returns>
-    private static SyntaxTree ParseSyntaxTree(string sourceCode, IEnumerable<string> usingDirectives)
+    private static SyntaxTree? ParseSyntaxTree(string sourceCode, IEnumerable<string> usingDirectives)
     {
         var syntaxTree = CSharpSyntaxTree.ParseText(sourceCode);
-        return usingDirectives.Aggregate(syntaxTree,
-            (current, directive) => AddMissingUsingDirective(current, directive));
+        return usingDirectives.Aggregate(syntaxTree, (tree, s) => AddMissingUsingDirective(tree, s)!);
     }
 
     /// <summary>
@@ -67,18 +66,19 @@ public class DynamicAssemblyGenerator : IDynamicAssemblyGenerator
     /// <param name="syntaxTree">The syntax tree.</param>
     /// <param name="namespaceName">The namespace name.</param>
     /// <returns>A SyntaxTree.</returns>
-    private static SyntaxTree AddMissingUsingDirective(SyntaxTree syntaxTree, string namespaceName)
+    private static SyntaxTree? AddMissingUsingDirective(SyntaxTree syntaxTree, string namespaceName)
     {
         var root = syntaxTree.GetRoot() as CompilationUnitSyntax;
-        var usingDirectives = root.Usings.Select(uds => uds.Name.ToString()).ToList();
+        var usingDirectives = root?.Usings.Select(uds => uds.Name.ToString()).ToList();
 
-        if (!usingDirectives.Contains(namespaceName))
+        if (usingDirectives != null && !usingDirectives.Contains(namespaceName))
         {
             var newUsingDirective = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(namespaceName));
-            root = root.AddUsings(newUsingDirective);
+            root = root?.AddUsings(newUsingDirective);
         }
 
-        return syntaxTree.WithRootAndOptions(root, syntaxTree.Options);
+        if (root != null) return syntaxTree.WithRootAndOptions(root, syntaxTree.Options);
+        return null;
     }
 
     /// <summary>
@@ -86,7 +86,7 @@ public class DynamicAssemblyGenerator : IDynamicAssemblyGenerator
     /// </summary>
     /// <param name="syntaxTree">The syntax tree.</param>
     /// <returns>A list of MetadataReferences.</returns>
-    private static List<MetadataReference> GetReferencedAssemblies(SyntaxTree syntaxTree)
+    private static List<MetadataReference> GetReferencedAssemblies(SyntaxTree? syntaxTree)
     {
         var assemblies = new HashSet<Assembly>
         {
@@ -107,13 +107,13 @@ public class DynamicAssemblyGenerator : IDynamicAssemblyGenerator
         };
 
 
-        var usingDirectives = syntaxTree.GetRoot().DescendantNodes()
+        var usingDirectives = syntaxTree?.GetRoot().DescendantNodes()
             .OfType<UsingDirectiveSyntax>()
             .Select(uds => uds.Name.ToString())
             .ToList();
 
-        if (!usingDirectives.Contains("System")) assemblies.Add(typeof(object).Assembly);
-        if (!usingDirectives.Contains("System.Collections.Generic"))
+        if (usingDirectives != null && !usingDirectives.Contains("System")) assemblies.Add(typeof(object).Assembly);
+        if (usingDirectives != null && !usingDirectives.Contains("System.Collections.Generic"))
         {
             assemblies.Add(typeof(List<>).Assembly);
             assemblies.Add(typeof(Dictionary<,>).Assembly);
@@ -122,7 +122,7 @@ public class DynamicAssemblyGenerator : IDynamicAssemblyGenerator
             assemblies.Add(typeof(IList<>).Assembly);
         }
 
-        if (!usingDirectives.Contains("System.Linq")) assemblies.Add(typeof(IQueryable<>).Assembly);
+        if (usingDirectives != null && !usingDirectives.Contains("System.Linq")) assemblies.Add(typeof(IQueryable<>).Assembly);
 
         return assemblies.Select(assembly => MetadataReference.CreateFromFile(assembly.Location))
             .Cast<MetadataReference>().ToList();
@@ -167,7 +167,7 @@ public class DynamicAssemblyGenerator : IDynamicAssemblyGenerator
     /// <param name="syntaxTree">The syntax tree.</param>
     /// <param name="referencedAssemblies">The referenced assemblies.</param>
     /// <returns>A CSharpCompilation.</returns>
-    private static CSharpCompilation CreateCompilation(SyntaxTree syntaxTree,
+    private static CSharpCompilation CreateCompilation(SyntaxTree? syntaxTree,
         List<MetadataReference> referencedAssemblies)
     {
         syntaxTree = AddMissingNamespaces(syntaxTree, referencedAssemblies);
@@ -175,7 +175,7 @@ public class DynamicAssemblyGenerator : IDynamicAssemblyGenerator
         var assemblyName = $"DynamicAssembly{Guid.NewGuid()}";
         return CSharpCompilation.Create(
             assemblyName,
-            new[] {syntaxTree},
+            new[] {syntaxTree}!,
             referencedAssemblies,
             new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
         );
@@ -187,35 +187,39 @@ public class DynamicAssemblyGenerator : IDynamicAssemblyGenerator
     /// <param name="syntaxTree">The syntax tree.</param>
     /// <param name="referencedAssemblies">The referenced assemblies.</param>
     /// <returns>A SyntaxTree.</returns>
-    private static SyntaxTree AddMissingNamespaces(SyntaxTree syntaxTree, List<MetadataReference> referencedAssemblies)
+    private static SyntaxTree? AddMissingNamespaces(SyntaxTree? syntaxTree, List<MetadataReference> referencedAssemblies)
     {
-        var root = syntaxTree.GetRoot();
+        var root = syntaxTree?.GetRoot();
         var compilationUnit = root as CompilationUnitSyntax;
-        var usingDirectives = compilationUnit.Usings;
-
-        // Define the list of missing types to find
-        var missingTypes = new List<string>
+        if (compilationUnit != null)
         {
-            "System.DateTime",
-            "System.Collections.Generic.Dictionary`2",
-            "System.Collections.Generic.List`1"
-        };
+            var usingDirectives = compilationUnit.Usings;
 
-        var alc = CreateReferenceAssemblyLoadContext(referencedAssemblies);
+            // Define the list of missing types to find
+            var missingTypes = new List<string>
+            {
+                "System.DateTime",
+                "System.Collections.Generic.Dictionary`2",
+                "System.Collections.Generic.List`1"
+            };
 
-        foreach (var directive in from typeName in missingTypes
-                 select FindTypeInReferencedAssemblies(typeName, alc)
-                 into type
-                 where type != null
-                 select type.Namespace
-                 into namespaceName
-                 let directive = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(namespaceName))
-                 where !usingDirectives.Any(ud => ud.Name.ToString() == namespaceName)
-                 select directive) usingDirectives = usingDirectives.Add(directive);
+            var alc = CreateReferenceAssemblyLoadContext(referencedAssemblies);
 
-        // Replace the compilation unit's using directives with the updated list
-        compilationUnit = compilationUnit.WithUsings(usingDirectives);
-        return compilationUnit.SyntaxTree;
+            foreach (var directive in from typeName in missingTypes
+                     select FindTypeInReferencedAssemblies(typeName, alc)
+                     into type
+                     where type != null
+                     select type.Namespace
+                     into namespaceName
+                     let directive = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(namespaceName))
+                     where usingDirectives.All(ud => ud.Name.ToString() != namespaceName)
+                     select directive) usingDirectives = usingDirectives.Add(directive);
+
+            // Replace the compilation unit's using directives with the updated list
+            compilationUnit = compilationUnit.WithUsings(usingDirectives);
+        }
+
+        return compilationUnit?.SyntaxTree;
     }
 
     /// <summary>

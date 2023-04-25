@@ -9,6 +9,10 @@ public class CompilerService : ICompilerService
 {
     private readonly IDynamicAssemblyGenerator _dynamicAssemblyGenerator;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CompilerService"/> class.
+    /// </summary>
+    /// <param name="dynamicAssemblyGenerator">The dynamic assembly generator.</param>
     public CompilerService(IDynamicAssemblyGenerator dynamicAssemblyGenerator)
     {
         _dynamicAssemblyGenerator = dynamicAssemblyGenerator;

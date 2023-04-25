@@ -12,19 +12,19 @@ public class AvroAvscPrimitiveTypeHandler : IAvroAvscTypeHandler
     /// </summary>
     /// <param name="type">The type.</param>
     /// <returns>A bool.</returns>
-    public bool IfCanHandleAvroAvscType(Type type)
+    public bool IfCanHandleAvroAvscType(Type? type)
     {
-        return type.IsPrimitive || type == typeof(string) || type == typeof(decimal) || type == typeof(DateTime) ||
-               type == typeof(DateTimeOffset) || type == typeof(TimeSpan) || type == typeof(Guid);
+        return type != null && (type.IsPrimitive || type == typeof(string) || type == typeof(decimal) || type == typeof(DateTime) ||
+                                type == typeof(DateTimeOffset) || type == typeof(TimeSpan) || type == typeof(Guid));
     }
 
     /// <summary>
-    /// Thens the create avro avsc type.
+    /// Then the create avro avsc type.
     /// </summary>
     /// <param name="type">The type.</param>
     /// <param name="forAvroAvscGeneratedTypes">The for avro avsc generated types.</param>
     /// <returns>An object.</returns>
-    public object ThenCreateAvroAvscType(Type type, HashSet<string> forAvroAvscGeneratedTypes)
+    public object ThenCreateAvroAvscType(Type? type, HashSet<string> forAvroAvscGeneratedTypes)
     {
         return MapCSharpTypeToAvroType(type);
     }
@@ -34,7 +34,7 @@ public class AvroAvscPrimitiveTypeHandler : IAvroAvscTypeHandler
     /// </summary>
     /// <param name="type">The type.</param>
     /// <returns>A string.</returns>
-    private string MapCSharpTypeToAvroType(Type type)
+    private static string MapCSharpTypeToAvroType(Type? type)
     {
         if (type == typeof(bool)) return "boolean";
         if (type == typeof(int)) return "int";
@@ -48,6 +48,6 @@ public class AvroAvscPrimitiveTypeHandler : IAvroAvscTypeHandler
         if (type == typeof(TimeSpan)) return "long";
         if (type == typeof(Guid)) return "string";
 
-        throw new NotSupportedException($"The type '{type.Name}' is not supported by the Avro schema generator.");
+        throw new NotSupportedException($"The type '{type?.Name}' is not supported by the Avro schema generator.");
     }
 }

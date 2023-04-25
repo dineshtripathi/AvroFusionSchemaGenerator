@@ -12,9 +12,7 @@ public class ProgressReporter
     /// <param name="message">The message.</param>
     public void UpdateProgress(int progress, string? message)
     {
-        // Implement progress reporting logic here
+
     }
 }
 
-// Add the necessary using directives
-// ...

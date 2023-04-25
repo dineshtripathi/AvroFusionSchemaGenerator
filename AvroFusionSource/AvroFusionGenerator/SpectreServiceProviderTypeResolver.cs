@@ -10,6 +10,10 @@ public class SpectreServiceProviderTypeResolver : ITypeResolver
 {
     private readonly IServiceProvider? _serviceProvider;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SpectreServiceProviderTypeResolver"/> class.
+    /// </summary>
+    /// <param name="serviceProvider">The service provider.</param>
     public SpectreServiceProviderTypeResolver(IServiceProvider? serviceProvider)
     {
         _serviceProvider = serviceProvider;
@@ -20,8 +24,8 @@ public class SpectreServiceProviderTypeResolver : ITypeResolver
     /// </summary>
     /// <param name="type">The type.</param>
     /// <returns>An object.</returns>
-    public object Resolve(Type? type)
+    public object? Resolve(Type? type)
     {
-        return _serviceProvider?.GetRequiredService(type);
+        return type != null ? _serviceProvider?.GetRequiredService(type) : null;
     }
 }

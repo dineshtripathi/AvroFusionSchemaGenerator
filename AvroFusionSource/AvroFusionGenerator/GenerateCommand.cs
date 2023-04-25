@@ -33,20 +33,27 @@ public class GenerateCommand : AsyncCommand<GenerateCommand.Settings>
         var outputDir = settings.OutputDir;
         var @namespace = settings.Namespace;
 
-        // Load types from the input file
-        var sourceCode = await File.ReadAllTextAsync(inputFile);
-        var types = _compilerService.LoadTypesFromSource(sourceCode);
+        if (inputFile != null)
+        {
+            var sourceCode = await File.ReadAllTextAsync(inputFile);
+            var types = _compilerService.LoadTypesFromSource(sourceCode);
 
-        // Generate the Avro schema
-        var parentType = GetMainParentType(types);
-        var progressReporter = new ProgressReporter(); // Create a progress reporter if needed
-        var schemaFromParentClassProperties =
-            _avroSchemaGenerator.GenerateAvroAvscSshema(types, parentType.Name, progressReporter);
+            var parentType = GetMainParentType(types);
+            var progressReporter = new ProgressReporter();
+            if (parentType?.Name != null)
+            {
+                var schemaFromParentClassProperties =
+                    _avroSchemaGenerator.GenerateAvroAvscSchema(types, parentType.Name, progressReporter);
 
-        // Save the combined Avro schema to the output directory
-        var outputPath = Path.Combine(outputDir, $"{parentType.Namespace}.{parentType.Name}.avsc");
-        await File.WriteAllTextAsync(outputPath, schemaFromParentClassProperties);
-        RunAvroGen(outputPath);
+                if (outputDir != null)
+                {
+                    var outputPath = Path.Combine(outputDir, $"{parentType.Namespace}.{parentType.Name}.avsc");
+                    await File.WriteAllTextAsync(outputPath, schemaFromParentClassProperties);
+                    RunAvroGen(outputPath);
+                }
+            }
+        }
+
         AnsiConsole.MarkupLine("[green]Success![/]");
 
         return 0;
@@ -57,10 +64,11 @@ public class GenerateCommand : AsyncCommand<GenerateCommand.Settings>
     /// </summary>
     /// <param name="types">The types.</param>
     /// <returns>A Type.</returns>
-    public Type GetMainParentType(IEnumerable<Type> types)
+    public Type? GetMainParentType(IEnumerable<Type?> types)
     {
-        var typeSet = new HashSet<Type>(types);
-        return (from type in types
+        var collection = types.ToList();
+        var typeSet = new HashSet<Type?>(collection);
+        return (from type in collection
             let properties = type.GetProperties()
             from property in properties
             where typeSet.Contains(property.PropertyType)
@@ -94,10 +102,8 @@ public class GenerateCommand : AsyncCommand<GenerateCommand.Settings>
 
         process.Start();
 
-        // Execute the avrogen command
-        process.StandardInput.WriteLine(
-            $"avrogen -s {schemaFilePath} {schemaFileDirectory}\\output --skip-directories");
-        process.StandardInput.WriteLine("exit"); // Exit the command prompt
+        process.StandardInput.WriteLine($"avrogen -s {schemaFilePath} {schemaFileDirectory}\\output --skip-directories");
+        process.StandardInput.WriteLine("exit"); 
         var output = process.StandardOutput.ReadToEnd();
         process.WaitForExit();
 

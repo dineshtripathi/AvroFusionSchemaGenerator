@@ -15,24 +15,28 @@ public static class DependencyInjectionHelper
     /// </summary>
     /// <param name="services">The services.</param>
     /// <returns>An IServiceProvider.</returns>
-    public static IServiceProvider RegisterAllServices(IServiceCollection? services)
+    public static IServiceProvider? RegisterAllServices(IServiceCollection? services)
     {
         ITypeStrategyRegistration typeStrategyRegistration = new TypeStrategyRegistration();
-        typeStrategyRegistration.RegisterTypeStrategies(services);
-        services?.AddSingleton<IAvroTypeStrategyResolver, AvroTypeStrategyResolver>();
+        if (services != null)
+        {
+            typeStrategyRegistration.RegisterTypeStrategies(services);
+            services?.AddSingleton<IAvroTypeStrategyResolver, AvroTypeStrategyResolver>();
+            services?.AddSingleton<IAvroSchemaGenerator, AvroSchemaGenerator>();
+            services?.AddSingleton<Lazy<IAvroSchemaGenerator>>(sp =>
+                new Lazy<IAvroSchemaGenerator>(sp.GetRequiredService<IAvroSchemaGenerator>));
 
-        services.AddSingleton<IAvroSchemaGenerator, AvroSchemaGenerator>();
-        services.AddSingleton<Lazy<IAvroSchemaGenerator>>(sp =>
-            new Lazy<IAvroSchemaGenerator>(() => sp.GetRequiredService<IAvroSchemaGenerator>()));
+            ICompilerServiceRegistration compilerServiceRegistration = new CompilerServiceRegistration();
+            compilerServiceRegistration.RegisterCompilerServices(services);
 
-        ICompilerServiceRegistration compilerServiceRegistration = new CompilerServiceRegistration();
-        compilerServiceRegistration.RegisterCompilerServices(services);
+            ICommandBuilderRegistration commandBuilderRegistration = new CommandBuilderRegistration();
+            commandBuilderRegistration.RegisterCommandBuilder(services);
 
-        ICommandBuilderRegistration commandBuilderRegistration = new CommandBuilderRegistration();
-        commandBuilderRegistration.RegisterCommandBuilder(services);
+            services?.AddSingleton<ProgressReporter>();
 
-        services?.AddSingleton<ProgressReporter>();
+            if (services != null) return services.BuildServiceProvider();
+        }
 
-        return services.BuildServiceProvider();
+        return null;
     }
 }

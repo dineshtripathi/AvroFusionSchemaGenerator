@@ -9,6 +9,10 @@ public class AvroAvscNullableTypeHandler : IAvroAvscTypeHandler
 {
     private readonly Lazy<IAvroSchemaGenerator> _avroSchemaGenerator;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AvroAvscNullableTypeHandler"/> class.
+    /// </summary>
+    /// <param name="avroSchemaGenerator">The avro schema generator.</param>
     public AvroAvscNullableTypeHandler(Lazy<IAvroSchemaGenerator> avroSchemaGenerator)
     {
         _avroSchemaGenerator = avroSchemaGenerator;
@@ -19,23 +23,28 @@ public class AvroAvscNullableTypeHandler : IAvroAvscTypeHandler
     /// </summary>
     /// <param name="type">The type.</param>
     /// <returns>A bool.</returns>
-    public bool IfCanHandleAvroAvscType(Type type)
+    public bool IfCanHandleAvroAvscType(Type? type)
     {
-        return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+        return type is {IsGenericType: true} && type.GetGenericTypeDefinition() == typeof(Nullable<>);
     }
 
     /// <summary>
-    /// Thens the create avro avsc type.
+    /// Then the create avro avsc type.
     /// </summary>
     /// <param name="type">The type.</param>
     /// <param name="forAvroAvscGeneratedTypes">The for avro avsc generated types.</param>
     /// <returns>An object.</returns>
-    public object ThenCreateAvroAvscType(Type type, HashSet<string> forAvroAvscGeneratedTypes)
+    public object? ThenCreateAvroAvscType(Type? type, HashSet<string> forAvroAvscGeneratedTypes)
     {
-        var underlyingType = Nullable.GetUnderlyingType(type);
-        var underlyingAvroType =
-            _avroSchemaGenerator.Value.GenerateAvroAvscType(underlyingType, forAvroAvscGeneratedTypes);
+        if (type != null)
+        {
+            var underlyingType = Nullable.GetUnderlyingType(type);
+            var underlyingAvroType =
+                _avroSchemaGenerator.Value.GenerateAvroAvscType(underlyingType, forAvroAvscGeneratedTypes);
 
-        return new[] {"null", underlyingAvroType};
+            return new[] {"null", underlyingAvroType};
+        }
+
+        return null;
     }
 }

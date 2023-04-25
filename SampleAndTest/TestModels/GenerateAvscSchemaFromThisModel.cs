@@ -24,6 +24,8 @@ namespace TestModels
         public List<Schema>? Schemas { get; set; }
         public Dictionary<string, CosmosDb>? CosmosDBs { get; set; }
         public AzureResource? AzureResources { get; set; }
+        public ArmTemplateMetadata? ArmTemplateMetadata { get; set; }
+        public Tuple<string,string,int,List<string>>? MappingResources { get; set; }
     }
     /// <summary>
     /// 
@@ -152,4 +154,11 @@ namespace TestModels
         public object? ProvisioningState { get; set; }
     }
 
+    public struct ArmTemplateMetadata
+    {
+        public string Sku { get; set; }
+        public string PricingPlan { get; set; }
+        public string Endpoints { get; set; }
+        public List<string> IpAddressRange { get; set; }
+    }
 }
