@@ -43,13 +43,17 @@ on:
   pull_request:
     branches: [ "main" ]
 
-jobs:
+env:
+  Solution_Name: AvroFusionGenerator.sln
+  Project_Name: AvroFusionGenerator
+  Project_Directory: AvroFusionSource/AvroFusionGenerator
+  Pipeline_Token: ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}
 
+jobs:
   prepare:
     runs-on: ubuntu-latest
     outputs:
       new_version: ${{ steps.increment_version.outputs.new_version }}
-
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -77,10 +81,7 @@ jobs:
         NEW_PATCH=$((PATCH + 1))
 
         NEW_VERSION="v$MAJOR.$MINOR.$NEW_PATCH-beta$VersionSuffix"
-        echo "new_version=$NEW_VERSION" | tee -a $GITHUB_ENV >> $GITHUB_OUTPUT
-        echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
-
-   
+        echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
 
   build:
     needs: prepare
@@ -88,11 +89,6 @@ jobs:
     strategy:
       matrix:
         configuration: [Release]
-
-    env:
-      Solution_Name: AvroFusionGenerator.sln
-      Project_Name: AvroFusionGenerator
-      Project_Directory: AvroFusionSource/AvroFusionGenerator
 
     steps:
     - name: Checkout
@@ -106,23 +102,17 @@ jobs:
         dotnet-version: 7.0.x
 
     - name: Restore dependencies
-      run: dotnet restore
-      shell: bash
+      run: dotnet restore ${{ env.Solution_Name }}
 
     - name: Build the solution
-      run: dotnet build $Solution_Name --configuration $Configuration
-      env:
-        Configuration: ${{ matrix.configuration }}
-      shell: bash
+      run: dotnet build ${{ env.Solution_Name }} --configuration ${{ matrix.configuration }}
 
     - name: Create the app package
       run: dotnet msbuild ${{ env.Project_Directory }}/${{ env.Project_Name }}.csproj /p:Configuration=${{ matrix.configuration }} /t:Publish
-      shell: bash
 
   publish:
     needs: build
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -131,20 +121,17 @@ jobs:
 
     - name: Get new version from prepare job
       id: get_new_version
-      run: |
-        NEW_VERSION="${{ needs.prepare.outputs.new_version }}"
-        echo "New version=$NEW_VERSION" >> $GITHUB_OUTPUT
-        echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+      run: echo "::set-output name=new_version::${{ needs.prepare.outputs.new_version }}"
 
     - name: Create NuGet package
       run: |
-        mkdir -p AvroFusionSource/AvroFusionGenerator/nupkg
-        dotnet pack --configuration Release --version ${{ steps.get_new_version.outputs.new_version }} --output AvroFusionSource/AvroFusionGenerator/nupkg
-      working-directory: AvroFusionSource/AvroFusionGenerator
-
+        NUPKG_DIR=$(pwd)/${{ env.Project_Directory }}/nupkg
+        mkdir -p $NUPKG_DIR
+        dotnet pack ${{ env.Project_Directory }}/${{ env.Project_Name }}.csproj --configuration Release --version ${{ steps.get_new_version.outputs.new_version }} --output $NUPKG_DIR --verbosity detailed
 
     - name: List NuGet package file
-      run: ls -R AvroFusionSource/AvroFusionGenerator/nupkg/
+      run: ls -R ${{ env.Project_Directory }}/nupkg/
+
 
     - name: Publish NuGet package
       uses: actions/upload-artifact@v2
