@@ -35,6 +35,150 @@
 # For more information on GitHub Actions, refer to https://github.com/features/actions
 # For a complete CI/CD sample to get started with GitHub Action workflows for Desktop Applications,
 # refer to https://github.com/microsoft/github-actions-for-desktop-apps
+#name: .NET 7 AVRO Fusion Generator
+
+#on:
+#  push:
+#    branches: [ "main" ]
+#  pull_request:
+#    branches: [ "main" ]
+
+#env:
+#  Solution_Name: AvroFusionGenerator.sln
+#  Project_Name: AvroFusionGenerator
+#  Project_Directory: AvroFusionSource/AvroFusionGenerator
+#  Pipeline_Token: ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}
+
+#jobs:
+#  prepare:
+#    runs-on: ubuntu-latest
+#    outputs:
+#      new_version: ${{ steps.increment_version.outputs.new_version }}
+#    steps:
+#    - name: Checkout
+#      uses: actions/checkout@v3
+#      with:
+#        fetch-depth: 0
+
+#    - name: Increment version suffix
+#      run: |
+#        echo "VersionSuffix=$(date +%y%m%d%H%M%S)" >> $GITHUB_ENV
+
+#    - name: Increment version
+#      id: increment_version
+#      run: |
+#        LATEST_TAG=$(git describe --tags --abbrev=0)
+#        TAG_FORMAT_REGEX="^v(\d+\.\d+\.\d+)(-.+)?$"
+        
+#        if [[ ! $LATEST_TAG =~ $TAG_FORMAT_REGEX ]]; then
+#          LATEST_TAG="v1.0.0"
+#        fi
+
+#        IFS='.' read -ra VERSION_PARTS <<< "${LATEST_TAG#v}"
+#        MAJOR=${VERSION_PARTS[0]}
+#        MINOR=${VERSION_PARTS[1]}
+#        PATCH=${VERSION_PARTS[2]%-*}
+#        NEW_PATCH=$((PATCH + 1))
+
+#        NEW_VERSION="v$MAJOR.$MINOR.$NEW_PATCH-beta$VersionSuffix"
+#        echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
+
+#  build:
+#    needs: prepare
+#    runs-on: ubuntu-latest
+#    strategy:
+#      matrix:
+#        configuration: [Release]
+
+#    steps:
+#    - name: Checkout
+#      uses: actions/checkout@v3
+#      with:
+#        fetch-depth: 0
+
+#    - name: Install .NET 7 SDK
+#      uses: actions/setup-dotnet@v3
+#      with:
+#        dotnet-version: 7.0.x
+
+#    - name: Restore dependencies
+#      run: dotnet restore ${{ env.Solution_Name }}
+
+#    - name: Build the solution
+#      run: dotnet build ${{ env.Solution_Name }} --configuration ${{ matrix.configuration }}
+
+#    - name: Create the app package
+#      run: dotnet msbuild ${{ env.Project_Directory }}/${{ env.Project_Name }}.csproj /p:Configuration=${{ matrix.configuration }} /t:Publish
+
+#  publish:
+#    needs: build
+#    runs-on: ubuntu-latest
+#    steps:
+#    - name: Checkout
+#      uses: actions/checkout@v3
+#      with:
+#        fetch-depth: 0
+
+#    - name: Get new version from prepare job
+#      id: get_new_version
+#      run: echo "new_version=${{ needs.prepare.outputs.new_version }}"
+
+#    - name: Create NuGet package
+#      run: |
+#       NUPKG_DIR=$(pwd)/AvroFusionSource/AvroFusionGenerator/nupkg
+#       mkdir -p $NUPKG_DIR
+#       dotnet pack AvroFusionSource/AvroFusionGenerator/AvroFusionGenerator.csproj --configuration Release --version ${{ steps.get_new_version.outputs.new_version }} --output $NUPKG_DIR
+#      working-directory: AvroFusionSource/AvroFusionGenerator
+
+#    - name: List NuGet package file
+#      run: ls -R ${{ env.Project_Directory }}/nupkg/
+
+#    - name: Publish NuGet package
+#      uses: actions/upload-artifact@v2
+#      with:
+#        name: NuGetPackage
+#        path: ${{ env.Project_Directory }}/nupkg/*.nupkg
+#        if-no-files-found: warn
+
+
+#  tag:
+#    needs: publish
+#    runs-on: ubuntu-latest
+#    env:
+#      Pipeline_Token: ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}
+
+#    steps:
+#    - name: Checkout
+#      uses: actions/checkout@v3
+#      with:
+#        fetch-depth: 0
+
+#    - name: Set up Git
+#      run: |
+#        git config --local user.email "action@github.com"
+#        git config --local user.name "GitHub Action"
+
+#    - name: Get new version from prepare job
+#      id: get_new_version
+#      run: |
+#        NEW_VERSION="${{ needs.prepare.outputs.new_version }}"
+#        echo "New version=$NEW_VERSION" >> $GITHUB_OUTPUT
+#        echo "name=new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+#    - name: Create and push Git tag
+#      run: |
+#        git tag ${{ steps.get_new_version.outputs.new_version }}
+#        git push https://${{ env.Pipeline_Token }}@github.com/${{ github.repository }}.git --tags
+
+
+#  cleanup:
+#    needs: [prepare, build, publish, tag]
+#    runs-on: ubuntu-latest
+
+#    steps:
+#    - name: Cleanup artifacts
+#      run: echo "Perform cleanup tasks here"
+
 name: .NET 7 AVRO Fusion Generator
 
 on:
@@ -43,105 +187,19 @@ on:
   pull_request:
     branches: [ "main" ]
 
-env:
-  Solution_Name: AvroFusionGenerator.sln
-  Project_Name: AvroFusionGenerator
-  Project_Directory: AvroFusionSource/AvroFusionGenerator
-  Pipeline_Token: ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}
-
 jobs:
-  prepare:
-    runs-on: ubuntu-latest
-    outputs:
-      new_version: ${{ steps.increment_version.outputs.new_version }}
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-
-    - name: Increment version suffix
-      run: |
-        echo "VersionSuffix=$(date +%y%m%d%H%M%S)" >> $GITHUB_ENV
-
-    - name: Increment version
-      id: increment_version
-      run: |
-        LATEST_TAG=$(git describe --tags --abbrev=0)
-        TAG_FORMAT_REGEX="^v(\d+\.\d+\.\d+)(-.+)?$"
-        
-        if [[ ! $LATEST_TAG =~ $TAG_FORMAT_REGEX ]]; then
-          LATEST_TAG="v1.0.0"
-        fi
-
-        IFS='.' read -ra VERSION_PARTS <<< "${LATEST_TAG#v}"
-        MAJOR=${VERSION_PARTS[0]}
-        MINOR=${VERSION_PARTS[1]}
-        PATCH=${VERSION_PARTS[2]%-*}
-        NEW_PATCH=$((PATCH + 1))
-
-        NEW_VERSION="v$MAJOR.$MINOR.$NEW_PATCH-beta$VersionSuffix"
-        echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
-
   build:
-    needs: prepare
-    runs-on: ubuntu-latest
+    name: Build ${{ matrix.configuration }}
     strategy:
       matrix:
         configuration: [Release]
 
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-
-    - name: Install .NET 7 SDK
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 7.0.x
-
-    - name: Restore dependencies
-      run: dotnet restore ${{ env.Solution_Name }}
-
-    - name: Build the solution
-      run: dotnet build ${{ env.Solution_Name }} --configuration ${{ matrix.configuration }}
-
-    - name: Create the app package
-      run: dotnet msbuild ${{ env.Project_Directory }}/${{ env.Project_Name }}.csproj /p:Configuration=${{ matrix.configuration }} /t:Publish
-
-  publish:
-    needs: build
     runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
 
-    - name: Get new version from prepare job
-      id: get_new_version
-      run: echo "new_version=${{ needs.prepare.outputs.new_version }}"
-
-    - name: Create NuGet package
-      run:  dotnet pack --configuration Release --version ${{ steps.get_new_version.outputs.new_version }}
-      working-directory: AvroFusionSource/AvroFusionGenerator
-
-    - name: List NuGet package file
-      run: ls -R ${{ env.Project_Directory }}/nupkg/
-
-    - name: Publish NuGet package
-      uses: actions/upload-artifact@v2
-      with:
-        name: NuGetPackage
-        path: ${{ env.Project_Directory }}/nupkg/*.nupkg
-        if-no-files-found: warn
-
-
-  tag:
-    needs: publish
-    runs-on: ubuntu-latest
     env:
+      Solution_Name: AvroFusionGenerator.sln
+      Project_Name: AvroFusionGenerator
+      Project_Directory: AvroFusionSource/AvroFusionGenerator
       Pipeline_Token: ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}
 
     steps:
@@ -150,33 +208,51 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Set up Git
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
+    # Install the .NET 7 SDK
+    - name: Install .NET 7 SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+    - name: Install jq
+      run: sudo apt-get install jq
 
-    - name: Get new version from prepare job
-      id: get_new_version
+    - name: Increment version suffix
       run: |
-        NEW_VERSION="${{ needs.prepare.outputs.new_version }}"
-        echo "New version=$NEW_VERSION" >> $GITHUB_OUTPUT
-        echo "name=new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+        echo "VersionSuffix=$(date +%y%m%d%H%M%S)" >> $GITHUB_ENV
+
+    - name: Restore dependencies
+      run: dotnet restore
+      shell: bash
+
+    - name: Build the solution
+      run: dotnet build $Solution_Name --configuration $Configuration
+      env:
+        Configuration: ${{ matrix.configuration }}
+      shell: bash
+
+    - name: Create the app package
+      run: dotnet msbuild ${{ env.Project_Directory }}/${{ env.Project_Name }}.csproj /p:Configuration=${{ matrix.configuration }} /t:Publish
+      shell: bash
+
+    - name: Create NuGet package
+      run: dotnet pack --configuration Release --version 1.0.${{ github.run_number }}-beta${{ env.VersionSuffix }}
+      working-directory: AvroFusionSource/AvroFusionGenerator
+
+    - name: List NuGet package file
+      run: ls -R AvroFusionSource/AvroFusionGenerator/nupkg/
+
+    - name: Publish NuGet package
+      uses: actions/upload-artifact@v2
+      with:
+        name: NuGetPackage
+        path: AvroFusionSource/AvroFusionGenerator/nupkg/*.nupkg
+        if-no-files-found: warn
 
     - name: Create and push Git tag
       run: |
-        git tag ${{ steps.get_new_version.outputs.new_version }}
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        TAG_NAME="v1.0.${{ github.run_number }}-beta${{ env.VersionSuffix }}"
+        git tag $TAG_NAME
         git push https://${{ env.Pipeline_Token }}@github.com/${{ github.repository }}.git --tags
-
-
-  cleanup:
-    needs: [prepare, build, publish, tag]
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Cleanup artifacts
-      run: echo "Perform cleanup tasks here"
-
-
-
-
-
+      shell: bash
