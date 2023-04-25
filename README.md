@@ -49,6 +49,7 @@ To download the latest release of AvroFusionGenerator,
 |-----------------|-----------------|-----------------|----------------|--------------|
 |[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12468448665/artifacts/664337237)|  |  | | |
 |[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12468448665/artifacts/664337237)|  |  | | |
+|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12468448665/artifacts/664337237)|  |  | | |
 |[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12466339922/artifacts/664190454)|  |  | | |
 |[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12466339922/artifacts/664190454)|  |  | | |
 |[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12466119735/artifacts/664175078)|  |  | | |
