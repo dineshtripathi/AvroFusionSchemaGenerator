@@ -48,6 +48,7 @@ To download the latest release of AvroFusionGenerator,
 | Download Package| Package Name    | Package Version | Release Number | Release Type |
 |-----------------|-----------------|-----------------|----------------|--------------|
 |[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12466339922/artifacts/664190454)|  |  | | |
+|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12466339922/artifacts/664190454)|  |  | | |
 |[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12466119735/artifacts/664175078)|  |  | | |
 |[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12466119735/artifacts/664175078)|  |  | | |
 |[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12465677718/artifacts/664144298)|  |  | | |
