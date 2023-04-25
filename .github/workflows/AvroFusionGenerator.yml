@@ -179,6 +179,86 @@
 #    - name: Cleanup artifacts
 #      run: echo "Perform cleanup tasks here"
 
+
+#------------------------------------------------------------
+#name: .NET 7 AVRO Fusion Generator
+
+#on:
+#  push:
+#    branches: [ "main" ]
+#  pull_request:
+#    branches: [ "main" ]
+
+#jobs:
+#  build:
+#    name: Build ${{ matrix.configuration }}
+#    strategy:
+#      matrix:
+#        configuration: [Release]
+
+#    runs-on: ubuntu-latest
+
+#    env:
+#      Solution_Name: AvroFusionGenerator.sln
+#      Project_Name: AvroFusionGenerator
+#      Project_Directory: AvroFusionSource/AvroFusionGenerator
+#      Pipeline_Token: ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}
+
+#    steps:
+#    - name: Checkout
+#      uses: actions/checkout@v3
+#      with:
+#        fetch-depth: 0
+
+#    # Install the .NET 7 SDK
+#    - name: Install .NET 7 SDK
+#      uses: actions/setup-dotnet@v3
+#      with:
+#        dotnet-version: 7.0.x
+#    - name: Install jq
+#      run: sudo apt-get install jq
+
+#    - name: Increment version suffix
+#      run: |
+#        echo "VersionSuffix=$(date +%y%m%d%H%M%S)" >> $GITHUB_ENV
+
+#    - name: Restore dependencies
+#      run: dotnet restore
+#      shell: bash
+
+#    - name: Build the solution
+#      run: dotnet build $Solution_Name --configuration $Configuration
+#      env:
+#        Configuration: ${{ matrix.configuration }}
+#      shell: bash
+
+#    - name: Create the app package
+#      run: dotnet msbuild ${{ env.Project_Directory }}/${{ env.Project_Name }}.csproj /p:Configuration=${{ matrix.configuration }} /t:Publish
+#      shell: bash
+
+#    - name: Create NuGet package
+#      run: dotnet pack --configuration Release --version 1.0.${{ github.run_number }}-beta${{ env.VersionSuffix }}
+#      working-directory: AvroFusionSource/AvroFusionGenerator
+
+#    - name: List NuGet package file
+#      run: ls -R AvroFusionSource/AvroFusionGenerator/nupkg/
+
+#    - name: Publish NuGet package
+#      uses: actions/upload-artifact@v2
+#      with:
+#        name: NuGetPackage
+#        path: AvroFusionSource/AvroFusionGenerator/nupkg/*.nupkg
+#        if-no-files-found: warn
+
+#    - name: Create and push Git tag
+#      run: |
+#        git config --local user.email "action@github.com"
+#        git config --local user.name "GitHub Action"
+#        TAG_NAME="v1.0.${{ github.run_number }}-beta${{ env.VersionSuffix }}"
+#        git tag $TAG_NAME
+#        git push https://${{ env.Pipeline_Token }}@github.com/${{ github.repository }}.git --tags
+#      shell: bash
+
 name: .NET 7 AVRO Fusion Generator
 
 on:
@@ -188,6 +268,7 @@ on:
     branches: [ "main" ]
 
 jobs:
+
   build:
     name: Build ${{ matrix.configuration }}
     strategy:
@@ -201,6 +282,7 @@ jobs:
       Project_Name: AvroFusionGenerator
       Project_Directory: AvroFusionSource/AvroFusionGenerator
       Pipeline_Token: ${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}
+
 
     steps:
     - name: Checkout
@@ -230,16 +312,19 @@ jobs:
         Configuration: ${{ matrix.configuration }}
       shell: bash
 
+
+    # Create the app package by building and packaging the Windows Application Packaging project
     - name: Create the app package
       run: dotnet msbuild ${{ env.Project_Directory }}/${{ env.Project_Name }}.csproj /p:Configuration=${{ matrix.configuration }} /t:Publish
       shell: bash
-
+    
     - name: Create NuGet package
       run: dotnet pack --configuration Release --version 1.0.${{ github.run_number }}-beta${{ env.VersionSuffix }}
       working-directory: AvroFusionSource/AvroFusionGenerator
 
     - name: List NuGet package file
       run: ls -R AvroFusionSource/AvroFusionGenerator/nupkg/
+
 
     - name: Publish NuGet package
       uses: actions/upload-artifact@v2
@@ -248,11 +333,45 @@ jobs:
         path: AvroFusionSource/AvroFusionGenerator/nupkg/*.nupkg
         if-no-files-found: warn
 
-    - name: Create and push Git tag
+    
+    - name: Create GITHUB_OUTPUT file
       run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        TAG_NAME="v1.0.${{ github.run_number }}-beta${{ env.VersionSuffix }}"
-        git tag $TAG_NAME
-        git push https://${{ env.Pipeline_Token }}@github.com/${{ github.repository }}.git --tags
+        echo "GITHUB_OUTPUT=${{ runner.temp }}/github_output.env" >> $GITHUB_ENV
+
+    - name: Get latest commit short hash
+      run: echo "short_hash=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      
+    - name: Get total number of commits on main branch
+      run: echo "commit_count=$(git rev-list --count HEAD)" >> $GITHUB_OUTPUT
+
+    - name: Use output values
+      run: |
+        source <(cat $GITHUB_OUTPUT)
+        build_number=$(($commit_count + 1))
+        release_number="1.0.$build_number"
+        echo "Build number: $build_number"
+        echo "Release number: $release_number"
+      shell: bash
+      
+    
+    - name: Create Git tag
+      run: |
+       git config --local user.email "action@github.com"
+       git config --local user.name "GitHub Action"
+       git tag "v${release_number}-b${build_number}-g${short_hash}-r${{ github.run_id }}-d${current_date_time}"
+       git push https://${{ secrets.BUILD_TAGGING_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git --tags
+      shell: bash
+
+
+    - name: Set version number output
+      run: echo "version_number=1.0.0" >> $GITHUB_OUTPUT
+
+    - name: Set release number output
+      run: echo "release_number=100" >> $GITHUB_OUTPUT
+
+    - name: Use version and release numbers
+      run: |
+        source <(cat $GITHUB_OUTPUT)
+        echo "The version number is: $version_number"
+        echo "The release number is: $release_number"
       shell: bash
