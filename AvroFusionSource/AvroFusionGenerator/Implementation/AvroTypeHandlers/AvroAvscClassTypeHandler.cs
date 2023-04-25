@@ -10,6 +10,10 @@ public class AvroAvscClassTypeHandler : IAvroAvscTypeHandler
 {
     private readonly Lazy<IAvroSchemaGenerator> _avroSchemaGenerator;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AvroAvscClassTypeHandler"/> class.
+    /// </summary>
+    /// <param name="avroSchemaGenerator">The avro schema generator.</param>
     public AvroAvscClassTypeHandler(Lazy<IAvroSchemaGenerator> avroSchemaGenerator)
     {
         _avroSchemaGenerator = avroSchemaGenerator;
@@ -20,25 +24,25 @@ public class AvroAvscClassTypeHandler : IAvroAvscTypeHandler
     /// </summary>
     /// <param name="type">The type.</param>
     /// <returns>A bool.</returns>
-    public bool IfCanHandleAvroAvscType(Type type)
+    public bool IfCanHandleAvroAvscType(Type? type)
     {
-        return type.IsClass && !type.Equals(typeof(string));
+        return type is {IsClass: true} && type != typeof(string);
     }
 
     /// <summary>
-    /// Thens the create avro avsc type.
+    /// Then the create avro avsc type.
     /// </summary>
     /// <param name="type">The type.</param>
     /// <param name="forAvroAvscGeneratedTypes">The for avro avsc generated types.</param>
     /// <returns>An object.</returns>
-    public object ThenCreateAvroAvscType(Type type, HashSet<string> forAvroAvscGeneratedTypes)
+    public object? ThenCreateAvroAvscType(Type? type, HashSet<string> forAvroAvscGeneratedTypes)
     {
-        if (forAvroAvscGeneratedTypes.Contains(type.FullName))
+        if (type?.FullName != null && forAvroAvscGeneratedTypes.Contains(type.FullName))
             return type.FullName;
 
-        forAvroAvscGeneratedTypes.Add(type.FullName);
+        if (type?.FullName != null) forAvroAvscGeneratedTypes.Add(type.FullName);
 
-        var avroFieldInfo = type.GetProperties().Where(prop => !IsIgnoredType(prop.PropertyType))
+        var avroFieldInfo = type?.GetProperties().Where(prop => !IsIgnoredType(prop.PropertyType))
             .Select(prop => new
             {
                 name = prop.Name,
@@ -46,31 +50,36 @@ public class AvroAvscClassTypeHandler : IAvroAvscTypeHandler
                 aliasAttribute = prop.GetCustomAttribute<AvroDuplicateFieldAliasAttribute>()
             });
 
-        var createAvroAvscType = new Dictionary<string, object>
+        if (avroFieldInfo != null)
         {
-            {"type", "record"},
-            {"name", type.Name},
-            {"namespace", type.Namespace},
+            var createAvroAvscType = new Dictionary<string, object?>
             {
-                "fields", avroFieldInfo.Select(fieldInfo =>
+                {"type", "record"},
+                {"name", type?.Name},
+                {"namespace", type?.Namespace},
                 {
-                    var field = new Dictionary<string, object>
+                    "fields", avroFieldInfo.Select(fieldInfo =>
                     {
-                        {"name", fieldInfo.name},
-                        {"type", fieldInfo.type}
-                    };
+                        var field = new Dictionary<string, object?>
+                        {
+                            {"name", fieldInfo.name},
+                            {"type", fieldInfo.type}
+                        };
 
-                    if (fieldInfo.aliasAttribute != null)
-                    {
-                        field["aliases"] = new List<string> { fieldInfo.aliasAttribute.Alias };
-                    }
+                        if (fieldInfo.aliasAttribute != null)
+                        {
+                            field["aliases"] = new List<string> { fieldInfo.aliasAttribute.Alias };
+                        }
 
-                    return field;
-                }).ToList()
-            }
-        };
+                        return field;
+                    }).ToList()
+                }
+            };
 
-        return createAvroAvscType;
+            return createAvroAvscType;
+        }
+
+        return null;
     }
 
     /// <summary>
@@ -78,7 +87,7 @@ public class AvroAvscClassTypeHandler : IAvroAvscTypeHandler
     /// </summary>
     /// <param name="type">The type.</param>
     /// <returns>A bool.</returns>
-    private bool IsIgnoredType(Type type)
+    private static bool IsIgnoredType(Type type)
     {
         return type.GetInterfaces().Contains(typeof(IEqualityComparer<>)) ||
                type.Name.EndsWith("UnsupportedType", StringComparison.Ordinal) ||
@@ -93,13 +102,13 @@ public class AvroAvscClassTypeHandler : IAvroAvscTypeHandler
     /// <param name="prop">The prop.</param>
     /// <param name="generatedTypes">The generated types.</param>
     /// <returns>An object.</returns>
-    private object GenerateUnionTypeIfRequired(PropertyInfo prop, HashSet<string> generatedTypes)
+    private object? GenerateUnionTypeIfRequired(PropertyInfo prop, HashSet<string> generatedTypes)
     {
         var avroUnionAttribute = prop.GetCustomAttribute<AvroUnionTypeAttribute>();
 
         if (avroUnionAttribute != null)
         {
-            var unionTypes = avroUnionAttribute.UnionTypes.Select(unionType =>
+            List<object?> unionTypes = avroUnionAttribute.UnionTypes.Select(unionType =>
                 _avroSchemaGenerator.Value.GenerateAvroAvscType(unionType, generatedTypes)).ToList();
             unionTypes.Add("null");
             return unionTypes;

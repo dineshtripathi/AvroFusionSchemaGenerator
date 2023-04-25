@@ -10,12 +10,12 @@ public interface IAvroAvscTypeHandler
     /// </summary>
     /// <param name="type">The type.</param>
     /// <returns>A bool.</returns>
-    bool IfCanHandleAvroAvscType(Type type);
+    bool IfCanHandleAvroAvscType(Type? type);
     /// <summary>
-    /// Thens the create avro avsc type.
+    /// Then the create avro avsc type.
     /// </summary>
     /// <param name="type">The type.</param>
     /// <param name="forAvroAvscGeneratedTypes">The for avro avsc generated types.</param>
     /// <returns>An object.</returns>
-    object ThenCreateAvroAvscType(Type type, HashSet<string> forAvroAvscGeneratedTypes);
+    object? ThenCreateAvroAvscType(Type? type, HashSet<string> forAvroAvscGeneratedTypes);
 }

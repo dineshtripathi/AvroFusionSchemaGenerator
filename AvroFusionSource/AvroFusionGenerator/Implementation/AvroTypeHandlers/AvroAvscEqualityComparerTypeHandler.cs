@@ -12,20 +12,20 @@ public class AvroAvscEqualityComparerTypeHandler : IAvroAvscTypeHandler
     /// </summary>
     /// <param name="type">The type.</param>
     /// <returns>A bool.</returns>
-    public bool IfCanHandleAvroAvscType(Type type)
+    public bool IfCanHandleAvroAvscType(Type? type)
     {
-        return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEqualityComparer<>);
+        return type is {IsGenericType: true} && type.GetGenericTypeDefinition() == typeof(IEqualityComparer<>);
     }
 
     /// <summary>
-    /// Thens the create avro avsc type.
+    /// Then the create avro avsc type.
     /// </summary>
     /// <param name="type">The type.</param>
     /// <param name="forAvroAvscGeneratedTypes">The for avro avsc generated types.</param>
     /// <returns>An object.</returns>
-    public object ThenCreateAvroAvscType(Type type, HashSet<string> forAvroAvscGeneratedTypes)
+    public object? ThenCreateAvroAvscType(Type? type, HashSet<string> forAvroAvscGeneratedTypes)
     {
-        var underlyingType = type.GetGenericArguments()[0];
-        return $"IEqualityComparer<{underlyingType.Name}>";
+        var underlyingType = type?.GetGenericArguments()[0];
+        return $"IEqualityComparer<{underlyingType?.Name}>";
     }
 }

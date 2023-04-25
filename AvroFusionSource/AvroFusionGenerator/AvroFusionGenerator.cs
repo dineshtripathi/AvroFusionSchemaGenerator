@@ -8,7 +8,7 @@ namespace AvroFusionGenerator;
 public class AvroFusionGenerator : AvroFusionGeneratorBase
 {
     private static IServiceCollection? _services;
-    private static SpectreServiceProviderTypeRegistrar _typeRegistrar;
+    private static SpectreServiceProviderTypeRegistrar? _typeRegistrar;
 
     /// <summary>
     /// Mains the.

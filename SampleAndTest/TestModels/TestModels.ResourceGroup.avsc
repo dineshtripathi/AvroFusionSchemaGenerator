@@ -551,6 +551,86 @@
           }
         ]
       }
+    },
+    {
+      "name": "ArmTemplateMetadata",
+      "type": [
+        "null",
+        {
+          "type": "record",
+          "name": "ArmTemplateMetadata",
+          "namespace": "TestModels",
+          "fields": [
+            {
+              "name": "Sku",
+              "type": "string"
+            },
+            {
+              "name": "PricingPlan",
+              "type": "string"
+            },
+            {
+              "name": "Endpoints",
+              "type": "string"
+            },
+            {
+              "name": "IpAddressRange",
+              "type": {
+                "type": "array",
+                "items": "string"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "MappingResources",
+      "type": {
+        "type": "record",
+        "name": "Tuple`4",
+        "namespace": "System",
+        "fields": [
+          {
+            "name": "Item1",
+            "type": "string"
+          },
+          {
+            "name": "Item2",
+            "type": "string"
+          },
+          {
+            "name": "Item3",
+            "type": "int"
+          },
+          {
+            "name": "Item4",
+            "type": {
+              "type": "array",
+              "items": "string"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Sku",
+      "type": "string"
+    },
+    {
+      "name": "PricingPlan",
+      "type": "string"
+    },
+    {
+      "name": "Endpoints",
+      "type": "string"
+    },
+    {
+      "name": "IpAddressRange",
+      "type": {
+        "type": "array",
+        "items": "string"
+      }
     }
   ]
 }

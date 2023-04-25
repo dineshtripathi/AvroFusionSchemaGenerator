@@ -71,8 +71,8 @@ public class TypeStrategyRegistration : ITypeStrategyRegistration
         services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscIQueryableTypeHandler>();
         services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscIEnumerableTypeHandler>();
         services?.AddSingleton<IAvroAvscTypeHandler, AvroAvscHashSetTypeHandler>();
-        services.AddSingleton<IAvroAvscTypeHandler, AvroStructTypeHandler>();
-        services.AddSingleton<IAvroAvscTypeHandler, AvroTupleTypeHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroStructTypeHandler>();
+        services?.AddSingleton<IAvroAvscTypeHandler, AvroTupleTypeHandler>();
 
 
     }

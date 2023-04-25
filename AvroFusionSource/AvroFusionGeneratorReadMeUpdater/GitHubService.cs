@@ -14,6 +14,10 @@ public class GitHubService : IGitHubService
         };
     }
 
+    /// <summary>
+    /// Gets the package version and tag async.
+    /// </summary>
+    /// <returns>A Task.</returns>
     public Task<(string packageVersion, string packageName, string releaseNumber, string? packageUrl)> GetPackageVersionAndTagAsync()
     {
         var packageName = GetEnvironmentVariableWithMessage("PACKAGE_NAME", "GITHUB PACKAGE_NAME");
@@ -28,6 +32,12 @@ public class GitHubService : IGitHubService
         return Task.FromResult((packageVersion,packageName,releaseNumber,packageUrl));
     }
 
+    /// <summary>
+    /// Gets the environment variable with message.
+    /// </summary>
+    /// <param name="variable">The variable.</param>
+    /// <param name="message">The message.</param>
+    /// <returns>A string? .</returns>
     private static string? GetEnvironmentVariableWithMessage(string variable, string message)
     {
         var value = Environment.GetEnvironmentVariable(variable);
@@ -35,6 +45,10 @@ public class GitHubService : IGitHubService
         return value;
     }
 
+    /// <summary>
+    /// Logs the message.
+    /// </summary>
+    /// <param name="message">The message.</param>
     private void LogMessage(string message)
     {
         Console.WriteLine("-----------------------------");

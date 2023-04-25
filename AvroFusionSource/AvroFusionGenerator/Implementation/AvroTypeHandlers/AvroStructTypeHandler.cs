@@ -6,38 +6,58 @@ public class AvroStructTypeHandler : IAvroAvscTypeHandler
 {
     private readonly Lazy<IAvroSchemaGenerator> _avroSchemaGenerator;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AvroStructTypeHandler"/> class.
+    /// </summary>
+    /// <param name="avroSchemaGenerator">The avro schema generator.</param>
     public AvroStructTypeHandler(Lazy<IAvroSchemaGenerator> avroSchemaGenerator)
     {
         _avroSchemaGenerator = avroSchemaGenerator;
     }
 
-    public bool IfCanHandleAvroAvscType(Type type)
+    /// <summary>
+    /// Ifs the can handle avro avsc type.
+    /// </summary>
+    /// <param name="type">The type.</param>
+    /// <returns>A bool.</returns>
+    public bool IfCanHandleAvroAvscType(Type? type)
     {
-        return type.IsValueType && !type.IsEnum && !type.IsPrimitive && !type.Namespace.StartsWith("System.");
+        return type?.Namespace != null && type is {IsValueType: true, IsEnum: false, IsPrimitive: false} && !type.Namespace.StartsWith("System.");
     }
 
-    public object ThenCreateAvroAvscType(Type type, HashSet<string> generatedTypes)
+    /// <summary>
+    /// Then the create avro avsc type.
+    /// </summary>
+    /// <param name="type">The type.</param>
+    /// <param name="generatedTypes">The generated types.</param>
+    /// <returns>An object? .</returns>
+    public object? ThenCreateAvroAvscType(Type? type, HashSet<string> generatedTypes)
     {
-        var fieldInfos = type.GetProperties()
+        var fieldInfos = type?.GetProperties()
             .Select(prop => new
             {
-                Name = prop.Name,
-                Type = _avroSchemaGenerator.Value.GenerateAvroAvscType(prop.PropertyType, generatedTypes)
+                name = prop.Name,
+                type = _avroSchemaGenerator.Value.GenerateAvroAvscType(prop.PropertyType, generatedTypes)
             });
 
-        var elementType = new Dictionary<string, object>
+        if (fieldInfos != null)
         {
-            { "type", "record" },
-            { "name", type.Name },
-            { "namespace", type.Namespace },
-            { "fields", fieldInfos.Select(fieldInfo => new Dictionary<string, object>
-                {
-                    { "name", fieldInfo.Name },
-                    { "type", fieldInfo.Type }
-                }).ToList()
-            }
-        };
+            var elementType = new Dictionary<string, object?>
+            {
+                { "type", "record" },
+                { "name", type?.Name },
+                { "namespace", type?.Namespace },
+                { "fields", fieldInfos.Select(fieldInfo => new Dictionary<string, object?>
+                    {
+                        { "name", fieldInfo.name },
+                        { "type", fieldInfo.type }
+                    }).ToList()
+                }
+            };
 
-        return elementType;
+            return elementType;
+        }
+
+        return null;
     }
 }

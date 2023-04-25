@@ -9,15 +9,16 @@ namespace AvroFusionGenerator.Implementation;
 
 public class ReferenceAssemblyLoadContext : AssemblyLoadContext
 {
-    private readonly Dictionary<string, string> _assemblyPaths;
+    private readonly Dictionary<string, string?>? _assemblyPaths;
 
+    /// <inheritdoc />
     public ReferenceAssemblyLoadContext(IEnumerable<MetadataReference> referencedAssemblies)
     {
-        _assemblyPaths = new Dictionary<string, string>();
+        _assemblyPaths = new Dictionary<string, string?>();
 
         foreach (var reference in referencedAssemblies)
             if (reference is PortableExecutableReference peReference)
-                _assemblyPaths.Add(Path.GetFileNameWithoutExtension(peReference.FilePath), peReference.FilePath);
+                _assemblyPaths.Add(Path.GetFileNameWithoutExtension(peReference.FilePath)!, peReference.FilePath);
     }
 
     /// <summary>
@@ -25,10 +26,11 @@ public class ReferenceAssemblyLoadContext : AssemblyLoadContext
     /// </summary>
     /// <param name="assemblyName">The assembly name.</param>
     /// <returns>An Assembly.</returns>
-    protected override Assembly Load(AssemblyName assemblyName)
+    protected override Assembly? Load(AssemblyName assemblyName)
     {
-        if (_assemblyPaths.TryGetValue(assemblyName.Name, out var assemblyPath))
-            return LoadFromAssemblyPath(assemblyPath);
+        if (assemblyName.Name != null && _assemblyPaths != null && _assemblyPaths.TryGetValue(assemblyName.Name, out var assemblyPath))
+            if (assemblyPath != null)
+                return LoadFromAssemblyPath(assemblyPath);
 
         return null;
     }
