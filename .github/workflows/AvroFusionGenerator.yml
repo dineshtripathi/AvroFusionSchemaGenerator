@@ -319,7 +319,7 @@ jobs:
       shell: bash
     
     - name: Create NuGet package
-      run: dotnet pack --configuration Release --version 1.0.${{ github.run_number }}-beta${{ env.VersionSuffix }}
+      run: dotnet pack /p:Configuration=${{ matrix.configuration }} /p:Version=1.0.${{ github.run_number }}-beta${{ env.VersionSuffix }}
       working-directory: AvroFusionSource/AvroFusionGenerator
 
     - name: List NuGet package file
