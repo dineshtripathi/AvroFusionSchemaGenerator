@@ -47,26 +47,7 @@ To download the latest release of AvroFusionGenerator,
 
 | Download Package| Package Name    | Package Version | Release Number | Release Type |
 |-----------------|-----------------|-----------------|----------------|--------------|
-|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12476401724/artifacts/664926175)| AvroFusionGenerator | 1.0.193 |230425174447 |beta |
-|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12476400026/artifacts/664925794)| AvroFusionGenerator | 1.0.192 |230425174445 |beta |
-|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12468448665/artifacts/664337237)|  |  | | |
-|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12468448665/artifacts/664337237)|  |  | | |
-|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12468448665/artifacts/664337237)|  |  | | |
-|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12468448665/artifacts/664337237)|  |  | | |
-|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12468448665/artifacts/664337237)|  |  | | |
-|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12468448665/artifacts/664337237)|  |  | | |
-|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12468448665/artifacts/664337237)|  |  | | |
-|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12468448665/artifacts/664337237)|  |  | | |
-|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12468448665/artifacts/664337237)|  |  | | |
-|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12466339922/artifacts/664190454)|  |  | | |
-|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12466339922/artifacts/664190454)|  |  | | |
-|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12466119735/artifacts/664175078)|  |  | | |
-|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12466119735/artifacts/664175078)|  |  | | |
-|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12465677718/artifacts/664144298)|  |  | | |
-|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12464599943/artifacts/664067449)| AvroFusionGenerator | 1.0.0 |230425095903 |beta |
-|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12464599943/artifacts/664067449)| AvroFusionGenerator | 1.0.0 |230425095903 |beta |
-|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12464412082/artifacts/664053596)| AvroFusionGenerator | 1.0.0 |230425095035 |beta |
-|[Avro Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/suites/12463766520/artifacts/664003878)| AvroFusionGenerator | 1.0.0 |230425092235 |beta |
+
 
 
 ## Features
