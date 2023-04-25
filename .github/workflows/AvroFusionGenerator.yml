@@ -77,8 +77,8 @@ jobs:
         NEW_PATCH=$((PATCH + 1))
 
         NEW_VERSION="v$MAJOR.$MINOR.$NEW_PATCH-beta$VersionSuffix"
-        echo "new_version=$NEW_VERSION" | tee -a $GITHUB_ENV
-        echo "new_version::$NEW_VERSION"
+        echo "new_version=$NEW_VERSION" | tee -a $GITHUB_ENV >> $GITHUB_OUTPUT
+        echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
    
 
@@ -133,12 +133,15 @@ jobs:
       id: get_new_version
       run: |
         NEW_VERSION="${{ needs.prepare.outputs.new_version }}"
-        echo "New version: $NEW_VERSION"
-        echo "::set-output name=new_version::$NEW_VERSION"
+        echo "New version=$NEW_VERSION" >> $GITHUB_OUTPUT
+        echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
     - name: Create NuGet package
-      run: dotnet pack --configuration Release --version ${{ steps.get_new_version.outputs.new_version }}
-      working-directory: AvroFusionSource/AvroFusionGenerator
+      run: |
+        mkdir -p AvroFusionSource/AvroFusionGenerator/nupkg
+        dotnet pack --configuration Release --version ${{ steps.get_new_version.outputs.new_version }} --output AvroFusionSource/AvroFusionGenerator/nupkg
+        working-directory: AvroFusionSource/AvroFusionGenerator
+
 
     - name: List NuGet package file
       run: ls -R AvroFusionSource/AvroFusionGenerator/nupkg/
@@ -171,8 +174,8 @@ jobs:
       id: get_new_version
       run: |
         NEW_VERSION="${{ needs.prepare.outputs.new_version }}"
-        echo "New version: $NEW_VERSION"
-        echo "::set-output name=new_version::$NEW_VERSION"
+        echo "New version=$NEW_VERSION" >> $GITHUB_OUTPUT
+        echo "name=new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
     - name: Create and push Git tag
       run: |
