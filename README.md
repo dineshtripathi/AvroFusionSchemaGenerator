@@ -1,4 +1,4 @@
-[![.NET 7 Desktop](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/dotnet-desktop.yml/badge.svg?branch=main)](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/dotnet-desktop.yml) [![.NET 7 Release](https://img.shields.io/badge/.NET%207-Release-blue)](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/dotnet-desktop.yml/badge.svg?label=Release)  [![.NET 7 Debug](https://img.shields.io/badge/.NET%207-Debug-yellow)](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/dotnet-desktop.yml/badge.svg?label=debug)
+[![.NET 7 AVRO Fusion Generator](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/AvroFusionGenerator.yml/badge.svg)](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/AvroFusionGenerator.yml)[![.NET 7 Release](https://img.shields.io/badge/.NET%207-Release-blue)](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/dotnet-desktop.yml/badge.svg?label=Release)  [![.NET 7 Debug](https://img.shields.io/badge/.NET%207-Debug-yellow)](https://github.com/dineshtripathi/AvroFusionSchemaGenerator/actions/workflows/dotnet-desktop.yml/badge.svg?label=debug)
 
 Welcome to the AvroFusionSchemaGenerator wiki!
 
@@ -6,6 +6,38 @@ Welcome to the AvroFusionSchemaGenerator wiki!
 Avro Fusion Generator is a tool to generate Avro schemas from C# classes. It uses a combination of reflection and type strategies to create Avro schemas that represent the structure of the input C# types.
 
 It Follows the AVRO Schema Specfication guidlines .See the specification here [Avro Schema Spefication -Apache](https://avro.apache.org/docs/1.11.1/specification/)
+
+#### .Net to Avro Schema mapping for Primitive type and Collection Type
+
+| .NET Type                        | Avro Type        |
+| -------------------------------- | ---------------- |
+| `bool` / `Boolean`               | boolean          |
+| `byte` / `Byte`                  | int              |
+| `sbyte` / `SByte`                | int              |
+| `short` / `Int16`                | int              |
+| `ushort` / `UInt16`              | int              |
+| `int` / `Int32`                  | int              |
+| `uint` / `UInt32`                | long             |
+| `long` / `Int64`                 | long             |
+| `ulong` / `UInt64`               | long             |
+| `float` / `Single`               | float            |
+| `double` / `Double`              | double           |
+| `decimal` / `Decimal`            | bytes (decimal)  |
+| `char` / `Char`                  | int              |
+| `string` / `String`              | string           |
+| `DateTime`                       | long (timestamp) |
+| `DateTimeOffset`                 | long (timestamp) |
+| `TimeSpan`                       | long (time)      |
+| `Guid`                           | fixed (16 bytes) |
+| `Nullable<T>`                    | union {null, T}  |
+| `Enum`                           | enum             |
+| Class                            | record           |
+| Struct                           | record           |
+| `Tuple` / `ValueTuple`           | Custom "tuple"<minor issues>   |
+| Array, `List<T>`, `IList<T>`     | array            |
+| Dictionary, `IDictionary<K, V>`  | map              |
+| `IEqualityComparer<T>`           | Work in progress    |
+
 
 ### Nuget package (Dot net tool)
 To download the latest release of AvroFusionGenerator, 
