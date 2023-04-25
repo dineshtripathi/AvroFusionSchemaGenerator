@@ -121,24 +121,22 @@ jobs:
 
     - name: Get new version from prepare job
       id: get_new_version
-      run: echo "::set-output name=new_version::${{ needs.prepare.outputs.new_version }}"
+      run: echo "new_version=${{ needs.prepare.outputs.new_version }}"
 
     - name: Create NuGet package
-      run: |
-        NUPKG_DIR=$(pwd)/${{ env.Project_Directory }}/nupkg
-        mkdir -p $NUPKG_DIR
-        dotnet pack ${{ env.Project_Directory }}/${{ env.Project_Name }}.csproj --configuration Release --version ${{ steps.get_new_version.outputs.new_version }} --output $NUPKG_DIR --verbosity detailed
+      run:  dotnet pack ${{ env.Project_Directory }}/${{ env.Project_Name }}.csproj --configuration Release --version ${{ steps.get_new_version.outputs.new_version }} --output $NUPKG_DIR --verbosity detailed
+      working-directory: AvroFusionSource/AvroFusionGenerator
 
     - name: List NuGet package file
       run: ls -R ${{ env.Project_Directory }}/nupkg/
-
 
     - name: Publish NuGet package
       uses: actions/upload-artifact@v2
       with:
         name: NuGetPackage
-        path: AvroFusionSource/AvroFusionGenerator/nupkg/*.nupkg
+        path: ${{ env.Project_Directory }}/nupkg/*.nupkg
         if-no-files-found: warn
+
 
   tag:
     needs: publish
