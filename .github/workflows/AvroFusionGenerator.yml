@@ -129,8 +129,15 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Get new version from prepare job
+      id: get_new_version
+      run: |
+        NEW_VERSION="${{ needs.prepare.outputs.new_version }}"
+        echo "New version: $NEW_VERSION"
+        echo "::set-output name=new_version::$NEW_VERSION"
+
     - name: Create NuGet package
-      run: dotnet pack --configuration Release
+      run: dotnet pack --configuration Release --version ${{ steps.get_new_version.outputs.new_version }}
       working-directory: AvroFusionSource/AvroFusionGenerator
 
     - name: List NuGet package file
