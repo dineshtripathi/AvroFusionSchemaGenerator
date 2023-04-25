@@ -1,6 +1,10 @@
 name: Update Avro Fusion Generator Readme
 
 on:
+  workflow_run:
+    workflows: [".NET 7 AVRO Fusion Generator"]
+    types:
+      - completed
   push:
     branches:
       - main

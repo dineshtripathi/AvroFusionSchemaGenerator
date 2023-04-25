@@ -38,7 +38,8 @@ By using the Avro Schema Generator for C#, developers can improve the efficiency
 	  <PackageId>AvroFusionGenerator</PackageId>
 	  <PackageOutputPath>./nupkg</PackageOutputPath>
       <PackageIcon>.\Assets\AVSCGenerator.png</PackageIcon>
-	  <Version>1.0.0-beta$(VersionSuffix)</Version>
+	  <Version>1.0.0</Version>
+	  <VersionSuffix>$(VersionSuffix)</VersionSuffix>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
