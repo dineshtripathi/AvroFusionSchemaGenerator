@@ -8,15 +8,15 @@ namespace AvroFusionGenerator.Implementation;
 
 public class AvroSchemaGenerator : IAvroSchemaGenerator
 {
-    private readonly IAvroTypeStrategyResolver _strategyResolver;
+    private readonly IAvroTypeHandlerResolver _handlerResolver;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AvroSchemaGenerator"/> class.
     /// </summary>
-    /// <param name="strategyResolver">The strategy resolver.</param>
-    public AvroSchemaGenerator(IAvroTypeStrategyResolver strategyResolver)
+    /// <param name="handlerResolver">The strategy resolver.</param>
+    public AvroSchemaGenerator(IAvroTypeHandlerResolver handlerResolver)
     {
-        _strategyResolver = strategyResolver;
+        _handlerResolver = handlerResolver;
     }
 
 
@@ -89,7 +89,7 @@ public class AvroSchemaGenerator : IAvroSchemaGenerator
     {
         try
         {
-            var strategies = _strategyResolver.ResolveStrategies();
+            var strategies = _handlerResolver.ResolveStrategies();
 
             foreach (var strategy in strategies)
                 if (strategy.IfCanHandleAvroAvscType(type))

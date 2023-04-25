@@ -5,11 +5,11 @@ namespace AvroFusionGenerator.ServiceInterface;
 /// The avro type strategy resolver.
 /// </summary>
 
-public class AvroTypeStrategyResolver : IAvroTypeStrategyResolver
+public class AvroTypeHandlerResolver : IAvroTypeHandlerResolver
 {
     private readonly IServiceProvider _serviceProvider;
 
-    public AvroTypeStrategyResolver(IServiceProvider serviceProvider)
+    public AvroTypeHandlerResolver(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
     }

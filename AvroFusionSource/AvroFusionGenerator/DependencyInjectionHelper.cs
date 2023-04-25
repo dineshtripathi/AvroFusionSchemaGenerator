@@ -21,7 +21,7 @@ public static class DependencyInjectionHelper
         if (services != null)
         {
             typeStrategyRegistration.RegisterTypeStrategies(services);
-            services?.AddSingleton<IAvroTypeStrategyResolver, AvroTypeStrategyResolver>();
+            services?.AddSingleton<IAvroTypeHandlerResolver, AvroTypeHandlerResolver>();
             services?.AddSingleton<IAvroSchemaGenerator, AvroSchemaGenerator>();
             services?.AddSingleton<Lazy<IAvroSchemaGenerator>>(sp =>
                 new Lazy<IAvroSchemaGenerator>(sp.GetRequiredService<IAvroSchemaGenerator>));

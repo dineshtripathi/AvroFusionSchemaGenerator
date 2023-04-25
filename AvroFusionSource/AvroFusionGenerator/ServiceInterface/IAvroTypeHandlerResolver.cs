@@ -3,7 +3,7 @@
 /// The avro type strategy resolver.
 /// </summary>
 
-public interface IAvroTypeStrategyResolver
+public interface IAvroTypeHandlerResolver
 {
     /// <summary>
     /// Resolves the strategies.
