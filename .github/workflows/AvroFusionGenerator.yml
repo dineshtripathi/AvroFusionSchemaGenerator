@@ -56,6 +56,10 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Increment version suffix
+      run: |
+        echo "VersionSuffix=$(date +%y%m%d%H%M%S)" >> $GITHUB_ENV
+
     - name: Increment version
       id: increment_version
       run: |
@@ -66,9 +70,11 @@ jobs:
         PATCH=${VERSION_PARTS[2]%-*}
         NEW_PATCH=$((PATCH + 1))
         
-        NEW_VERSION="v$MAJOR.$MINOR.$NEW_PATCH-beta"
+        NEW_VERSION="v$MAJOR.$MINOR.$NEW_PATCH-beta$VersionSuffix"
         echo "new_version=$NEW_VERSION" | tee -a $GITHUB_ENV
         echo "::set-output name=new_version::$NEW_VERSION"
+
+   
 
   build:
     needs: prepare
