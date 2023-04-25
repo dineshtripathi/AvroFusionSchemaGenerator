@@ -1,21 +1,22 @@
 ﻿public class ReadmeUpdater : IReadmeUpdater
 {
-
     /// <summary>
     /// Updates the readme file.
     /// </summary>
+    /// <param name="url"></param>
     /// <param name="packageUrl">The package url.</param>
     /// <param name="packageName">The package name.</param>
     /// <param name="packageVersion">The package version.</param>
-    /// <param name="tag">The tag.</param>
-    public void UpdateReadmeFile(string packageUrl, string packageName, string packageVersion, string tag)
+    /// <param name="releaseNumber">The releaseNumber.</param>
+    ///   /// <param name="releaseType">The releaseNumber.</param>
+    public void UpdateReadmeFile(string? packageUrl, string packageName, string packageVersion, string releaseNumber, string releaseType)
     {
         var workspacePath = GetEnvironmentVariableWithMessage("GITHUB_WORKSPACE", "GITHUB_WORKSPACE");
         LogMessage(workspacePath);
         var readmeFilePath = Path.Combine(workspacePath, "README.md");
         LogMessage(readmeFilePath);
         string?[] lines = File.ReadAllLines(readmeFilePath);
-        var updatedLines = InsertRowInReadmeTable(lines, packageUrl,packageName, packageVersion, tag);
+        var updatedLines = InsertRowInReadmeTable(lines, packageUrl,packageName, packageVersion,releaseNumber, releaseType);
         File.WriteAllLines("README.md", updatedLines);
     }
 
@@ -26,7 +27,7 @@
     /// <returns>An int.</returns>
     private static int FindHeaderLine(string?[] lines)
     {
-        return Array.FindIndex(lines, line => line.Contains("| Download Package| Package Name    | Package Version | Tag |"));
+        return Array.FindIndex(lines, line => line.Contains("| Download Package| Package Name    | Package Version | Release Number | Release Type |"));
     }
 
     /// <summary>
@@ -36,9 +37,10 @@
     /// <param name="packageUrl">The package url.</param>
     /// <param name="packageName">The package name.</param>
     /// <param name="packageVersion">The package version.</param>
-    /// <param name="tag">The tag.</param>
+    /// <param name="releaseNumber">The release number.</param>
+    /// /// <param name="releaseType">The release number.</param>
     /// <returns>An array of string?.</returns>
-    private static string?[] InsertRowInReadmeTable(string?[] lines, string packageUrl,string packageName, string packageVersion, string tag)
+    private static string?[] InsertRowInReadmeTable(string?[] lines, string packageUrl,string packageName, string packageVersion,string releaseNumber, string releaseType)
     {
         var headerLine = FindHeaderLine(lines);
       
@@ -46,7 +48,7 @@
         {
             return lines;
         }
-        var newRow = $"|[Avro Fusion Generator]({new Uri(packageUrl)})| {packageName} | {packageVersion} | {tag} |";
+        var newRow = $"|[Avro Fusion Generator]({new Uri(packageUrl)})| {packageName} | {packageVersion} |{releaseNumber} |{releaseType} |";
         LogMessage(newRow);
         return InsertRowInLines(lines, headerLine + 2, newRow);
     }

@@ -13,8 +13,8 @@ To download the latest release of AvroFusionGenerator,
 #### Download Avro Fusion Generator Nuget package from the list 
 
 
-| Download Package| Package Name    | Package Version | Tag |
-|-----------------|-----------------|-----------------|-----|
+| Download Package| Package Name    | Package Version | Release Number | Release Type |
+|-----------------|-----------------|-----------------|----------------|--------------|
 
 
 ## Features

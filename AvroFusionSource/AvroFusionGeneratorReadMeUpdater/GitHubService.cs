@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 public class GitHubService : IGitHubService
 {
     private readonly GitHubClient _github;
-
+    const string Pattern = @"(?<name>[^\.]+)\.(?<version>[0-9.]+)-(?<releaseType>[^\d]+)(?<number>\d+)\.nupkg";
     public GitHubService(string? token)
     {
         _github = new GitHubClient(new Octokit.ProductHeaderValue("UpdateReadme"))
@@ -18,18 +18,18 @@ public class GitHubService : IGitHubService
     /// Gets the package version and tag async.
     /// </summary>
     /// <returns>A Task.</returns>
-    public Task<(string packageVersion, string packageName, string releaseNumber, string? packageUrl)> GetPackageVersionAndTagAsync()
+    public Task<(string packageVersion, string packageName, string releaseNumber,string packageType, string? packageUrl)> GetPackageVersionAndTagAsync()
     {
         var packageName = GetEnvironmentVariableWithMessage("PACKAGE_NAME", "GITHUB PACKAGE_NAME");
         var packageUrl = GetEnvironmentVariableWithMessage("PACKAGE_URL", "ARTIFACT PACKAGE URL");
-        const string pattern = @"(?<name>[^\.]+)\.(?<version>[0-9.]+)-beta(?<number>\d+)\.nupkg";
-        var match = Regex.Match(packageName, pattern);
+        var extractedProperties = Regex.Match(packageName, Pattern);
 
-        var packageVersion = match.Groups["version"].Value;
-        var releaseNumber = match.Groups["number"].Value;
-        packageName= match.Groups["name"].Value;
+        var packageVersion = extractedProperties.Groups["version"].Value;
+        var releaseNumber = extractedProperties.Groups["number"].Value;
+        var packageType= extractedProperties.Groups["releaseType"].Value;
+        packageName = extractedProperties.Groups["name"].Value;
 
-        return Task.FromResult((packageVersion,packageName,releaseNumber,packageUrl));
+        return Task.FromResult((packageVersion,packageName,releaseNumber,packageType,packageUrl));
     }
 
     /// <summary>

@@ -6,5 +6,5 @@ public interface IGitHubService
     /// Gets the package version and tag async.
     /// </summary>
     /// <returns>A Task.</returns>
-    Task<(string packageVersion, string packageName, string releaseNumber, string? packageUrl)> GetPackageVersionAndTagAsync();
+    Task<(string packageVersion, string packageName, string releaseNumber, string packageType, string? packageUrl)> GetPackageVersionAndTagAsync();
 }
