@@ -140,7 +140,7 @@ jobs:
       run: |
         mkdir -p AvroFusionSource/AvroFusionGenerator/nupkg
         dotnet pack --configuration Release --version ${{ steps.get_new_version.outputs.new_version }} --output AvroFusionSource/AvroFusionGenerator/nupkg
-        working-directory: AvroFusionSource/AvroFusionGenerator
+      working-directory: AvroFusionSource/AvroFusionGenerator
 
 
     - name: List NuGet package file
