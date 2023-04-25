@@ -64,15 +64,21 @@ jobs:
       id: increment_version
       run: |
         LATEST_TAG=$(git describe --tags --abbrev=0)
-        IFS='.' read -ra VERSION_PARTS <<< "${LATEST_TAG#v}"  
+        TAG_FORMAT_REGEX="^v(\d+\.\d+\.\d+)(-.+)?$"
+        
+        if [[ ! $LATEST_TAG =~ $TAG_FORMAT_REGEX ]]; then
+          LATEST_TAG="v1.0.0"
+        fi
+
+        IFS='.' read -ra VERSION_PARTS <<< "${LATEST_TAG#v}"
         MAJOR=${VERSION_PARTS[0]}
         MINOR=${VERSION_PARTS[1]}
         PATCH=${VERSION_PARTS[2]%-*}
         NEW_PATCH=$((PATCH + 1))
-        
+
         NEW_VERSION="v$MAJOR.$MINOR.$NEW_PATCH-beta$VersionSuffix"
         echo "new_version=$NEW_VERSION" | tee -a $GITHUB_ENV
-        echo "::set-output name=new_version::$NEW_VERSION"
+        echo "new_version::$NEW_VERSION"
 
    
 
@@ -165,6 +171,7 @@ jobs:
       run: |
         git tag ${{ steps.get_new_version.outputs.new_version }}
         git push https://${{ env.Pipeline_Token }}@github.com/${{ github.repository }}.git --tags
+
 
   cleanup:
     needs: [prepare, build, publish, tag]
