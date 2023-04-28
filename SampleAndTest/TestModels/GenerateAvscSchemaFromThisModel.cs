@@ -1,7 +1,9 @@
 ﻿
+
+
 using AvroFusionGenerator.Implementation.AvroTypeHandlers;
 
-namespace TestModels
+namespace AvroFusionGenerator.ResourceGroupModel.Test.Model
 {
     /// <summary>
     /// 
