@@ -3,19 +3,19 @@ using AvroFusionGenerator.Implementation;
 using AvroFusionGenerator.ServiceInterface;
 using Spectre.Console;
 using Spectre.Console.Cli;
+using static AvroFusionGenerator.SpectreGenerateCommand;
 
 namespace AvroFusionGenerator;
 /// <summary>
 /// The generate command.
 /// </summary>
 
-public class GenerateCommand : AsyncCommand<GenerateCommand.Settings>
+public class SpectreGenerateCommand : AsyncCommand<SpectreConsoleSettings>
 {
     private readonly IAvroSchemaGenerator _avroSchemaGenerator;
     private readonly ICompilerService _compilerService;
-
-
-    public GenerateCommand(IAvroSchemaGenerator avroSchemaGenerator, ICompilerService compilerService)
+  
+    public SpectreGenerateCommand(IAvroSchemaGenerator avroSchemaGenerator, ICompilerService compilerService)
     {
         _avroSchemaGenerator = avroSchemaGenerator;
         _compilerService = compilerService;
@@ -27,34 +27,37 @@ public class GenerateCommand : AsyncCommand<GenerateCommand.Settings>
     /// <param name="context">The context.</param>
     /// <param name="settings">The settings.</param>
     /// <returns>A Task.</returns>
-    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
+    public override async Task<int> ExecuteAsync(CommandContext context, SpectreConsoleSettings settings)
     {
-        var inputFile = settings.InputFile;
-        var outputDir = settings.OutputDir;
-        var @namespace = settings.Namespace;
-
-        if (inputFile != null)
+        var progressReporter = new ProgressReporter();
+        await AnsiConsole.Progress().StartAsync(async ctx =>
         {
-            var sourceCode = await File.ReadAllTextAsync(inputFile);
-            var types = _compilerService.LoadTypesFromSource(sourceCode);
+            var sourceDirectory = settings.DirectoryPath;
+            var modelclassName = settings.InputFile;
+            var outputDir = settings.OutputDir;
+            var @namespace = settings.Namespace;
 
-            var parentType = GetMainParentType(types);
-            var progressReporter = new ProgressReporter();
-            if (parentType?.Name != null)
             {
-                var schemaFromParentClassProperties =
-                    _avroSchemaGenerator.GenerateAvroAvscSchema(types, parentType.Name, progressReporter);
+                var parentClassModelName =  Path.GetFileNameWithoutExtension(modelclassName);
+                var types = _compilerService.LoadTypesFromSource(sourceDirectory, parentClassModelName);
 
-                if (outputDir != null)
+                var parentType = GetMainParentType(types, parentClassModelName);
+
+                if (parentType?.Name != null)
                 {
-                    var outputPath = Path.Combine(outputDir, $"{parentType.Namespace}.{parentType.Name}.avsc");
-                    await File.WriteAllTextAsync(outputPath, schemaFromParentClassProperties);
-                    RunAvroGen(outputPath);
+                    var schemaFromParentClassProperties =
+                        _avroSchemaGenerator.GenerateAvroAvscSchema(types, parentType.Name, progressReporter);
+
+                    {
+                        var outputPath = Path.Combine(outputDir, $"{parentType.Namespace}.{parentType.Name}.avsc");
+                        await File.WriteAllTextAsync(outputPath, schemaFromParentClassProperties);
+                        RunAvroGen(outputPath);
+                    }
                 }
             }
-        }
 
-        AnsiConsole.MarkupLine("[green]Success![/]");
+            AnsiConsole.MarkupLine("[green]Success![/]");
+        });
 
         return 0;
     }
@@ -63,8 +66,9 @@ public class GenerateCommand : AsyncCommand<GenerateCommand.Settings>
     /// Gets the main parent type.
     /// </summary>
     /// <param name="types">The types.</param>
+    /// <param name="modelclassName"></param>
     /// <returns>A Type.</returns>
-    public Type? GetMainParentType(IEnumerable<Type?> types)
+    public Type? GetMainParentType(IEnumerable<Type?> types, string modelclassName)
     {
         var collection = types.ToList();
         var typeSet = new HashSet<Type?>(collection);
@@ -72,7 +76,7 @@ public class GenerateCommand : AsyncCommand<GenerateCommand.Settings>
             let properties = type.GetProperties()
             from property in properties
             where typeSet.Contains(property.PropertyType)
-            select type).FirstOrDefault();
+            select type).FirstOrDefault(t=>t?.Name == modelclassName);
     }
 
     /// <summary>
@@ -110,18 +114,6 @@ public class GenerateCommand : AsyncCommand<GenerateCommand.Settings>
         Console.WriteLine($"AvroGen output: {output}");
     }
 
-    /// <summary>
-    /// The settings.
-    /// </summary>
-    public class Settings : CommandSettings
-    {
-        [CommandOption("--input-file <INPUT_FILE>")]
-        public string? InputFile { get; set; }
 
-        [CommandOption("--output-dir <OUTPUT_DIR>")]
-        public string? OutputDir { get; set; }
-
-        [CommandOption("--namespace <NAMESPACE>")]
-        public string? Namespace { get; set; }
-    }
+    
 }

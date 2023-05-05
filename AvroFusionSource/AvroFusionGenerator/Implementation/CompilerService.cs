@@ -21,10 +21,11 @@ public class CompilerService : ICompilerService
     /// <summary>
     /// Loads the types from source.
     /// </summary>
-    /// <param name="sourceCode">The source code.</param>
+    /// <param name="sourceDirectoryPath"></param>
+    /// <param name="parentObjectModelFile"></param>
     /// <returns>A list of Types.</returns>
-    public List<Type> LoadTypesFromSource(string sourceCode)
+    public List<Type> LoadTypesFromSource(string sourceDirectoryPath,string parentObjectModelFile)
     {
-        return _dynamicAssemblyGenerator.GenerateDynamicAssembly(sourceCode);
+        return _dynamicAssemblyGenerator.GenerateDynamicAssembly(sourceDirectoryPath, parentObjectModelFile);
     }
 }

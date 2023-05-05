@@ -8,7 +8,8 @@ public interface ICompilerService
     /// <summary>
     /// Loads the types from source.
     /// </summary>
-    /// <param name="sourceCode">The source code.</param>
+    /// <param name="sourceDirectoryPath"></param>
+    /// <param name="parentClassModelName"></param>
     /// <returns>A list of Types.</returns>
-    List<Type> LoadTypesFromSource(string sourceCode);
+    List<Type> LoadTypesFromSource(string sourceDirectoryPath, string parentClassModelName);
 }

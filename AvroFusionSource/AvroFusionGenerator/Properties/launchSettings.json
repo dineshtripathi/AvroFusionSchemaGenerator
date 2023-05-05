@@ -2,7 +2,7 @@
   "profiles": {
     "AvroFusionGenerator": {
       "commandName": "Project",
-      "commandLineArgs": "generate --input-file \"D:\\AvroFusionGenerator\\SampleAndTest\\TestModels\\GenerateAvscSchemaFromThisModel.cs\" --output-dir \"D:\\AvroFusionGenerator\\SampleAndTest\\TestModels\"\r\n"
+      "commandLineArgs": "generate --source-directory-path \"D:\\AvroFusionGenerator\\SampleAndTest\\TestModels\" --input-file \"D:\\AvroFusionGenerator\\SampleAndTest\\TestModels\\ResourceGroup.cs\" --output-dir \"D:\\AvroFusionGenerator\\SampleAndTest\\TestModels\\Output\"\r\n"
     }
   }
 }

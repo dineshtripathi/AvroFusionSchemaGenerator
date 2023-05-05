@@ -37,20 +37,22 @@ public class GenerateCommandHandler : ICommandHandler
     /// <returns>A Task.</returns>
     public async Task<int> InvokeAsync(InvocationContext context)
     {
-        var inputFile = context.ParseResult.GetValueForArgument(new Argument<string>("input-file"));
-        var outputDir = context.ParseResult.RootCommandResult.GetValueForArgument(new Argument<string>("output-dir"));
-        var @namespace = context.ParseResult.RootCommandResult.GetValueForArgument(new Argument<string>("namespace"));
+        var sourceDirPath= context.ParseResult.GetValueForArgument(new Argument<string>("--source-directory-path"));
+        var inputFile = context.ParseResult.GetValueForArgument(new Argument<string>("--input-file"));
+        var outputDir = context.ParseResult.RootCommandResult.GetValueForArgument(new Argument<string>("--output-dir"));
+        var @namespace = context.ParseResult.RootCommandResult.GetValueForArgument(new Argument<string>("--namespace"));
+
 
 
         // Load types from the input file
-        var sourceCode = await File.ReadAllTextAsync(inputFile);
-        var types = _compilerService.LoadTypesFromSource(sourceCode);
+        var parentObjectModel =  Path.GetFileNameWithoutExtension(inputFile);
+        var parentObjectModelTypes = _compilerService.LoadTypesFromSource(sourceDirPath, parentObjectModel);
 
         // Generate the combined Avro schema
-        var parentClassModelName = types.First().Name;
+        var parentClassModelName = parentObjectModelTypes.FirstOrDefault(t => t.Name == parentObjectModel).Name;
         var progressReporter = new ProgressReporter(); // Create a progress reporter if needed
         var schemaFromParentClassProperties =
-            _avroSchemaGenerator.GenerateAvroAvscSchema(types, parentClassModelName, progressReporter);
+            _avroSchemaGenerator.GenerateAvroAvscSchema(parentObjectModelTypes, parentClassModelName, progressReporter);
 
         // Save the combined Avro schema to the output directory
         var outputPath = Path.Combine(outputDir, $"{parentClassModelName}.avsc");

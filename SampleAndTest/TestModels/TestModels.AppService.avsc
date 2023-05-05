@@ -1,0 +1,594 @@
+{
+  "type": "record",
+  "namespace": "TestModels",
+  "name": "AppService",
+  "fields": [
+    {
+      "name": "AppServiceName",
+      "type": "string"
+    },
+    {
+      "name": "Plan",
+      "type": "string"
+    },
+    {
+      "name": "OperatingSystem",
+      "type": "string"
+    },
+    {
+      "name": "RuntimeStack",
+      "type": "string"
+    },
+    {
+      "name": "Status",
+      "type": {
+        "type": "enum",
+        "name": "AppServiceStatus",
+        "namespace": "TestModels",
+        "symbols": [
+          "Running",
+          "Stopped",
+          "Restarting",
+          "Scaling"
+        ]
+      }
+    },
+    {
+      "name": "Sku",
+      "type": "string"
+    },
+    {
+      "name": "PricingPlan",
+      "type": "string"
+    },
+    {
+      "name": "Endpoints",
+      "type": "string"
+    },
+    {
+      "name": "IpAddressRange",
+      "type": {
+        "type": "array",
+        "items": "string"
+      }
+    },
+    {
+      "name": "Name",
+      "type": "string"
+    },
+    {
+      "name": "ResourceType",
+      "type": "string"
+    },
+    {
+      "name": "Location",
+      "type": "string"
+    },
+    {
+      "name": "ResourceGroup",
+      "type": "string"
+    },
+    {
+      "name": "SubscriptionId",
+      "type": "string",
+      "aliases": [
+        "AzureResourceSubscriptionId"
+      ]
+    },
+    {
+      "name": "ETag",
+      "type": "string"
+    },
+    {
+      "name": "AzureResourceTags",
+      "type": {
+        "type": "map",
+        "values": "string"
+      }
+    },
+    {
+      "name": "ProvisioningState",
+      "type": [
+        "int",
+        "double",
+        "null"
+      ]
+    },
+    {
+      "name": "ContainerName",
+      "type": "string"
+    },
+    {
+      "name": "PartitionKey",
+      "type": "string"
+    },
+    {
+      "name": "Name",
+      "type": "string"
+    },
+    {
+      "name": "ResourceType",
+      "type": "string"
+    },
+    {
+      "name": "Location",
+      "type": "string"
+    },
+    {
+      "name": "ResourceGroup",
+      "type": "string"
+    },
+    {
+      "name": "SubscriptionId",
+      "type": "string",
+      "aliases": [
+        "AzureResourceSubscriptionId"
+      ]
+    },
+    {
+      "name": "ETag",
+      "type": "string"
+    },
+    {
+      "name": "AzureResourceTags",
+      "type": {
+        "type": "map",
+        "values": "string"
+      }
+    },
+    {
+      "name": "ProvisioningState",
+      "type": [
+        "int",
+        "double",
+        "null"
+      ]
+    },
+    {
+      "name": "CosmosDbName",
+      "type": "string"
+    },
+    {
+      "name": "AccountType",
+      "type": "string"
+    },
+    {
+      "name": "APIType",
+      "type": "string"
+    },
+    {
+      "name": "Databases",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "Database",
+          "namespace": "TestModels",
+          "fields": [
+            {
+              "name": "DatabaseName",
+              "type": "string"
+            },
+            {
+              "name": "Containers",
+              "type": {
+                "type": "array",
+                "items": "TestModels.Container"
+              }
+            },
+            {
+              "name": "Name",
+              "type": "string"
+            },
+            {
+              "name": "ResourceType",
+              "type": "string"
+            },
+            {
+              "name": "Location",
+              "type": "string"
+            },
+            {
+              "name": "ResourceGroup",
+              "type": "string"
+            },
+            {
+              "name": "SubscriptionId",
+              "type": "string",
+              "aliases": [
+                "AzureResourceSubscriptionId"
+              ]
+            },
+            {
+              "name": "ETag",
+              "type": "string"
+            },
+            {
+              "name": "AzureResourceTags",
+              "type": {
+                "type": "map",
+                "values": "string"
+              }
+            },
+            {
+              "name": "ProvisioningState",
+              "type": [
+                "int",
+                "double",
+                "null"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Name",
+      "type": "string"
+    },
+    {
+      "name": "ResourceType",
+      "type": "string"
+    },
+    {
+      "name": "Location",
+      "type": "string"
+    },
+    {
+      "name": "ResourceGroup",
+      "type": "string"
+    },
+    {
+      "name": "SubscriptionId",
+      "type": "string",
+      "aliases": [
+        "AzureResourceSubscriptionId"
+      ]
+    },
+    {
+      "name": "ETag",
+      "type": "string"
+    },
+    {
+      "name": "AzureResourceTags",
+      "type": {
+        "type": "map",
+        "values": "string"
+      }
+    },
+    {
+      "name": "ProvisioningState",
+      "type": [
+        "int",
+        "double",
+        "null"
+      ]
+    },
+    {
+      "name": "PipelineName",
+      "type": "string"
+    },
+    {
+      "name": "Description",
+      "type": "string"
+    },
+    {
+      "name": "LastModified",
+      "type": "long"
+    },
+    {
+      "name": "EventGridName",
+      "type": "string"
+    },
+    {
+      "name": "TopicType",
+      "type": "string"
+    },
+    {
+      "name": "InputSchema",
+      "type": "string"
+    },
+    {
+      "name": "EventHubName",
+      "type": "string"
+    },
+    {
+      "name": "PartitionCount",
+      "type": "int"
+    },
+    {
+      "name": "MessageRetention",
+      "type": "long"
+    },
+    {
+      "name": "ResourceGroupName",
+      "type": "string"
+    },
+    {
+      "name": "ResourceGroupSubscriptionId",
+      "type": "string"
+    },
+    {
+      "name": "CreationDate",
+      "type": "long"
+    },
+    {
+      "name": "AppServices",
+      "type": {
+        "type": "array",
+        "items": "TestModels.AppService"
+      }
+    },
+    {
+      "name": "ResourceGroupTags",
+      "type": {
+        "type": "map",
+        "values": "string"
+      }
+    },
+    {
+      "name": "StorageAccounts",
+      "type": {
+        "type": "map",
+        "values": {
+          "type": "record",
+          "name": "StorageAccount",
+          "namespace": "TestModels",
+          "fields": [
+            {
+              "name": "StorageAccountName",
+              "type": "string"
+            },
+            {
+              "name": "AccountType",
+              "type": "string"
+            },
+            {
+              "name": "AccessTier",
+              "type": "string"
+            },
+            {
+              "name": "IsSecureTransferEnabled",
+              "type": "boolean"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "VirtualMachines",
+      "type": {
+        "type": "map",
+        "values": {
+          "type": "record",
+          "name": "VirtualMachine",
+          "namespace": "TestModels",
+          "fields": [
+            {
+              "name": "VirtualMachineName",
+              "type": "string"
+            },
+            {
+              "name": "Size",
+              "type": "string"
+            },
+            {
+              "name": "OperatingSystem",
+              "type": "string"
+            },
+            {
+              "name": "Status",
+              "type": {
+                "type": "enum",
+                "name": "VirtualMachineStatus",
+                "namespace": "TestModels",
+                "symbols": [
+                  "Running",
+                  "Stopped",
+                  "Deallocated",
+                  "Deleting"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "DataFactoryPipelines",
+      "type": {
+        "type": "array",
+        "items": "TestModels.DataFactoryPipeline"
+      }
+    },
+    {
+      "name": "DataFactoryPipelineCount",
+      "type": [
+        "int",
+        "double",
+        "null"
+      ]
+    },
+    {
+      "name": "EventHubs",
+      "type": {
+        "type": "array",
+        "items": "TestModels.EventHub"
+      }
+    },
+    {
+      "name": "EventGrids",
+      "type": {
+        "type": "array",
+        "items": "TestModels.EventGrid"
+      }
+    },
+    {
+      "name": "SchemaGroups",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "SchemaGroup",
+          "namespace": "TestModels",
+          "fields": [
+            {
+              "name": "GroupName",
+              "type": "string"
+            },
+            {
+              "name": "Description",
+              "type": "string"
+            },
+            {
+              "name": "Schemas",
+              "type": {
+                "type": "array",
+                "items": {
+                  "type": "record",
+                  "name": "Schema",
+                  "namespace": "TestModels",
+                  "fields": [
+                    {
+                      "name": "SchemaName",
+                      "type": "string"
+                    },
+                    {
+                      "name": "SchemaVersion",
+                      "type": "string"
+                    },
+                    {
+                      "name": "SerializationType",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Name",
+                      "type": "string"
+                    },
+                    {
+                      "name": "ResourceType",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Location",
+                      "type": "string"
+                    },
+                    {
+                      "name": "ResourceGroup",
+                      "type": "string"
+                    },
+                    {
+                      "name": "SubscriptionId",
+                      "type": "string",
+                      "aliases": [
+                        "AzureResourceSubscriptionId"
+                      ]
+                    },
+                    {
+                      "name": "ETag",
+                      "type": "string"
+                    },
+                    {
+                      "name": "AzureResourceTags",
+                      "type": {
+                        "type": "map",
+                        "values": "string"
+                      }
+                    },
+                    {
+                      "name": "ProvisioningState",
+                      "type": [
+                        "int",
+                        "double",
+                        "null"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Schemas",
+      "type": {
+        "type": "array",
+        "items": "TestModels.Schema"
+      }
+    },
+    {
+      "name": "CosmosDBs",
+      "type": {
+        "type": "map",
+        "values": "TestModels.CosmosDb"
+      }
+    },
+    {
+      "name": "AzureResources",
+      "type": "TestModels.AzureResource"
+    },
+    {
+      "name": "ArmTemplateMetadata",
+      "type": [
+        "null",
+        {
+          "type": "record",
+          "name": "ArmTemplateMetadata",
+          "namespace": "TestModels",
+          "fields": [
+            {
+              "name": "Sku",
+              "type": "string"
+            },
+            {
+              "name": "PricingPlan",
+              "type": "string"
+            },
+            {
+              "name": "Endpoints",
+              "type": "string"
+            },
+            {
+              "name": "IpAddressRange",
+              "type": {
+                "type": "array",
+                "items": "string"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "MappingResources",
+      "type": {
+        "type": "record",
+        "name": "Tuple`4",
+        "namespace": "System",
+        "fields": [
+          {
+            "name": "Item1",
+            "type": "string"
+          },
+          {
+            "name": "Item2",
+            "type": "string"
+          },
+          {
+            "name": "Item3",
+            "type": "int"
+          },
+          {
+            "name": "Item4",
+            "type": {
+              "type": "array",
+              "items": "string"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

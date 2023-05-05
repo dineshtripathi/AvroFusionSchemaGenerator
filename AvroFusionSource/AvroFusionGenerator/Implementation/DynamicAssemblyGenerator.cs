@@ -2,6 +2,7 @@
 using System.Data;
 using System.Reflection;
 using System.Runtime.Loader;
+using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using AvroFusionGenerator.Implementation.AvroTypeHandlers;
@@ -35,19 +36,73 @@ public class DynamicAssemblyGenerator : IDynamicAssemblyGenerator
     /// <summary>
     /// Generates the dynamic assembly.
     /// </summary>
-    /// <param name="sourceCode">The source code.</param>
+    /// <param name="sourceDirectory">The source code directory.</param>
+    /// <param name="parentClassModelName">The main class name.</param>
     /// <returns>A list of Types.</returns>
-    public List<Type> GenerateDynamicAssembly(string sourceCode)
+    public List<Type> GenerateDynamicAssembly(string sourceDirectory,string parentClassModelName)
     {
-        var syntaxTree = ParseSyntaxTree(sourceCode, DefaultUsingDirectives);
-        var referencedAssemblies = GetReferencedAssemblies(syntaxTree);
-        var compilation = CreateCompilation(syntaxTree, referencedAssemblies);
+        var sourceFilePaths = Directory.GetFiles(sourceDirectory, "*.cs", SearchOption.AllDirectories);
+        var syntaxTrees = new List<SyntaxTree>();
+
+        foreach (var sourceFilePath in sourceFilePaths)
+        {
+            var fileContent = File.ReadAllText(sourceFilePath);
+            var syntaxTree = CSharpSyntaxTree.ParseText(fileContent);
+            syntaxTrees.Add(syntaxTree);
+        }
+
+        var mainClassSyntaxTree = syntaxTrees.FirstOrDefault(st =>
+        {
+            var root = st.GetRoot();
+            return root.DescendantNodes().OfType<ClassDeclarationSyntax>().Any(n => n.Identifier.ValueText == parentClassModelName);
+        });
+
+        if (mainClassSyntaxTree == null)
+        {
+            throw new FileNotFoundException($"The main class '{parentClassModelName}' was not found in the source directory.");
+        }
+
+        syntaxTrees = RemoveDuplicateAssemblyAttributes(syntaxTrees);
+
+        var referencedAssemblies = GetReferencedAssemblies(syntaxTrees);
+        var compilation = CreateCompilation(syntaxTrees, referencedAssemblies);
         var outputStream = EmitCompilation(compilation);
         var generatedAssembly = LoadAssembly(outputStream);
 
         return generatedAssembly.GetExportedTypes().ToList();
+
+
     }
 
+    private static List<SyntaxTree> RemoveDuplicateAssemblyAttributes(List<SyntaxTree> syntaxTrees)
+    {
+        var newSyntaxTrees = new List<SyntaxTree>();
+
+        foreach (var syntaxTree in syntaxTrees)
+        {
+            var root = syntaxTree.GetRoot();
+            var newRoot = root.RemoveNodes(
+                root.DescendantNodes().OfType<AttributeListSyntax>()
+                    .Where(al => al.Target?.Identifier.Kind() == SyntaxKind.AssemblyKeyword), SyntaxRemoveOptions.KeepNoTrivia);
+            var newSyntaxTree = syntaxTree.WithRootAndOptions(newRoot, syntaxTree.Options);
+            newSyntaxTrees.Add(newSyntaxTree);
+        }
+
+        return newSyntaxTrees;
+    }
+
+    private static string RemoveAssemblyAttributes(string sourceCode)
+    {
+        var tree = CSharpSyntaxTree.ParseText(sourceCode);
+        var root = tree.GetRoot();
+        var assemblyAttributes = root.DescendantNodes()
+            .OfType<AttributeSyntax>()
+            .Where(a => a.Name.ToString().StartsWith("assembly:"))
+            .ToList();
+
+        var newRoot = root.RemoveNodes(assemblyAttributes, SyntaxRemoveOptions.KeepNoTrivia);
+        return newRoot.ToFullString();
+    }
     /// <summary>
     /// Parses the syntax tree.
     /// </summary>
@@ -86,7 +141,7 @@ public class DynamicAssemblyGenerator : IDynamicAssemblyGenerator
     /// </summary>
     /// <param name="syntaxTree">The syntax tree.</param>
     /// <returns>A list of MetadataReferences.</returns>
-    private static List<MetadataReference> GetReferencedAssemblies(SyntaxTree? syntaxTree)
+    private static List<MetadataReference> GetReferencedAssemblies(List<SyntaxTree?> syntaxTrees)
     {
         var assemblies = new HashSet<Assembly>
         {
@@ -102,14 +157,16 @@ public class DynamicAssemblyGenerator : IDynamicAssemblyGenerator
             typeof(DataSet).Assembly, // System.Data.Common
             typeof(ValidationAttribute).Assembly, // System.ComponentModel.Annotations
             typeof(XmlSerializer).Assembly,
+            typeof(HttpClient).Assembly,
             Assembly.Load(
                 "System.Runtime, Version=7.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a") // System.Runtime
         };
 
 
-        var usingDirectives = syntaxTree?.GetRoot().DescendantNodes()
-            .OfType<UsingDirectiveSyntax>()
-            .Select(uds => uds.Name.ToString())
+        var usingDirectives = syntaxTrees.SelectMany(st => st.GetRoot().DescendantNodes()
+                .OfType<UsingDirectiveSyntax>()
+                .Select(uds => uds.Name.ToString()))
+            .Distinct()
             .ToList();
 
         if (usingDirectives != null && !usingDirectives.Contains("System")) assemblies.Add(typeof(object).Assembly);
@@ -167,19 +224,28 @@ public class DynamicAssemblyGenerator : IDynamicAssemblyGenerator
     /// <param name="syntaxTree">The syntax tree.</param>
     /// <param name="referencedAssemblies">The referenced assemblies.</param>
     /// <returns>A CSharpCompilation.</returns>
-    private static CSharpCompilation CreateCompilation(SyntaxTree? syntaxTree,
-        List<MetadataReference> referencedAssemblies)
-    {
-        syntaxTree = AddMissingNamespaces(syntaxTree, referencedAssemblies);
+    //private static CSharpCompilation CreateCompilation(SyntaxTree? syntaxTree,
+    //    List<MetadataReference> referencedAssemblies)
+    //{
+    //    syntaxTree = AddMissingNamespaces(syntaxTree, referencedAssemblies);
 
-        var assemblyName = $"DynamicAssembly{Guid.NewGuid()}";
+    //    var assemblyName = $"DynamicAssembly{Guid.NewGuid()}";
+    //    return CSharpCompilation.Create(
+    //        assemblyName,
+    //        new[] {syntaxTree}!,
+    //        referencedAssemblies,
+    //        new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
+    //    );
+    //}
+    private static CSharpCompilation CreateCompilation(List<SyntaxTree> syntaxTrees, IEnumerable<MetadataReference> references)
+    {
         return CSharpCompilation.Create(
-            assemblyName,
-            new[] {syntaxTree}!,
-            referencedAssemblies,
-            new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
-        );
+            $"DynamicAssembly_{Guid.NewGuid()}",
+            syntaxTrees,
+            references,
+            new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
     }
+
 
     /// <summary>
     /// Adds the missing namespaces.
@@ -241,5 +307,20 @@ public class DynamicAssemblyGenerator : IDynamicAssemblyGenerator
     private static Type? FindTypeInReferencedAssemblies(string typeName, AssemblyLoadContext alc)
     {
         return alc.Assemblies.Select(assembly => assembly.GetType(typeName)).FirstOrDefault(type => type != null);
+    }
+
+    private static bool HasChildObject(Type type)
+    {
+        var properties = type.GetProperties();
+        foreach (var property in properties)
+        {
+            var propertyType = property.PropertyType;
+            if (!propertyType.IsPrimitive && !propertyType.IsEnum && propertyType != typeof(string) && propertyType != typeof(decimal))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

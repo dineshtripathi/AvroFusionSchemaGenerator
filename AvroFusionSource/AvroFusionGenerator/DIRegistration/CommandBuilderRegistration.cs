@@ -1,7 +1,8 @@
 ﻿using System.CommandLine.Invocation;
 using AvroFusionGenerator.Abstraction;
 using Microsoft.Extensions.DependencyInjection;
-using static AvroFusionGenerator.GenerateCommand;
+using Spectre.Console.Cli;
+using static AvroFusionGenerator.SpectreGenerateCommand;
 
 namespace AvroFusionGenerator.DIRegistration;
 /// <summary>
@@ -19,10 +20,12 @@ public class CommandBuilderRegistration : ICommandBuilderRegistration
         services?.AddSingleton<CommandBuilder, AvroFusionCommandBuilder>();
         services?.AddSingleton<ICommandHandler, GenerateCommandHandler>();
         services?.AddSingleton<GenerateCommandHandler>();
-        services?.AddSingleton<GenerateCommand>();
+        services?.AddSingleton<SpectreGenerateCommand>();
         services?.AddSingleton<SpectreServiceProviderTypeRegistrar>();
         services?.AddSingleton<SpectreServiceProviderTypeResolver>();
         services?.AddSingleton<DefaultCommand>();
-        services?.AddSingleton<Settings>();
+        services?.AddSingleton<SpectreConsoleSettings>();
+        services.AddSingleton<ICommand<SpectreConsoleSettings>, SpectreGenerateCommand>();
+        
     }
 }

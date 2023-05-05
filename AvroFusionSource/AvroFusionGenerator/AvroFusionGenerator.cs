@@ -40,9 +40,9 @@ public class AvroFusionGenerator : AvroFusionGeneratorBase
             config.SetApplicationName("AvroFusionGenerator");
 
 
-            config.AddCommand<GenerateCommand>("generate").WithDescription("Generates Avro schema for C# models.")
+            config.AddCommand<SpectreGenerateCommand>("generate").WithDescription("Generates Avro schema for C# models.")
                 .WithExample(new[]
-                    {"generate", "--input-file", "input.cs", "--output-dir", "output", "--namespace", "MyNamespace"});
+                    {"generate", "--source-directory-path", "C:\\ModelClassproject" ,"--input-file", "input.cs", "--output-dir", "output", "--namespace", "MyNamespace"});
             ;
         });
 

@@ -15,40 +15,36 @@ public class SpectreServiceProviderTypeRegistrar : ITypeRegistrar
         _services = services;
     }
 
-    /// <summary>
-    /// Registers the.
-    /// </summary>
-    /// <param name="service">The service.</param>
-    /// <param name="implementation">The implementation.</param>
     public void Register(Type service, Type implementation)
     {
         _services?.AddSingleton(service, implementation);
     }
 
-    /// <summary>
-    /// Registers the instance.
-    /// </summary>
-    /// <param name="service">The service.</param>
-    /// <param name="implementation">The implementation.</param>
     public void RegisterInstance(Type service, object implementation)
     {
         _services?.AddSingleton(service, implementation);
     }
 
-    /// <summary>
-    /// Registers the lazy.
-    /// </summary>
-    /// <param name="service">The service.</param>
-    /// <param name="factory">The factory.</param>
     public void RegisterLazy(Type service, Func<object> factory)
     {
-        _services?.AddSingleton(service, factory);
+        _services?.AddSingleton(service, _ => factory());
     }
 
-    /// <summary>
-    /// Builds the.
-    /// </summary>
-    /// <returns>An ITypeResolver.</returns>
+    public void Register<TService, TImplementation>() where TService : class where TImplementation : class, TService
+    {
+        _services?.AddSingleton<TService, TImplementation>();
+    }
+
+    public void RegisterInstance<TService>(TService implementation) where TService : class
+    {
+        _services?.AddSingleton(implementation);
+    }
+
+    public void RegisterLazy<TService>(Func<TService> factory) where TService : class
+    {
+        _services?.AddSingleton(_ => factory());
+    }
+
     public ITypeResolver Build()
     {
         var serviceProvider = _services?.BuildServiceProvider();
