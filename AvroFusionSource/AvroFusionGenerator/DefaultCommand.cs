@@ -7,8 +7,8 @@ namespace AvroFusionGenerator;
 
 public class DefaultCommand : SpectreGenerateCommand
 {
-    public DefaultCommand(IAvroSchemaGenerator avroSchemaGenerator, ICompilerService compilerService)
-        : base(avroSchemaGenerator, compilerService)
+    public DefaultCommand(IAvroFusionSchemaGenerator avroFusionSchemaGenerator, IAvroFusionCompilerService avroFusionCompilerService)
+        : base(avroFusionSchemaGenerator, avroFusionCompilerService)
     {
     }
 }

@@ -3,7 +3,7 @@
 /// The compiler service.
 /// </summary>
 
-public interface ICompilerService
+public interface IAvroFusionCompilerService
 {
     /// <summary>
     /// Loads the types from source.
@@ -11,5 +11,5 @@ public interface ICompilerService
     /// <param name="sourceDirectoryPath"></param>
     /// <param name="parentClassModelName"></param>
     /// <returns>A list of Types.</returns>
-    List<Type> LoadTypesFromSource(string sourceDirectoryPath, string parentClassModelName);
+    List<Type> LoadDotNetTypesFromSource(string sourceDirectoryPath, string parentClassModelName);
 }

@@ -4,13 +4,13 @@ namespace AvroFusionGenerator.Implementation.AvroTypeHandlers;
 
 public class AvroTupleTypeHandler : IAvroAvscTypeHandler
 {
-    private readonly Lazy<IAvroSchemaGenerator> _avroSchemaGenerator;
+    private readonly Lazy<IAvroFusionSchemaGenerator> _avroSchemaGenerator;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AvroTupleTypeHandler"/> class.
     /// </summary>
     /// <param name="avroSchemaGenerator">The avro schema generator.</param>
-    public AvroTupleTypeHandler(Lazy<IAvroSchemaGenerator> avroSchemaGenerator)
+    public AvroTupleTypeHandler(Lazy<IAvroFusionSchemaGenerator> avroSchemaGenerator)
     {
         _avroSchemaGenerator = avroSchemaGenerator;
     }
@@ -33,7 +33,7 @@ public class AvroTupleTypeHandler : IAvroAvscTypeHandler
         var genericArguments = type?.GetGenericArguments();
         if (genericArguments != null)
         {
-            var tupleElements = genericArguments.Select(arg => _avroSchemaGenerator.Value.GenerateAvroAvscType(arg, generatedTypes)).ToList();
+            var tupleElements = genericArguments.Select(arg => _avroSchemaGenerator.Value.GenerateAvroFusionAvscAvroType(arg, generatedTypes)).ToList();
 
             var elementType = new Dictionary<string, object?>
             {

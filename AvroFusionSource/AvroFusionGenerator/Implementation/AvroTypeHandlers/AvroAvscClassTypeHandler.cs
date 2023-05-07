@@ -8,13 +8,13 @@ namespace AvroFusionGenerator.Implementation.AvroTypeHandlers;
 
 public class AvroAvscClassTypeHandler : IAvroAvscTypeHandler
 {
-    private readonly Lazy<IAvroSchemaGenerator> _avroSchemaGenerator;
+    private readonly Lazy<IAvroFusionSchemaGenerator> _avroSchemaGenerator;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AvroAvscClassTypeHandler"/> class.
     /// </summary>
     /// <param name="avroSchemaGenerator">The avro schema generator.</param>
-    public AvroAvscClassTypeHandler(Lazy<IAvroSchemaGenerator> avroSchemaGenerator)
+    public AvroAvscClassTypeHandler(Lazy<IAvroFusionSchemaGenerator> avroSchemaGenerator)
     {
         _avroSchemaGenerator = avroSchemaGenerator;
     }
@@ -109,11 +109,11 @@ public class AvroAvscClassTypeHandler : IAvroAvscTypeHandler
         if (avroUnionAttribute != null)
         {
             List<object?> unionTypes = avroUnionAttribute.UnionTypes.Select(unionType =>
-                _avroSchemaGenerator.Value.GenerateAvroAvscType(unionType, generatedTypes)).ToList();
+                _avroSchemaGenerator.Value.GenerateAvroFusionAvscAvroType(unionType, generatedTypes)).ToList();
             unionTypes.Add("null");
             return unionTypes;
         }
 
-        return _avroSchemaGenerator.Value.GenerateAvroAvscType(prop.PropertyType, generatedTypes);
+        return _avroSchemaGenerator.Value.GenerateAvroFusionAvscAvroType(prop.PropertyType, generatedTypes);
     }
 }

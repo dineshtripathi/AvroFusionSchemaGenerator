@@ -22,9 +22,9 @@ public static class DependencyInjectionHelper
         {
             typeStrategyRegistration.RegisterTypeStrategies(services);
             services?.AddSingleton<IAvroTypeHandlerResolver, AvroTypeHandlerResolver>();
-            services?.AddSingleton<IAvroSchemaGenerator, AvroSchemaGenerator>();
-            services?.AddSingleton<Lazy<IAvroSchemaGenerator>>(sp =>
-                new Lazy<IAvroSchemaGenerator>(sp.GetRequiredService<IAvroSchemaGenerator>));
+            services?.AddSingleton<IAvroFusionSchemaGenerator, AvroFusionSchemaGenerator>();
+            services?.AddSingleton<Lazy<IAvroFusionSchemaGenerator>>(sp =>
+                new Lazy<IAvroFusionSchemaGenerator>(sp.GetRequiredService<IAvroFusionSchemaGenerator>));
 
             ICompilerServiceRegistration compilerServiceRegistration = new CompilerServiceRegistration();
             compilerServiceRegistration.RegisterCompilerServices(services);

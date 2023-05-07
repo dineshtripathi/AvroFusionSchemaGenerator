@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using AvroFusionGenerator.ServiceInterface;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace AvroFusionGenerator.ServiceInterface;
+namespace AvroFusionGenerator.Implementation;
 /// <summary>
 /// The avro type strategy resolver.
 /// </summary>

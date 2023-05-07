@@ -4,13 +4,13 @@ namespace AvroFusionGenerator.Implementation.AvroTypeHandlers;
 
 public class AvroStructTypeHandler : IAvroAvscTypeHandler
 {
-    private readonly Lazy<IAvroSchemaGenerator> _avroSchemaGenerator;
+    private readonly Lazy<IAvroFusionSchemaGenerator> _avroSchemaGenerator;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AvroStructTypeHandler"/> class.
     /// </summary>
     /// <param name="avroSchemaGenerator">The avro schema generator.</param>
-    public AvroStructTypeHandler(Lazy<IAvroSchemaGenerator> avroSchemaGenerator)
+    public AvroStructTypeHandler(Lazy<IAvroFusionSchemaGenerator> avroSchemaGenerator)
     {
         _avroSchemaGenerator = avroSchemaGenerator;
     }
@@ -37,7 +37,7 @@ public class AvroStructTypeHandler : IAvroAvscTypeHandler
             .Select(prop => new
             {
                 name = prop.Name,
-                type = _avroSchemaGenerator.Value.GenerateAvroAvscType(prop.PropertyType, generatedTypes)
+                type = _avroSchemaGenerator.Value.GenerateAvroFusionAvscAvroType(prop.PropertyType, generatedTypes)
             });
 
         if (fieldInfos != null)

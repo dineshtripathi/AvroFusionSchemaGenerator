@@ -1,12 +1,9 @@
 ﻿namespace AvroFusionGenerator.ServiceInterface;
-/// <summary>
-/// The dynamic assembly generator.
-/// </summary>
 
-public interface IDynamicAssemblyGenerator
+public interface IAvroFusionDynamicAssemblyGenerator
 {
     /// <summary>
-    /// Generates the dynamic assembly.
+    ///     Generates the dynamic assembly.
     /// </summary>
     /// <param name="sourceDirectory"></param>
     /// <param name="csharpModelParentClass">The csharp model parent class.</param>

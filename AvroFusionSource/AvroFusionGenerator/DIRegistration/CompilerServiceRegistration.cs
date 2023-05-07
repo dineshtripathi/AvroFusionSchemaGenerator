@@ -15,7 +15,11 @@ public class CompilerServiceRegistration : ICompilerServiceRegistration
     /// <param name="services">The services.</param>
     public void RegisterCompilerServices(IServiceCollection? services)
     {
-        services?.AddSingleton<ICompilerService, CompilerService>();
-        services?.AddSingleton<IDynamicAssemblyGenerator, DynamicAssemblyGenerator>();
+        services?.AddSingleton<IAvroFusionCompilerService, AvroFusionCompilerService>();
+        services?.AddSingleton<IAvroFusionDynamicAssemblyGenerator, AvroFusionDynamicAssemblyGenerator>();
+        services?.AddSingleton<IAvroFusionFileReader, AvroFusionFileReader>();
+        services?.AddSingleton<IAvroFusionSchemaGenerator, AvroFusionSchemaGenerator>();
+        services?.AddSingleton<IAvroFusionSyntaxTreeManager, AvroFusionSyntaxTreeManager>();
+      //  services?.AddSingleton<IDynamicAssemblyGenerator, DynamicAssemblyGenerator>();
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace TestModels;
+﻿namespace Avro.SchemaGeneration.Sample.Model;
 
 /// <summary>
 /// 

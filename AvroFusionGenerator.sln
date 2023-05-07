@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AvroFusionGenerator", "Avro
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SamplesAndTest", "SamplesAndTest", "{2317E9C1-7A04-46DA-A042-EC66C11BE2C2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestModels", "SampleAndTest\TestModels\TestModels.csproj", "{4AC01257-7C90-46B7-B56B-584380554C5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Avro.SchemaGeneration.Sample.Model", "SampleAndTest\TestModels\Avro.SchemaGeneration.Sample.Model.csproj", "{4AC01257-7C90-46B7-B56B-584380554C5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvroFusionGeneratorReadMeUpdater", "AvroFusionSource\AvroFusionGeneratorReadMeUpdater\AvroFusionGeneratorReadMeUpdater.csproj", "{16015C64-A1F3-486B-B8BA-3F5F7DB813FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AvroFusionGeneratorReadMeUpdater", "AvroFusionSource\AvroFusionGeneratorReadMeUpdater\AvroFusionGeneratorReadMeUpdater.csproj", "{16015C64-A1F3-486B-B8BA-3F5F7DB813FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

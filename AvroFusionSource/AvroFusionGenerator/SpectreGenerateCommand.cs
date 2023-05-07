@@ -12,13 +12,13 @@ namespace AvroFusionGenerator;
 
 public class SpectreGenerateCommand : AsyncCommand<SpectreConsoleSettings>
 {
-    private readonly IAvroSchemaGenerator _avroSchemaGenerator;
-    private readonly ICompilerService _compilerService;
+    private readonly IAvroFusionSchemaGenerator _avroFusionSchemaGenerator;
+    private readonly IAvroFusionCompilerService _avroFusionCompilerService;
   
-    public SpectreGenerateCommand(IAvroSchemaGenerator avroSchemaGenerator, ICompilerService compilerService)
+    public SpectreGenerateCommand(IAvroFusionSchemaGenerator avroFusionSchemaGenerator, IAvroFusionCompilerService avroFusionCompilerService)
     {
-        _avroSchemaGenerator = avroSchemaGenerator;
-        _compilerService = compilerService;
+        _avroFusionSchemaGenerator = avroFusionSchemaGenerator;
+        _avroFusionCompilerService = avroFusionCompilerService;
     }
 
     /// <summary>
@@ -33,20 +33,20 @@ public class SpectreGenerateCommand : AsyncCommand<SpectreConsoleSettings>
         await AnsiConsole.Progress().StartAsync(async ctx =>
         {
             var sourceDirectory = settings.DirectoryPath;
-            var modelclassName = settings.InputFile;
+            var parentClassFilePathWithName = settings.InputFile;
             var outputDir = settings.OutputDir;
             var @namespace = settings.Namespace;
 
             {
-                var parentClassModelName =  Path.GetFileNameWithoutExtension(modelclassName);
-                var types = _compilerService.LoadTypesFromSource(sourceDirectory, parentClassModelName);
+                var parentClassModelName =  Path.GetFileNameWithoutExtension(parentClassFilePathWithName);
+                var types = _avroFusionCompilerService.LoadDotNetTypesFromSource(sourceDirectory, parentClassModelName);
 
                 var parentType = GetMainParentType(types, parentClassModelName);
 
                 if (parentType?.Name != null)
                 {
                     var schemaFromParentClassProperties =
-                        _avroSchemaGenerator.GenerateAvroAvscSchema(types, parentType.Name, progressReporter);
+                        _avroFusionSchemaGenerator.GenerateAvroFusionAvscSchema(types, parentType.Name, progressReporter);
 
                     {
                         var outputPath = Path.Combine(outputDir, $"{parentType.Namespace}.{parentType.Name}.avsc");

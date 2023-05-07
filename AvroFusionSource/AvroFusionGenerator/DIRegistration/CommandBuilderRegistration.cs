@@ -18,8 +18,8 @@ public class CommandBuilderRegistration : ICommandBuilderRegistration
     public void RegisterCommandBuilder(IServiceCollection? services)
     {
         services?.AddSingleton<CommandBuilder, AvroFusionCommandBuilder>();
-        services?.AddSingleton<ICommandHandler, GenerateCommandHandler>();
-        services?.AddSingleton<GenerateCommandHandler>();
+    //    services?.AddSingleton<ICommandHandler, GenerateCommandHandler>();
+     //   services?.AddSingleton<GenerateCommandHandler>();
         services?.AddSingleton<SpectreGenerateCommand>();
         services?.AddSingleton<SpectreServiceProviderTypeRegistrar>();
         services?.AddSingleton<SpectreServiceProviderTypeResolver>();

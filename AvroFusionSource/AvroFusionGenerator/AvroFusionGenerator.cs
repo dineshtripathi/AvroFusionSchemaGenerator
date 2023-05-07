@@ -37,7 +37,7 @@ public class AvroFusionGenerator : AvroFusionGeneratorBase
 
         app.Configure(config =>
         {
-            config.SetApplicationName("AvroFusionGenerator");
+            config.SetApplicationName("AvroSchema");
 
 
             config.AddCommand<SpectreGenerateCommand>("generate").WithDescription("Generates Avro schema for C# models.")

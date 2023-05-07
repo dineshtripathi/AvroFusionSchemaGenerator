@@ -6,15 +6,15 @@ namespace AvroFusionGenerator.Implementation;
 /// The avro schema generator.
 /// </summary>
 
-public class AvroSchemaGenerator : IAvroSchemaGenerator
+public class AvroFusionSchemaGenerator : IAvroFusionSchemaGenerator
 {
     private readonly IAvroTypeHandlerResolver _handlerResolver;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="AvroSchemaGenerator"/> class.
+    /// Initializes a new instance of the <see cref="AvroFusionSchemaGenerator"/> class.
     /// </summary>
     /// <param name="handlerResolver">The strategy resolver.</param>
-    public AvroSchemaGenerator(IAvroTypeHandlerResolver handlerResolver)
+    public AvroFusionSchemaGenerator(IAvroTypeHandlerResolver handlerResolver)
     {
         _handlerResolver = handlerResolver;
     }
@@ -27,7 +27,7 @@ public class AvroSchemaGenerator : IAvroSchemaGenerator
     /// <param name="mainClassName">The main class name.</param>
     /// <param name="progressReporter">The progress reporter.</param>
     /// <returns>A string.</returns>
-    public string? GenerateAvroAvscSchema(IEnumerable<Type?> types, string mainClassName,
+    public string? GenerateAvroFusionAvscSchema(IEnumerable<Type?> types, string mainClassName,
         ProgressReporter progressReporter)
     {
         var enumerable = types.ToList();
@@ -37,11 +37,11 @@ public class AvroSchemaGenerator : IAvroSchemaGenerator
                 $"Could not find the main type '{mainClassName}' in the provided types.");
 
         var generatedTypes = new HashSet<string>();
-        var avroMainType = GenerateAvroAvscType(mainType, generatedTypes) as Dictionary<string, object>;
+        var avroMainType = GenerateAvroFusionAvscAvroType(mainType, generatedTypes) as Dictionary<string, object>;
 
         var generatedSchemas = enumerable
             .Where(t => t != mainType)
-            .Select(t => GenerateAvroAvscType(t, generatedTypes))
+            .Select(t => GenerateAvroFusionAvscAvroType(t, generatedTypes))
             .OfType<Dictionary<string, object>>()
             .ToList();
 
@@ -85,7 +85,7 @@ public class AvroSchemaGenerator : IAvroSchemaGenerator
     /// <param name="type">The type.</param>
     /// <param name="generatedTypes">The generated types.</param>
     /// <returns>An object.</returns>
-    public object? GenerateAvroAvscType(Type? type, HashSet<string> generatedTypes)
+    public object? GenerateAvroFusionAvscAvroType(Type? type, HashSet<string> generatedTypes)
     {
         try
         {
@@ -117,7 +117,7 @@ public class AvroSchemaGenerator : IAvroSchemaGenerator
             new Dictionary<string, object?>
             {
                 {"name", prop.Name},
-                {"type", GenerateAvroAvscType(prop.PropertyType, generatedTypes)}
+                {"type", GenerateAvroFusionAvscAvroType(prop.PropertyType, generatedTypes)}
             });
     }
 

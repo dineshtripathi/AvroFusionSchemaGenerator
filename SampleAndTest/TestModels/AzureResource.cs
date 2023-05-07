@@ -1,6 +1,6 @@
 ﻿using AvroFusionGenerator.Implementation.AvroTypeHandlers;
 
-namespace TestModels;
+namespace Avro.SchemaGeneration.Sample.Model;
 
 /// <summary>
 /// 

@@ -1,6 +1,6 @@
 {
   "type": "record",
-  "namespace": "TestModels",
+  "namespace": "Avro.SchemaGeneration.Sample.Model",
   "name": "ResourceGroup",
   "fields": [
     {
@@ -22,7 +22,7 @@
         "items": {
           "type": "record",
           "name": "AppService",
-          "namespace": "TestModels",
+          "namespace": "Avro.SchemaGeneration.Sample.Model",
           "fields": [
             {
               "name": "AppServiceName",
@@ -45,7 +45,7 @@
               "type": {
                 "type": "enum",
                 "name": "AppServiceStatus",
-                "namespace": "TestModels",
+                "namespace": "Avro.SchemaGeneration.Sample.Model",
                 "symbols": [
                   "Running",
                   "Stopped",
@@ -72,7 +72,7 @@
         "values": {
           "type": "record",
           "name": "StorageAccount",
-          "namespace": "TestModels",
+          "namespace": "Avro.SchemaGeneration.Sample.Model",
           "fields": [
             {
               "name": "StorageAccountName",
@@ -101,7 +101,7 @@
         "values": {
           "type": "record",
           "name": "VirtualMachine",
-          "namespace": "TestModels",
+          "namespace": "Avro.SchemaGeneration.Sample.Model",
           "fields": [
             {
               "name": "VirtualMachineName",
@@ -120,7 +120,7 @@
               "type": {
                 "type": "enum",
                 "name": "VirtualMachineStatus",
-                "namespace": "TestModels",
+                "namespace": "Avro.SchemaGeneration.Sample.Model",
                 "symbols": [
                   "Running",
                   "Stopped",
@@ -140,7 +140,7 @@
         "items": {
           "type": "record",
           "name": "DataFactoryPipeline",
-          "namespace": "TestModels",
+          "namespace": "Avro.SchemaGeneration.Sample.Model",
           "fields": [
             {
               "name": "PipelineName",
@@ -173,7 +173,7 @@
         "items": {
           "type": "record",
           "name": "EventHub",
-          "namespace": "TestModels",
+          "namespace": "Avro.SchemaGeneration.Sample.Model",
           "fields": [
             {
               "name": "EventHubName",
@@ -198,7 +198,7 @@
         "items": {
           "type": "record",
           "name": "EventGrid",
-          "namespace": "TestModels",
+          "namespace": "Avro.SchemaGeneration.Sample.Model",
           "fields": [
             {
               "name": "EventGridName",
@@ -223,7 +223,7 @@
         "items": {
           "type": "record",
           "name": "SchemaGroup",
-          "namespace": "TestModels",
+          "namespace": "Avro.SchemaGeneration.Sample.Model",
           "fields": [
             {
               "name": "GroupName",
@@ -240,7 +240,7 @@
                 "items": {
                   "type": "record",
                   "name": "Schema",
-                  "namespace": "TestModels",
+                  "namespace": "Avro.SchemaGeneration.Sample.Model",
                   "fields": [
                     {
                       "name": "SchemaName",
@@ -308,7 +308,7 @@
       "name": "Schemas",
       "type": {
         "type": "array",
-        "items": "TestModels.Schema"
+        "items": "Avro.SchemaGeneration.Sample.Model.Schema"
       }
     },
     {
@@ -318,7 +318,7 @@
         "values": {
           "type": "record",
           "name": "CosmosDb",
-          "namespace": "TestModels",
+          "namespace": "Avro.SchemaGeneration.Sample.Model",
           "fields": [
             {
               "name": "CosmosDbName",
@@ -339,7 +339,7 @@
                 "items": {
                   "type": "record",
                   "name": "Database",
-                  "namespace": "TestModels",
+                  "namespace": "Avro.SchemaGeneration.Sample.Model",
                   "fields": [
                     {
                       "name": "DatabaseName",
@@ -352,7 +352,7 @@
                         "items": {
                           "type": "record",
                           "name": "Container",
-                          "namespace": "TestModels",
+                          "namespace": "Avro.SchemaGeneration.Sample.Model",
                           "fields": [
                             {
                               "name": "ContainerName",
@@ -505,7 +505,7 @@
       "type": {
         "type": "record",
         "name": "AzureResource",
-        "namespace": "TestModels",
+        "namespace": "Avro.SchemaGeneration.Sample.Model",
         "fields": [
           {
             "name": "Name",
@@ -559,7 +559,7 @@
         {
           "type": "record",
           "name": "ArmTemplateMetadata",
-          "namespace": "TestModels",
+          "namespace": "Avro.SchemaGeneration.Sample.Model",
           "fields": [
             {
               "name": "Sku",
