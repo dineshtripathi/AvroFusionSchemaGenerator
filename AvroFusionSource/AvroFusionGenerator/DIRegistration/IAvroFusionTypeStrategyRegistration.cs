@@ -6,7 +6,7 @@ namespace AvroFusionGenerator.DIRegistration;
 /// The type strategy registration.
 /// </summary>
 
-public interface ITypeStrategyRegistration
+public interface IAvroFusionTypeStrategyRegistration
 {
     /// <summary>
     /// Registers the type strategies.

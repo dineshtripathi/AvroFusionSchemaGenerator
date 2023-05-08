@@ -8,7 +8,7 @@ namespace AvroFusionGenerator;
 /// The dependency injection helper.
 /// </summary>
 
-public static class DependencyInjectionHelper
+public static class AvroFusionDependencyInjectionHelper
 {
     /// <summary>
     /// Registers the all services.
@@ -17,20 +17,20 @@ public static class DependencyInjectionHelper
     /// <returns>An IServiceProvider.</returns>
     public static IServiceProvider? RegisterAllServices(IServiceCollection? services)
     {
-        ITypeStrategyRegistration typeStrategyRegistration = new TypeStrategyRegistration();
+        IAvroFusionTypeStrategyRegistration avroFusionTypeStrategyRegistration = new AvroFusionTypeStrategyRegistration();
         if (services != null)
         {
-            typeStrategyRegistration.RegisterTypeStrategies(services);
+            avroFusionTypeStrategyRegistration.RegisterTypeStrategies(services);
             services?.AddSingleton<IAvroTypeHandlerResolver, AvroTypeHandlerResolver>();
             services?.AddSingleton<IAvroFusionSchemaGenerator, AvroFusionSchemaGenerator>();
             services?.AddSingleton<Lazy<IAvroFusionSchemaGenerator>>(sp =>
                 new Lazy<IAvroFusionSchemaGenerator>(sp.GetRequiredService<IAvroFusionSchemaGenerator>));
 
-            ICompilerServiceRegistration compilerServiceRegistration = new CompilerServiceRegistration();
-            compilerServiceRegistration.RegisterCompilerServices(services);
+            IAvroFusionCompilerServiceRegistration avroFusionCompilerServiceRegistration = new AvroFusionCompilerServiceRegistration();
+            avroFusionCompilerServiceRegistration.RegisterCompilerServices(services);
 
-            ICommandBuilderRegistration commandBuilderRegistration = new CommandBuilderRegistration();
-            commandBuilderRegistration.RegisterCommandBuilder(services);
+            IAvroFusionCommandBuilderRegistration avroFusionCommandBuilderRegistration = new AvroFusionCommandBuilderRegistration();
+            avroFusionCommandBuilderRegistration.RegisterCommandBuilder(services);
 
             services?.AddSingleton<ProgressReporter>();
 

@@ -62,7 +62,7 @@ By using the Avro Schema Generator for C#, developers can improve the efficiency
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="autofac" Version="7.0.0" />
+    <PackageReference Include="autofac" Version="7.0.1" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="MediatR" Version="12.0.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />

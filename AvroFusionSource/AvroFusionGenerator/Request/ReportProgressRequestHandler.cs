@@ -10,6 +10,10 @@ public class ReportProgressRequestHandler : IRequestHandler<ReportProgressReques
 {
     private readonly ProgressReporter _progressReporter;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ReportProgressRequestHandler"/> class.
+    /// </summary>
+    /// <param name="progressReporter">The progress reporter.</param>
     public ReportProgressRequestHandler(ProgressReporter progressReporter)
     {
         _progressReporter = progressReporter;

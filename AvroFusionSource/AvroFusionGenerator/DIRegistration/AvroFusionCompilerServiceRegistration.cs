@@ -7,7 +7,7 @@ namespace AvroFusionGenerator.DIRegistration;
 /// The compiler service registration.
 /// </summary>
 
-public class CompilerServiceRegistration : ICompilerServiceRegistration
+public class AvroFusionCompilerServiceRegistration : IAvroFusionCompilerServiceRegistration
 {
     /// <summary>
     /// Registers the compiler services.
@@ -20,6 +20,5 @@ public class CompilerServiceRegistration : ICompilerServiceRegistration
         services?.AddSingleton<IAvroFusionFileReader, AvroFusionFileReader>();
         services?.AddSingleton<IAvroFusionSchemaGenerator, AvroFusionSchemaGenerator>();
         services?.AddSingleton<IAvroFusionSyntaxTreeManager, AvroFusionSyntaxTreeManager>();
-      //  services?.AddSingleton<IDynamicAssemblyGenerator, DynamicAssemblyGenerator>();
     }
 }

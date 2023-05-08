@@ -1,4 +1,7 @@
 ﻿namespace AvroFusionGenerator.ServiceInterface;
+/// <summary>
+/// The avro fusion dynamic assembly generator.
+/// </summary>
 
 public interface IAvroFusionDynamicAssemblyGenerator
 {

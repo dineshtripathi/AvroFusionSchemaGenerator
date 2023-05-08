@@ -9,7 +9,7 @@ namespace AvroFusionGenerator.DIRegistration;
 /// The command builder registration.
 /// </summary>
 
-public class CommandBuilderRegistration : ICommandBuilderRegistration
+public class AvroFusionCommandBuilderRegistration : IAvroFusionCommandBuilderRegistration
 {
     /// <summary>
     /// Registers the command builder.
@@ -17,7 +17,7 @@ public class CommandBuilderRegistration : ICommandBuilderRegistration
     /// <param name="services">The services.</param>
     public void RegisterCommandBuilder(IServiceCollection? services)
     {
-        services?.AddSingleton<CommandBuilder, AvroFusionCommandBuilder>();
+       // services?.AddSingleton<CommandBuilder, AvroFusionCommandBuilder>();
     //    services?.AddSingleton<ICommandHandler, GenerateCommandHandler>();
      //   services?.AddSingleton<GenerateCommandHandler>();
         services?.AddSingleton<SpectreGenerateCommand>();
@@ -25,7 +25,7 @@ public class CommandBuilderRegistration : ICommandBuilderRegistration
         services?.AddSingleton<SpectreServiceProviderTypeResolver>();
         services?.AddSingleton<DefaultCommand>();
         services?.AddSingleton<SpectreConsoleSettings>();
-        services.AddSingleton<ICommand<SpectreConsoleSettings>, SpectreGenerateCommand>();
+        services?.AddSingleton<ICommand<SpectreConsoleSettings>, SpectreGenerateCommand>();
         
     }
 }

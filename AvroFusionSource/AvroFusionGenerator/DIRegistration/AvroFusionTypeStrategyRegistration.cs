@@ -8,7 +8,7 @@ namespace AvroFusionGenerator.DIRegistration;
 /// The type strategy registration.
 /// </summary>
 
-public class TypeStrategyRegistration : ITypeStrategyRegistration
+public class AvroFusionTypeStrategyRegistration : IAvroFusionTypeStrategyRegistration
 {
     /// <summary>
     /// Registers the type strategies.
@@ -17,7 +17,7 @@ public class TypeStrategyRegistration : ITypeStrategyRegistration
     public void RegisterTypeStrategies(ContainerBuilder builder)
     {
         // Get all types from the current assembly
-        var allTypes = typeof(AvroFusionGenerator).Assembly.GetTypes();
+        var allTypes = typeof(AvroFusionGeneratorEntryPoint).Assembly.GetTypes();
         Console.WriteLine("All types in assembly:");
         foreach (var type in allTypes) Console.WriteLine($" - {type.FullName}");
 
@@ -29,7 +29,7 @@ public class TypeStrategyRegistration : ITypeStrategyRegistration
 
 
         // Register types implementing IAvroAvscTypeHandler from the current assembly
-        builder.RegisterAssemblyTypes(typeof(AvroFusionGenerator).Assembly)
+        builder.RegisterAssemblyTypes(typeof(AvroFusionGeneratorEntryPoint).Assembly)
             .Where(t => typeof(IAvroAvscTypeHandler).IsAssignableFrom(t))
             .AsImplementedInterfaces().InstancePerDependency();
     }

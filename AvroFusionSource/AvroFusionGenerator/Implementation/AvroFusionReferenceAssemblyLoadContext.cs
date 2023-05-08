@@ -7,12 +7,12 @@ namespace AvroFusionGenerator.Implementation;
 /// The reference assembly load context.
 /// </summary>
 
-public class ReferenceAssemblyLoadContext : AssemblyLoadContext
+public class AvroFusionReferenceAssemblyLoadContext : AssemblyLoadContext
 {
     private readonly Dictionary<string, string?>? _assemblyPaths;
 
     /// <inheritdoc />
-    public ReferenceAssemblyLoadContext(IEnumerable<MetadataReference> referencedAssemblies)
+    public AvroFusionReferenceAssemblyLoadContext(IEnumerable<MetadataReference> referencedAssemblies)
     {
         _assemblyPaths = new Dictionary<string, string?>();
 

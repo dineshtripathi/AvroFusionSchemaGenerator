@@ -26,6 +26,16 @@ public class AvroFusionCompilerService : IAvroFusionCompilerService
     /// <returns>A list of Types.</returns>
     public List<Type> LoadDotNetTypesFromSource(string sourceDirectoryPath,string parentClassModelName)
     {
+        if (string.IsNullOrWhiteSpace(sourceDirectoryPath))
+        {
+            throw new ArgumentException("Source directory path cannot be null or whitespace.", nameof(sourceDirectoryPath));
+        }
+
+
+        if (string.IsNullOrWhiteSpace(parentClassModelName))
+        {
+            throw new ArgumentException("Parent class model name cannot be null or whitespace.", nameof(parentClassModelName));
+        }
         return _avroFusionDynamicAssemblyGenerator.GenerateDynamicAssembly(sourceDirectoryPath, parentClassModelName);
     }
 }

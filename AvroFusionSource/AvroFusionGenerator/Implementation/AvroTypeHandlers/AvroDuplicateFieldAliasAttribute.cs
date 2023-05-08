@@ -5,6 +5,9 @@
 
 public class AvroDuplicateFieldAliasAttribute : Attribute
 {
+    /// <summary>
+    /// Gets the alias.
+    /// </summary>
     public string Alias { get; }
 
     /// <summary>

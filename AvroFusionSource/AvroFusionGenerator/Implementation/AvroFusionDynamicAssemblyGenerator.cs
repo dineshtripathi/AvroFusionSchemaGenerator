@@ -1,12 +1,20 @@
 ﻿using AvroFusionGenerator.ServiceInterface;
 
 namespace AvroFusionGenerator.Implementation;
+/// <summary>
+/// The avro fusion dynamic assembly generator.
+/// </summary>
 
 public class AvroFusionDynamicAssemblyGenerator : IAvroFusionDynamicAssemblyGenerator
 {
     private readonly IAvroFusionFileReader _fileReader;
     private readonly IAvroFusionSyntaxTreeManager _syntaxTreeManager;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AvroFusionDynamicAssemblyGenerator"/> class.
+    /// </summary>
+    /// <param name="fileReader">The file reader.</param>
+    /// <param name="syntaxTreeManager">The syntax tree manager.</param>
     public AvroFusionDynamicAssemblyGenerator(
         IAvroFusionFileReader fileReader,
         IAvroFusionSyntaxTreeManager syntaxTreeManager)
@@ -15,11 +23,17 @@ public class AvroFusionDynamicAssemblyGenerator : IAvroFusionDynamicAssemblyGene
         _syntaxTreeManager = syntaxTreeManager;
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AvroFusionDynamicAssemblyGenerator"/> class.
+    /// </summary>
     public AvroFusionDynamicAssemblyGenerator()
         : this(new AvroFusionFileReader(), new AvroFusionSyntaxTreeManager())
     {
     }
 
+    /// <summary>
+    /// Gets the default using directives.
+    /// </summary>
     private static List<string> DefaultUsingDirectives => new()
     {
         "System",
@@ -33,6 +47,12 @@ public class AvroFusionDynamicAssemblyGenerator : IAvroFusionDynamicAssemblyGene
         "System.Xml.Serialization"
     };
 
+    /// <summary>
+    /// Generates the dynamic assembly.
+    /// </summary>
+    /// <param name="sourceDirectory">The source directory.</param>
+    /// <param name="csharpModelParentClass">The csharp model parent class.</param>
+    /// <returns>A list of Types.</returns>
     public List<Type> GenerateDynamicAssembly(string sourceDirectory, string csharpModelParentClass)
     {
         var sourceFilePaths = _fileReader.GetFiles(sourceDirectory, "*.cs", SearchOption.AllDirectories);

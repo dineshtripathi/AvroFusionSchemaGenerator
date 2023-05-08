@@ -14,7 +14,12 @@ public class SpectreGenerateCommand : AsyncCommand<SpectreConsoleSettings>
 {
     private readonly IAvroFusionSchemaGenerator _avroFusionSchemaGenerator;
     private readonly IAvroFusionCompilerService _avroFusionCompilerService;
-  
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SpectreGenerateCommand"/> class.
+    /// </summary>
+    /// <param name="avroFusionSchemaGenerator">The avro fusion schema generator.</param>
+    /// <param name="avroFusionCompilerService">The avro fusion compiler service.</param>
     public SpectreGenerateCommand(IAvroFusionSchemaGenerator avroFusionSchemaGenerator, IAvroFusionCompilerService avroFusionCompilerService)
     {
         _avroFusionSchemaGenerator = avroFusionSchemaGenerator;

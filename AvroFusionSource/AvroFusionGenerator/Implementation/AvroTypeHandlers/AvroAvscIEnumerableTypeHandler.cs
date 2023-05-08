@@ -6,6 +6,10 @@ public class AvroAvscIEnumerableTypeHandler : IAvroAvscTypeHandler
 {
     private readonly Lazy<IAvroFusionSchemaGenerator> _avroSchemaGenerator;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AvroAvscIEnumerableTypeHandler"/> class.
+    /// </summary>
+    /// <param name="avroSchemaGenerator">The avro schema generator.</param>
     public AvroAvscIEnumerableTypeHandler(Lazy<IAvroFusionSchemaGenerator> avroSchemaGenerator)
     {
         _avroSchemaGenerator = avroSchemaGenerator;

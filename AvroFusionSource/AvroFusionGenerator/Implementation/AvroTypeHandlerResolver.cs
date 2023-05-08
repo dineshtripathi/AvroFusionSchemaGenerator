@@ -10,6 +10,10 @@ public class AvroTypeHandlerResolver : IAvroTypeHandlerResolver
 {
     private readonly IServiceProvider _serviceProvider;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AvroTypeHandlerResolver"/> class.
+    /// </summary>
+    /// <param name="serviceProvider">The service provider.</param>
     public AvroTypeHandlerResolver(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;

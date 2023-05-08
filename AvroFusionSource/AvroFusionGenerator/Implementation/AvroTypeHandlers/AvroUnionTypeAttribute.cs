@@ -15,5 +15,8 @@ public class AvroUnionTypeAttribute : Attribute
         UnionTypes = unionTypes;
     }
 
+    /// <summary>
+    /// Gets the union types.
+    /// </summary>
     public Type[] UnionTypes { get; }
 }

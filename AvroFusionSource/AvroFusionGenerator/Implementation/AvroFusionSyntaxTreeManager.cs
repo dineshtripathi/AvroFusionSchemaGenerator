@@ -15,11 +15,22 @@ namespace AvroFusionGenerator.Implementation;
 
 public class AvroFusionSyntaxTreeManager : IAvroFusionSyntaxTreeManager
 {
+    /// <summary>
+    /// Creates the syntax trees.
+    /// </summary>
+    /// <param name="sourceFilePaths">The source file paths.</param>
+    /// <returns>A list of SyntaxTrees.</returns>
     public List<SyntaxTree> CreateSyntaxTrees(IEnumerable<string> sourceFilePaths)
     {
         return sourceFilePaths.Select(sourceFilePath => File.ReadAllText(sourceFilePath)).Select(fileContent => CSharpSyntaxTree.ParseText(fileContent)).ToList();
     }
 
+    /// <summary>
+    /// Finds the main class syntax tree.
+    /// </summary>
+    /// <param name="syntaxTrees">The syntax trees.</param>
+    /// <param name="parentClassModelName">The parent class model name.</param>
+    /// <returns>A SyntaxTree? .</returns>
     public SyntaxTree? FindMainClassSyntaxTree(List<SyntaxTree> syntaxTrees, string parentClassModelName)
     {
         var mainClassSyntaxTree = syntaxTrees.FirstOrDefault(syntaxTree =>
@@ -30,6 +41,11 @@ public class AvroFusionSyntaxTreeManager : IAvroFusionSyntaxTreeManager
         return mainClassSyntaxTree;
     }
 
+    /// <summary>
+    /// Removes the duplicate assembly attributes.
+    /// </summary>
+    /// <param name="syntaxTrees">The syntax trees.</param>
+    /// <returns>A list of SyntaxTrees.</returns>
     public List<SyntaxTree> RemoveDuplicateAssemblyAttributes(List<SyntaxTree> syntaxTrees)
     {
         return (from syntaxTree in syntaxTrees
@@ -41,12 +57,24 @@ public class AvroFusionSyntaxTreeManager : IAvroFusionSyntaxTreeManager
                 select syntaxTree.WithRootAndOptions(newRoot, syntaxTree.Options)).ToList();
     }
 
+    /// <summary>
+    /// Parses the syntax tree.
+    /// </summary>
+    /// <param name="sourceCode">The source code.</param>
+    /// <param name="usingDirectives">The using directives.</param>
+    /// <returns>A SyntaxTree.</returns>
     public SyntaxTree ParseSyntaxTree(string sourceCode, IEnumerable<string> usingDirectives)
     {
         var syntaxTree = CSharpSyntaxTree.ParseText(sourceCode);
         return usingDirectives.Aggregate(syntaxTree, (tree, s) => AddMissingUsingDirective(tree, s)!);
     }
 
+    /// <summary>
+    /// Adds the missing using directive.
+    /// </summary>
+    /// <param name="syntaxTree">The syntax tree.</param>
+    /// <param name="namespaceName">The namespace name.</param>
+    /// <returns>A SyntaxTree? .</returns>
     public SyntaxTree? AddMissingUsingDirective(SyntaxTree syntaxTree, string namespaceName)
     {
         var root = syntaxTree.GetRoot() as CompilationUnitSyntax;
@@ -62,6 +90,11 @@ public class AvroFusionSyntaxTreeManager : IAvroFusionSyntaxTreeManager
         return null;
     }
 
+    /// <summary>
+    /// Gets the referenced assemblies.
+    /// </summary>
+    /// <param name="syntaxTrees">The syntax trees.</param>
+    /// <returns>A list of MetadataReferences.</returns>
     public IEnumerable<MetadataReference> GetReferencedAssemblies(List<SyntaxTree> syntaxTrees)
     {
         var usingDirectives = syntaxTrees.SelectMany(st => st.GetRoot().DescendantNodes()
@@ -77,6 +110,7 @@ public class AvroFusionSyntaxTreeManager : IAvroFusionSyntaxTreeManager
             MetadataReference.CreateFromFile(typeof(List<>).Assembly.Location),
             MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location),
             MetadataReference.CreateFromFile(typeof(DateTime).Assembly.Location),
+            MetadataReference.CreateFromFile(typeof(TimeSpan).Assembly.Location),
             MetadataReference.CreateFromFile(typeof(decimal).Assembly.Location),
             MetadataReference.CreateFromFile(typeof(AvroUnionTypeAttribute).Assembly.Location),
             MetadataReference.CreateFromFile(typeof(JsonConvert).Assembly.Location),
@@ -85,8 +119,8 @@ public class AvroFusionSyntaxTreeManager : IAvroFusionSyntaxTreeManager
             MetadataReference.CreateFromFile(typeof(ValidationAttribute).Assembly.Location),
             MetadataReference.CreateFromFile(typeof(XmlSerializer).Assembly.Location),
             MetadataReference.CreateFromFile(typeof(HttpClient).Assembly.Location),
-            MetadataReference.CreateFromFile(Assembly
-                .Load("System.Runtime, Version=7.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a").Location)
+            MetadataReference.CreateFromFile(typeof(AvroFusionGeneratorEntryPoint).GetTypeInfo().Assembly.Location),
+            MetadataReference.CreateFromFile(Assembly.Load("System.Runtime, Version=7.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a").Location)
         };
 
         if (usingDirectives.Contains("System.Collections.Generic"))
@@ -102,6 +136,12 @@ public class AvroFusionSyntaxTreeManager : IAvroFusionSyntaxTreeManager
         return metadataReferences;
     }
 
+    /// <summary>
+    /// Creates the compilation code.
+    /// </summary>
+    /// <param name="syntaxTrees">The syntax trees.</param>
+    /// <param name="referencedAssemblies">The referenced assemblies.</param>
+    /// <returns>A CSharpCompilation.</returns>
     public CSharpCompilation CreateCompilationCode(List<SyntaxTree> syntaxTrees,
         IEnumerable<MetadataReference> referencedAssemblies)
     {
@@ -112,6 +152,11 @@ public class AvroFusionSyntaxTreeManager : IAvroFusionSyntaxTreeManager
             new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
     }
 
+    /// <summary>
+    /// Loads the compilation code.
+    /// </summary>
+    /// <param name="compilation">The compilation.</param>
+    /// <returns>A MemoryStream.</returns>
     public MemoryStream LoadCompilationCode(CSharpCompilation compilation)
     {
         var outputStream = new MemoryStream();
@@ -129,6 +174,11 @@ public class AvroFusionSyntaxTreeManager : IAvroFusionSyntaxTreeManager
         return outputStream;
     }
 
+    /// <summary>
+    /// Loads the required assembly.
+    /// </summary>
+    /// <param name="outputStream">The output stream.</param>
+    /// <returns>An Assembly.</returns>
     public Assembly LoadRequiredAssembly(MemoryStream outputStream)
     {
         var assemblyLoadContext = new AssemblyLoadContext(null, true);

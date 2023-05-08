@@ -5,7 +5,7 @@ namespace AvroFusionGenerator.DIRegistration;
 /// The command builder registration.
 /// </summary>
 
-public interface ICommandBuilderRegistration
+public interface IAvroFusionCommandBuilderRegistration
 {
     /// <summary>
     /// Registers the command builder.

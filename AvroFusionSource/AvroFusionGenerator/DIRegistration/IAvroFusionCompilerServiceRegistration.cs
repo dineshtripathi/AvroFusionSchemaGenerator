@@ -5,7 +5,7 @@ namespace AvroFusionGenerator.DIRegistration;
 /// The compiler service registration.
 /// </summary>
 
-public interface ICompilerServiceRegistration
+public interface IAvroFusionCompilerServiceRegistration
 {
     /// <summary>
     /// Registers the compiler services.

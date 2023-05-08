@@ -5,7 +5,7 @@ using Spectre.Console.Cli;
 namespace AvroFusionGenerator;
 
 /// <inheritdoc />
-public class AvroFusionGenerator : AvroFusionGeneratorBase
+public class AvroFusionGeneratorEntryPoint : AvroFusionGeneratorBase
 {
     private static IServiceCollection? _services;
     private static SpectreServiceProviderTypeRegistrar? _typeRegistrar;
@@ -17,7 +17,7 @@ public class AvroFusionGenerator : AvroFusionGeneratorBase
     /// <returns>A Task.</returns>
     public static async Task<int> Main(string[] args)
     {
-        var program = new AvroFusionGenerator();
+        var program = new AvroFusionGeneratorEntryPoint();
         return await program.Run(args);
     }
 
@@ -37,7 +37,7 @@ public class AvroFusionGenerator : AvroFusionGeneratorBase
 
         app.Configure(config =>
         {
-            config.SetApplicationName("AvroSchema");
+            config.SetApplicationName("AvroFusionSchema");
 
 
             config.AddCommand<SpectreGenerateCommand>("generate").WithDescription("Generates Avro schema for C# models.")
