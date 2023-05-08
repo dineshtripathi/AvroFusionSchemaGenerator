@@ -20,9 +20,9 @@ public class ResourceGroup
     public List<EventHub>? EventHubs { get; set; }
     public List<EventGrid>? EventGrids { get; set; }
     public List<SchemaGroup>? SchemaGroups { get; set; }
-    public List<Schema>? Schemas { get; set; }
+    public List<EventHubSchema>? Schemas { get; set; }
     public Dictionary<string, CosmosDb>? CosmosDBs { get; set; }
     public AzureResource? AzureResources { get; set; }
     public ArmTemplateMetadata? ArmTemplateMetadata { get; set; }
-    public Tuple<string,string,int,List<string>>? MappingResources { get; set; }
+   // public Tuple<string,string,int,List<string>>? MappingResources { get; set; }
 }

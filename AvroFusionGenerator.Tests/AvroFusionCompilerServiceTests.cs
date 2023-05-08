@@ -95,7 +95,7 @@ public class AvroFusionCompilerServiceTests
             typeof(DataFactoryPipeline),
             typeof(EventGrid),
             typeof(EventHub),
-            typeof(Schema),
+            typeof(EventHubSchema),
             typeof(SchemaGroup),
             typeof(StorageAccount),
             typeof(VirtualMachine),

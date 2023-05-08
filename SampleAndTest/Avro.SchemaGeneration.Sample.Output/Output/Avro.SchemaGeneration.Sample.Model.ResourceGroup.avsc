@@ -1,0 +1,607 @@
+{
+  "type": "record",
+  "namespace": "Avro.SchemaGeneration.Sample.Model",
+  "name": "ResourceGroup",
+  "fields": [
+    {
+      "name": "ResourceGroupName",
+      "type": "string"
+    },
+    {
+      "name": "ResourceGroupSubscriptionId",
+      "type": "string"
+    },
+    {
+      "name": "CreationDate",
+      "type": "long"
+    },
+    {
+      "name": "AppServices",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "AppService",
+          "namespace": "Avro.SchemaGeneration.Sample.Model",
+          "fields": [
+            {
+              "name": "AppServiceName",
+              "type": "string"
+            },
+            {
+              "name": "Plan",
+              "type": "string"
+            },
+            {
+              "name": "OperatingSystem",
+              "type": "string"
+            },
+            {
+              "name": "RuntimeStack",
+              "type": "string"
+            },
+            {
+              "name": "Status",
+              "type": {
+                "type": "enum",
+                "name": "AppServiceStatus",
+                "namespace": "Avro.SchemaGeneration.Sample.Model",
+                "symbols": [
+                  "Running",
+                  "Stopped",
+                  "Restarting",
+                  "Scaling"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "ResourceGroupTags",
+      "type": {
+        "type": "map",
+        "values": "string"
+      }
+    },
+    {
+      "name": "StorageAccounts",
+      "type": {
+        "type": "map",
+        "values": {
+          "type": "record",
+          "name": "StorageAccount",
+          "namespace": "Avro.SchemaGeneration.Sample.Model",
+          "fields": [
+            {
+              "name": "StorageAccountName",
+              "type": "string"
+            },
+            {
+              "name": "AccountType",
+              "type": "string"
+            },
+            {
+              "name": "AccessTier",
+              "type": "string"
+            },
+            {
+              "name": "IsSecureTransferEnabled",
+              "type": "boolean"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "VirtualMachines",
+      "type": {
+        "type": "map",
+        "values": {
+          "type": "record",
+          "name": "VirtualMachine",
+          "namespace": "Avro.SchemaGeneration.Sample.Model",
+          "fields": [
+            {
+              "name": "VirtualMachineName",
+              "type": "string"
+            },
+            {
+              "name": "Size",
+              "type": "string"
+            },
+            {
+              "name": "OperatingSystem",
+              "type": "string"
+            },
+            {
+              "name": "Status",
+              "type": {
+                "type": "enum",
+                "name": "VirtualMachineStatus",
+                "namespace": "Avro.SchemaGeneration.Sample.Model",
+                "symbols": [
+                  "Running",
+                  "Stopped",
+                  "Deallocated",
+                  "Deleting"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "DataFactoryPipelines",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "DataFactoryPipeline",
+          "namespace": "Avro.SchemaGeneration.Sample.Model",
+          "fields": [
+            {
+              "name": "PipelineName",
+              "type": "string"
+            },
+            {
+              "name": "Description",
+              "type": "string"
+            },
+            {
+              "name": "LastModified",
+              "type": "long"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "DataFactoryPipelineCount",
+      "type": [
+        "int",
+        "double",
+        "null"
+      ]
+    },
+    {
+      "name": "EventHubs",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "EventHub",
+          "namespace": "Avro.SchemaGeneration.Sample.Model",
+          "fields": [
+            {
+              "name": "EventHubName",
+              "type": "string"
+            },
+            {
+              "name": "PartitionCount",
+              "type": "int"
+            },
+            {
+              "name": "MessageRetention",
+              "type": "long"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "EventGrids",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "EventGrid",
+          "namespace": "Avro.SchemaGeneration.Sample.Model",
+          "fields": [
+            {
+              "name": "EventGridName",
+              "type": "string"
+            },
+            {
+              "name": "TopicType",
+              "type": "string"
+            },
+            {
+              "name": "InputSchema",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "SchemaGroups",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "SchemaGroup",
+          "namespace": "Avro.SchemaGeneration.Sample.Model",
+          "fields": [
+            {
+              "name": "GroupName",
+              "type": "string"
+            },
+            {
+              "name": "Description",
+              "type": "string"
+            },
+            {
+              "name": "Schemas",
+              "type": {
+                "type": "array",
+                "items": {
+                  "type": "record",
+                  "name": "EventHubSchema",
+                  "namespace": "Avro.SchemaGeneration.Sample.Model",
+                  "fields": [
+                    {
+                      "name": "SchemaName",
+                      "type": "string"
+                    },
+                    {
+                      "name": "SchemaVersion",
+                      "type": "string"
+                    },
+                    {
+                      "name": "SerializationType",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Name",
+                      "type": "string"
+                    },
+                    {
+                      "name": "ResourceType",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Location",
+                      "type": "string"
+                    },
+                    {
+                      "name": "ResourceGroup",
+                      "type": "string"
+                    },
+                    {
+                      "name": "SubscriptionId",
+                      "type": "string",
+                      "aliases": [
+                        "AzureResourceSubscriptionId"
+                      ]
+                    },
+                    {
+                      "name": "ETag",
+                      "type": "string"
+                    },
+                    {
+                      "name": "AzureResourceTags",
+                      "type": {
+                        "type": "map",
+                        "values": "string"
+                      }
+                    },
+                    {
+                      "name": "ProvisioningState",
+                      "type": [
+                        "int",
+                        "double",
+                        "null"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Schemas",
+      "type": {
+        "type": "array",
+        "items": "Avro.SchemaGeneration.Sample.Model.EventHubSchema"
+      }
+    },
+    {
+      "name": "CosmosDBs",
+      "type": {
+        "type": "map",
+        "values": {
+          "type": "record",
+          "name": "CosmosDb",
+          "namespace": "Avro.SchemaGeneration.Sample.Model",
+          "fields": [
+            {
+              "name": "CosmosDbName",
+              "type": "string"
+            },
+            {
+              "name": "AccountType",
+              "type": "string"
+            },
+            {
+              "name": "APIType",
+              "type": "string"
+            },
+            {
+              "name": "Databases",
+              "type": {
+                "type": "array",
+                "items": {
+                  "type": "record",
+                  "name": "Database",
+                  "namespace": "Avro.SchemaGeneration.Sample.Model",
+                  "fields": [
+                    {
+                      "name": "DatabaseName",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Containers",
+                      "type": {
+                        "type": "array",
+                        "items": {
+                          "type": "record",
+                          "name": "Container",
+                          "namespace": "Avro.SchemaGeneration.Sample.Model",
+                          "fields": [
+                            {
+                              "name": "ContainerName",
+                              "type": "string"
+                            },
+                            {
+                              "name": "PartitionKey",
+                              "type": "string"
+                            },
+                            {
+                              "name": "Name",
+                              "type": "string"
+                            },
+                            {
+                              "name": "ResourceType",
+                              "type": "string"
+                            },
+                            {
+                              "name": "Location",
+                              "type": "string"
+                            },
+                            {
+                              "name": "ResourceGroup",
+                              "type": "string"
+                            },
+                            {
+                              "name": "SubscriptionId",
+                              "type": "string",
+                              "aliases": [
+                                "AzureResourceSubscriptionId"
+                              ]
+                            },
+                            {
+                              "name": "ETag",
+                              "type": "string"
+                            },
+                            {
+                              "name": "AzureResourceTags",
+                              "type": {
+                                "type": "map",
+                                "values": "string"
+                              }
+                            },
+                            {
+                              "name": "ProvisioningState",
+                              "type": [
+                                "int",
+                                "double",
+                                "null"
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "name": "Name",
+                      "type": "string"
+                    },
+                    {
+                      "name": "ResourceType",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Location",
+                      "type": "string"
+                    },
+                    {
+                      "name": "ResourceGroup",
+                      "type": "string"
+                    },
+                    {
+                      "name": "SubscriptionId",
+                      "type": "string",
+                      "aliases": [
+                        "AzureResourceSubscriptionId"
+                      ]
+                    },
+                    {
+                      "name": "ETag",
+                      "type": "string"
+                    },
+                    {
+                      "name": "AzureResourceTags",
+                      "type": {
+                        "type": "map",
+                        "values": "string"
+                      }
+                    },
+                    {
+                      "name": "ProvisioningState",
+                      "type": [
+                        "int",
+                        "double",
+                        "null"
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Name",
+              "type": "string"
+            },
+            {
+              "name": "ResourceType",
+              "type": "string"
+            },
+            {
+              "name": "Location",
+              "type": "string"
+            },
+            {
+              "name": "ResourceGroup",
+              "type": "string"
+            },
+            {
+              "name": "SubscriptionId",
+              "type": "string",
+              "aliases": [
+                "AzureResourceSubscriptionId"
+              ]
+            },
+            {
+              "name": "ETag",
+              "type": "string"
+            },
+            {
+              "name": "AzureResourceTags",
+              "type": {
+                "type": "map",
+                "values": "string"
+              }
+            },
+            {
+              "name": "ProvisioningState",
+              "type": [
+                "int",
+                "double",
+                "null"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "AzureResources",
+      "type": {
+        "type": "record",
+        "name": "AzureResource",
+        "namespace": "Avro.SchemaGeneration.Sample.Model",
+        "fields": [
+          {
+            "name": "Name",
+            "type": "string"
+          },
+          {
+            "name": "ResourceType",
+            "type": "string"
+          },
+          {
+            "name": "Location",
+            "type": "string"
+          },
+          {
+            "name": "ResourceGroup",
+            "type": "string"
+          },
+          {
+            "name": "SubscriptionId",
+            "type": "string",
+            "aliases": [
+              "AzureResourceSubscriptionId"
+            ]
+          },
+          {
+            "name": "ETag",
+            "type": "string"
+          },
+          {
+            "name": "AzureResourceTags",
+            "type": {
+              "type": "map",
+              "values": "string"
+            }
+          },
+          {
+            "name": "ProvisioningState",
+            "type": [
+              "int",
+              "double",
+              "null"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "ArmTemplateMetadata",
+      "type": [
+        "null",
+        {
+          "type": "record",
+          "name": "ArmTemplateMetadata",
+          "namespace": "Avro.SchemaGeneration.Sample.Model",
+          "fields": [
+            {
+              "name": "Sku",
+              "type": "string"
+            },
+            {
+              "name": "PricingPlan",
+              "type": "string"
+            },
+            {
+              "name": "Endpoints",
+              "type": "string"
+            },
+            {
+              "name": "IpAddressRange",
+              "type": {
+                "type": "array",
+                "items": "string"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Sku",
+      "type": "string"
+    },
+    {
+      "name": "PricingPlan",
+      "type": "string"
+    },
+    {
+      "name": "Endpoints",
+      "type": "string"
+    },
+    {
+      "name": "IpAddressRange",
+      "type": {
+        "type": "array",
+        "items": "string"
+      }
+    }
+  ]
+}
