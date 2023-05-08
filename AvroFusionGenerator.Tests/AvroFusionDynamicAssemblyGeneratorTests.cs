@@ -66,11 +66,11 @@
 //                .Returns(sourceFilePaths);
 
 //            // Set up the desired return values for the syntax tree manager mock
-//            var syntaxTrees = new List<SyntaxTree>(); 
-//            var mainClassSyntaxTree = CSharpSyntaxTree.ParseText(""); 
-//            var syntaxTreesNoDup = new List<SyntaxTree>(); 
-//            var referencedAssemblies = new List<MetadataReference>(); 
-//            var compilation = CSharpCompilation.Create("DynamicAssembly"); 
+//            var syntaxTrees = new List<SyntaxTree>();
+//            var mainClassSyntaxTree = CSharpSyntaxTree.ParseText("");
+//            var syntaxTreesNoDup = new List<SyntaxTree>();
+//            var referencedAssemblies = new List<MetadataReference>();
+//            var compilation = CSharpCompilation.Create("DynamicAssembly");
 //            var outputStream = new MemoryStream();
 
 //            var usingDirectives = syntaxTrees.SelectMany(st => st.GetRoot().DescendantNodes()
@@ -78,7 +78,7 @@
 //                    .Select(uds => uds.Name.ToString()))
 //                .Distinct()
 //                .ToList();
-//            var generatedAssembly = GenerateTestAssembly(sourceFilePaths, usingDirectives); 
+//            var generatedAssembly = GenerateTestAssembly(sourceFilePaths, usingDirectives);
 //            // Provide the desired generated assembly
 
 //            _syntaxTreeManagerMock.Setup(x => x.CreateSyntaxTrees(sourceFilePaths)).Returns(syntaxTrees);
@@ -101,17 +101,17 @@
 //        }
 
 
-//private Assembly GenerateTestAssembly(string[] sourceFilePaths, List<string> usingDirectives)
-//    {
-//        // Read the content of each source file
-//        string[] sourceCodes = sourceFilePaths.Select(File.ReadAllText).ToArray();
-       
+//        private Assembly GenerateTestAssembly(string[] sourceFilePaths, List<string> usingDirectives)
+//        {
+//            // Read the content of each source file
+//            string[] sourceCodes = sourceFilePaths.Select(File.ReadAllText).ToArray();
+
 //            // Create syntax trees from the source code
 //            SyntaxTree[] syntaxTrees = sourceCodes.Select(x => CSharpSyntaxTree.ParseText(x)).ToArray();
 
-//        // Compile the syntax trees
-//        CSharpCompilationOptions compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
-//        var references = new List<MetadataReference>
+//            // Compile the syntax trees
+//            CSharpCompilationOptions compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
+//            var references = new List<MetadataReference>
 //        {
 //        MetadataReference.CreateFromFile(typeof(object).GetTypeInfo().Assembly.Location),
 //        MetadataReference.CreateFromFile(typeof(Enumerable).GetTypeInfo().Assembly.Location),
@@ -132,47 +132,46 @@
 //        MetadataReference.CreateFromFile(typeof(AvroFusionGeneratorEntryPoint).GetTypeInfo().Assembly.Location),
 //        MetadataReference.CreateFromFile(Assembly.Load("System.Runtime, Version=7.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a").Location)
 //        };
-//        if (usingDirectives.Contains("System.Collections.Generic"))
-//        {
-//            references.Add(MetadataReference.CreateFromFile(typeof(HashSet<>).Assembly.Location));
-//            references.Add(MetadataReference.CreateFromFile(typeof(IEnumerable<>).Assembly.Location));
-//            references.Add(MetadataReference.CreateFromFile(typeof(IList<>).Assembly.Location));
-//        }
+//            if (usingDirectives.Contains("System.Collections.Generic"))
+//            {
+//                references.Add(MetadataReference.CreateFromFile(typeof(HashSet<>).Assembly.Location));
+//                references.Add(MetadataReference.CreateFromFile(typeof(IEnumerable<>).Assembly.Location));
+//                references.Add(MetadataReference.CreateFromFile(typeof(IList<>).Assembly.Location));
+//            }
 
-//        if (usingDirectives.Contains("System.Linq"))
-//            references.Add(MetadataReference.CreateFromFile(typeof(IQueryable<>).Assembly.Location));
+//            if (usingDirectives.Contains("System.Linq"))
+//                references.Add(MetadataReference.CreateFromFile(typeof(IQueryable<>).Assembly.Location));
 
 //            CSharpCompilation compilation = CSharpCompilation.Create("DynamicTestAssembly", syntaxTrees, references, compilationOptions);
 
-//        // Emit the assembly
-//        using (MemoryStream stream = new MemoryStream())
-//        {
-//            EmitResult emitResult = compilation.Emit(stream);
-
-//            if (!emitResult.Success)
+//            // Emit the assembly
+//            using (MemoryStream stream = new MemoryStream())
 //            {
-//                IEnumerable<Diagnostic> failures = emitResult.Diagnostics.Where(diagnostic =>
-//                    diagnostic.IsWarningAsError ||
-//                    diagnostic.Severity == DiagnosticSeverity.Error);
+//                EmitResult emitResult = compilation.Emit(stream);
 
-//                StringBuilder errorMessage = new StringBuilder();
-//                errorMessage.AppendLine("Failed to compile the provided C# source code:");
-
-//                foreach (Diagnostic diagnostic in failures)
+//                if (!emitResult.Success)
 //                {
-//                    errorMessage.AppendLine($"{diagnostic.Id}: {diagnostic.GetMessage()}");
+//                    IEnumerable<Diagnostic> failures = emitResult.Diagnostics.Where(diagnostic =>
+//                        diagnostic.IsWarningAsError ||
+//                        diagnostic.Severity == DiagnosticSeverity.Error);
+
+//                    StringBuilder errorMessage = new StringBuilder();
+//                    errorMessage.AppendLine("Failed to compile the provided C# source code:");
+
+//                    foreach (Diagnostic diagnostic in failures)
+//                    {
+//                        errorMessage.AppendLine($"{diagnostic.Id}: {diagnostic.GetMessage()}");
+//                    }
+
+//                    throw new InvalidOperationException(errorMessage.ToString());
 //                }
 
-//                throw new InvalidOperationException(errorMessage.ToString());
+//                stream.Seek(0, SeekOrigin.Begin);
+//                Assembly generatedAssembly = Assembly.Load(stream.ToArray());
+//                return generatedAssembly;
 //            }
-
-//            stream.Seek(0, SeekOrigin.Begin);
-//            Assembly generatedAssembly = Assembly.Load(stream.ToArray());
-//            return generatedAssembly;
 //        }
+
+
 //    }
-
-
 //}
-//}
-
