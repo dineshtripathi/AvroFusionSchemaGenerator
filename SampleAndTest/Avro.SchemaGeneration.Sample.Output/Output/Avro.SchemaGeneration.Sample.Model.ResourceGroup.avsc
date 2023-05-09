@@ -585,6 +585,35 @@
       ]
     },
     {
+      "name": "MappingResources",
+      "type": {
+        "type": "record",
+        "name": "Tuple4",
+        "namespace": "CustomNamespace",
+        "fields": [
+          {
+            "name": "Item1",
+            "type": "string"
+          },
+          {
+            "name": "Item2",
+            "type": "string"
+          },
+          {
+            "name": "Item3",
+            "type": "int"
+          },
+          {
+            "name": "Item4",
+            "type": {
+              "type": "array",
+              "items": "string"
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "Sku",
       "type": "string"
     },

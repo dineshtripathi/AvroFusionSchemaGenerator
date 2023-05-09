@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+﻿using System.Data;
+using System.Net;
+using System.Reflection;
+using System.Text;
 using AvroFusionGenerator.ServiceInterface;
 
 namespace AvroFusionGenerator.Implementation.AvroTypeHandlers;
@@ -26,7 +29,35 @@ public class AvroAvscClassTypeHandler : IAvroAvscTypeHandler
     /// <returns>A bool.</returns>
     public bool IfCanHandleAvroAvscType(Type? type)
     {
-        return type is {IsClass: true} && type != typeof(string);
+        if (type == null || !type.IsClass) return false;
+
+        var knownTypes = new List<Type>
+        {
+            typeof(string),
+            typeof(object),
+            typeof(Exception),
+            typeof(Uri),
+            typeof(Stream),
+            typeof(Task),
+            typeof(ValueTask),
+            typeof(CancellationToken),
+            typeof(TimeSpan),
+            typeof(DateTime),
+            typeof(DateTimeOffset),
+            typeof(Encoding),
+            typeof(MemoryStream),
+            typeof(WebRequest),
+            typeof(WebResponse),
+            typeof(HttpRequestMessage),
+            typeof(HttpResponseMessage),
+            typeof(IQueryable),
+            typeof(IDbConnection),
+            typeof(IDbCommand),
+            typeof(IDbTransaction),
+            typeof(IEnumerable<>)
+        };
+
+        return !knownTypes.Contains(type) && !IsTupleType(type);
     }
 
     /// <summary>
@@ -46,7 +77,7 @@ public class AvroAvscClassTypeHandler : IAvroAvscTypeHandler
             .Select(prop => new
             {
                 name = prop.Name,
-                type = GenerateUnionTypeIfRequired(prop, forAvroAvscGeneratedTypes),
+                type = IsTupleType(prop.PropertyType) ? GetTupleSchema(prop.PropertyType) : GenerateUnionTypeIfRequired(prop, forAvroAvscGeneratedTypes),
                 aliasAttribute = prop.GetCustomAttribute<AvroDuplicateFieldAliasAttribute>()
             });
 
@@ -96,6 +127,28 @@ public class AvroAvscClassTypeHandler : IAvroAvscTypeHandler
                 type.GetGenericArguments()[0] != typeof(string));
     }
 
+    private object GetTupleSchema(Type tupleType)
+    {
+        var genericArgs = tupleType.GetGenericArguments();
+        var fieldNames = Enumerable.Range(1, genericArgs.Length).Select(i => $"Item{i}").ToArray();
+
+        var schema = new Dictionary<string, object>
+        {
+            {"type", "record"},
+            {"name", $"Tuple{genericArgs.Length}"},
+            {"namespace", "CustomNamespace"}, // Change "CustomNamespace" to a namespace of your choice
+            {
+                "fields", genericArgs.Select((arg, i) => new Dictionary<string, object>
+                {
+                    {"name", fieldNames[i]},
+                    {"type", _avroSchemaGenerator.Value.GenerateAvroFusionAvscAvroType(arg, new HashSet<string>())}
+                }).ToList()
+            }
+        };
+
+        return schema;
+    }
+
     /// <summary>
     /// Generates the union type if required.
     /// </summary>
@@ -116,4 +169,31 @@ public class AvroAvscClassTypeHandler : IAvroAvscTypeHandler
 
         return _avroSchemaGenerator.Value.GenerateAvroFusionAvscAvroType(prop.PropertyType, generatedTypes);
     }
+
+    private static bool IsTupleType(Type? type)
+    {
+        if (type == null) return false;
+
+        if (!type.IsGenericType) return false;
+
+        var genericTypeDefinition = type.GetGenericTypeDefinition();
+
+        return genericTypeDefinition == typeof(ValueTuple<>) ||
+               genericTypeDefinition.GetGenericTypeDefinition() == typeof(ValueTuple<,>) ||
+               genericTypeDefinition.GetGenericTypeDefinition() == typeof(ValueTuple<,,>) ||
+               genericTypeDefinition.GetGenericTypeDefinition() == typeof(ValueTuple<,,,>) ||
+               genericTypeDefinition.GetGenericTypeDefinition() == typeof(ValueTuple<,,,,>) ||
+               genericTypeDefinition.GetGenericTypeDefinition() == typeof(ValueTuple<,,,,,>) ||
+               genericTypeDefinition.GetGenericTypeDefinition() == typeof(ValueTuple<,,,,,,>) ||
+               genericTypeDefinition.GetGenericTypeDefinition() == typeof(ValueTuple<,,,,,,,>)||
+               genericTypeDefinition.GetGenericTypeDefinition() == typeof(Tuple<>) ||
+               genericTypeDefinition.GetGenericTypeDefinition() == typeof(Tuple<,>) ||
+               genericTypeDefinition.GetGenericTypeDefinition() == typeof(Tuple<,,>) ||
+               genericTypeDefinition.GetGenericTypeDefinition() == typeof(Tuple<,,,>) ||
+               genericTypeDefinition.GetGenericTypeDefinition() == typeof(Tuple<,,,,>) ||
+               genericTypeDefinition.GetGenericTypeDefinition() == typeof(Tuple<,,,,,>) ||
+               genericTypeDefinition.GetGenericTypeDefinition() == typeof(Tuple<,,,,,,>) ||
+               genericTypeDefinition.GetGenericTypeDefinition() == typeof(Tuple<,,,,,,,>);
+    }
+
 }

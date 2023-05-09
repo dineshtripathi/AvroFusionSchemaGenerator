@@ -93,9 +93,12 @@ namespace Avro.SchemaGeneration.Sample.Model
 				"data\",\"namespace\":\"Avro.SchemaGeneration.Sample.Model\",\"fields\":[{\"name\":\"Sku\",\"" +
 				"type\":\"string\"},{\"name\":\"PricingPlan\",\"type\":\"string\"},{\"name\":\"Endpoints\",\"type" +
 				"\":\"string\"},{\"name\":\"IpAddressRange\",\"type\":{\"type\":\"array\",\"items\":\"string\"}}]}" +
-				"]},{\"name\":\"Sku\",\"type\":\"string\"},{\"name\":\"PricingPlan\",\"type\":\"string\"},{\"name\"" +
-				":\"Endpoints\",\"type\":\"string\"},{\"name\":\"IpAddressRange\",\"type\":{\"type\":\"array\",\"i" +
-				"tems\":\"string\"}}]}");
+				"]},{\"name\":\"MappingResources\",\"type\":{\"type\":\"record\",\"name\":\"Tuple4\",\"namespace" +
+				"\":\"CustomNamespace\",\"fields\":[{\"name\":\"Item1\",\"type\":\"string\"},{\"name\":\"Item2\",\"" +
+				"type\":\"string\"},{\"name\":\"Item3\",\"type\":\"int\"},{\"name\":\"Item4\",\"type\":{\"type\":\"ar" +
+				"ray\",\"items\":\"string\"}}]}},{\"name\":\"Sku\",\"type\":\"string\"},{\"name\":\"PricingPlan\"," +
+				"\"type\":\"string\"},{\"name\":\"Endpoints\",\"type\":\"string\"},{\"name\":\"IpAddressRange\",\"" +
+				"type\":{\"type\":\"array\",\"items\":\"string\"}}]}");
 		private string _ResourceGroupName;
 		private string _ResourceGroupSubscriptionId;
 		private long _CreationDate;
@@ -112,6 +115,7 @@ namespace Avro.SchemaGeneration.Sample.Model
 		private IDictionary<string,Avro.SchemaGeneration.Sample.Model.CosmosDb> _CosmosDBs;
 		private Avro.SchemaGeneration.Sample.Model.AzureResource _AzureResources;
 		private Avro.SchemaGeneration.Sample.Model.ArmTemplateMetadata _ArmTemplateMetadata;
+		private CustomNamespace.Tuple4 _MappingResources;
 		private string _Sku;
 		private string _PricingPlan;
 		private string _Endpoints;
@@ -299,6 +303,17 @@ namespace Avro.SchemaGeneration.Sample.Model
 				this._ArmTemplateMetadata = value;
 			}
 		}
+		public CustomNamespace.Tuple4 MappingResources
+		{
+			get
+			{
+				return this._MappingResources;
+			}
+			set
+			{
+				this._MappingResources = value;
+			}
+		}
 		public string Sku
 		{
 			get
@@ -363,10 +378,11 @@ namespace Avro.SchemaGeneration.Sample.Model
 			case 13: return this.CosmosDBs;
 			case 14: return this.AzureResources;
 			case 15: return this.ArmTemplateMetadata;
-			case 16: return this.Sku;
-			case 17: return this.PricingPlan;
-			case 18: return this.Endpoints;
-			case 19: return this.IpAddressRange;
+			case 16: return this.MappingResources;
+			case 17: return this.Sku;
+			case 18: return this.PricingPlan;
+			case 19: return this.Endpoints;
+			case 20: return this.IpAddressRange;
 			default: throw new global::Avro.AvroRuntimeException("Bad index " + fieldPos + " in Get()");
 			};
 		}
@@ -390,10 +406,11 @@ namespace Avro.SchemaGeneration.Sample.Model
 			case 13: this.CosmosDBs = (IDictionary<string,Avro.SchemaGeneration.Sample.Model.CosmosDb>)fieldValue; break;
 			case 14: this.AzureResources = (Avro.SchemaGeneration.Sample.Model.AzureResource)fieldValue; break;
 			case 15: this.ArmTemplateMetadata = (Avro.SchemaGeneration.Sample.Model.ArmTemplateMetadata)fieldValue; break;
-			case 16: this.Sku = (System.String)fieldValue; break;
-			case 17: this.PricingPlan = (System.String)fieldValue; break;
-			case 18: this.Endpoints = (System.String)fieldValue; break;
-			case 19: this.IpAddressRange = (IList<System.String>)fieldValue; break;
+			case 16: this.MappingResources = (CustomNamespace.Tuple4)fieldValue; break;
+			case 17: this.Sku = (System.String)fieldValue; break;
+			case 18: this.PricingPlan = (System.String)fieldValue; break;
+			case 19: this.Endpoints = (System.String)fieldValue; break;
+			case 20: this.IpAddressRange = (IList<System.String>)fieldValue; break;
 			default: throw new global::Avro.AvroRuntimeException("Bad index " + fieldPos + " in Put()");
 			};
 		}

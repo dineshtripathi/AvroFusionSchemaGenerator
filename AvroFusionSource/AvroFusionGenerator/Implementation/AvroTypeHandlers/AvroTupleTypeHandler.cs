@@ -35,12 +35,13 @@ public class AvroTupleTypeHandler : IAvroAvscTypeHandler
         {
             var tupleElements = genericArguments.Select(arg => _avroSchemaGenerator.Value.GenerateAvroFusionAvscAvroType(arg, generatedTypes)).ToList();
 
+            var avroTypeName = $"{type?.Name.Replace("`", "_")}_{genericArguments.Length}_tuple";
             var elementType = new Dictionary<string, object?>
             {
-                { "type", "tuple" },
-                { "name", $"{type?.Name}_tuple" },
+                { "type", "record" },
+                { "name", avroTypeName },
                 { "namespace", type?.Namespace },
-                { "elements", tupleElements }
+                { "fields", tupleElements }
             };
 
             return elementType;

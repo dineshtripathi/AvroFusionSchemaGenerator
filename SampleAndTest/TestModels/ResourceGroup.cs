@@ -24,5 +24,5 @@ public class ResourceGroup
     public Dictionary<string, CosmosDb>? CosmosDBs { get; set; }
     public AzureResource? AzureResources { get; set; }
     public ArmTemplateMetadata? ArmTemplateMetadata { get; set; }
-   // public Tuple<string,string,int,List<string>>? MappingResources { get; set; }
+    public Tuple<string,string,int,List<string>>? MappingResources { get; set; }
 }
