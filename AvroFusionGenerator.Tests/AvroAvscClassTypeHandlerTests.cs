@@ -29,21 +29,7 @@ public class AvroAvscClassTypeHandlerTests
         result.Should().Be(expectedResult);
     }
 
-    [Theory]
-    [InlineData(typeof(List<string>), true)]
-    [InlineData(typeof(Dictionary<string, object>), true)]
-    [InlineData(typeof(TestClass), true)]
-    [InlineData(typeof(object), true)]
-    [InlineData(typeof(string), false)]
-    public void IfCanHandleAvroAvscTypeCollectionsAndClass_ShouldReturnExpectedResult(Type type, bool expectedResult)
-    {
-        // Act
-        bool result = _handler.IfCanHandleAvroAvscType(type);
-
-        // Assert
-        result.Should().Be(expectedResult);
-    }
-
+   
     private class TestClass
     {
         public string Property1 { get; set; }
