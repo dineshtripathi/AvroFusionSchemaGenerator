@@ -16,7 +16,7 @@ public abstract class AvroFusionGeneratorBase
     /// <returns>An IServiceCollection? .</returns>
     protected static IServiceCollection? ConfigureServices(IServiceCollection? services)
     {
-        FusionGeneratorServiceProvider = DependencyInjectionHelper.RegisterAllServices(services);
+        FusionGeneratorServiceProvider = AvroFusionDependencyInjectionHelper.RegisterAllServices(services);
         return services;
     }
 

@@ -7,13 +7,13 @@ namespace AvroFusionGenerator.Implementation.AvroTypeHandlers;
 
 public class AvroAvscNullableTypeHandler : IAvroAvscTypeHandler
 {
-    private readonly Lazy<IAvroSchemaGenerator> _avroSchemaGenerator;
+    private readonly Lazy<IAvroFusionSchemaGenerator> _avroSchemaGenerator;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AvroAvscNullableTypeHandler"/> class.
     /// </summary>
     /// <param name="avroSchemaGenerator">The avro schema generator.</param>
-    public AvroAvscNullableTypeHandler(Lazy<IAvroSchemaGenerator> avroSchemaGenerator)
+    public AvroAvscNullableTypeHandler(Lazy<IAvroFusionSchemaGenerator> avroSchemaGenerator)
     {
         _avroSchemaGenerator = avroSchemaGenerator;
     }
@@ -40,7 +40,7 @@ public class AvroAvscNullableTypeHandler : IAvroAvscTypeHandler
         {
             var underlyingType = Nullable.GetUnderlyingType(type);
             var underlyingAvroType =
-                _avroSchemaGenerator.Value.GenerateAvroAvscType(underlyingType, forAvroAvscGeneratedTypes);
+                _avroSchemaGenerator.Value.GenerateAvroFusionAvscAvroType(underlyingType, forAvroAvscGeneratedTypes);
 
             return new[] {"null", underlyingAvroType};
         }
