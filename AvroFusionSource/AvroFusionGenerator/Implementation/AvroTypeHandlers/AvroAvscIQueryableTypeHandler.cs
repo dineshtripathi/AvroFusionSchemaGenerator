@@ -4,13 +4,13 @@ namespace AvroFusionGenerator.Implementation.AvroTypeHandlers;
 
 public class AvroAvscIQueryableTypeHandler : IAvroAvscTypeHandler
 {
-    private readonly Lazy<IAvroSchemaGenerator> _avroSchemaGenerator;
+    private readonly Lazy<IAvroFusionSchemaGenerator> _avroSchemaGenerator;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AvroAvscIQueryableTypeHandler"/> class.
     /// </summary>
     /// <param name="avroSchemaGenerator">The avro schema generator.</param>
-    public AvroAvscIQueryableTypeHandler(Lazy<IAvroSchemaGenerator> avroSchemaGenerator)
+    public AvroAvscIQueryableTypeHandler(Lazy<IAvroFusionSchemaGenerator> avroSchemaGenerator)
     {
         _avroSchemaGenerator = avroSchemaGenerator;
     }
@@ -34,7 +34,7 @@ public class AvroAvscIQueryableTypeHandler : IAvroAvscTypeHandler
     public object? ThenCreateAvroAvscType(Type? type, HashSet<string> forAvroAvscGeneratedTypes)
     {
         var itemType =
-            _avroSchemaGenerator.Value.GenerateAvroAvscType(type?.GetGenericArguments()[0], forAvroAvscGeneratedTypes);
+            _avroSchemaGenerator.Value.GenerateAvroFusionAvscAvroType(type?.GetGenericArguments()[0], forAvroAvscGeneratedTypes);
         return new Dictionary<string, object?> { { "type", "array" }, { "items", itemType } };
     }
 }

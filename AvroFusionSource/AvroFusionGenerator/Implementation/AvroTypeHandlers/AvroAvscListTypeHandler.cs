@@ -7,13 +7,13 @@ namespace AvroFusionGenerator.Implementation.AvroTypeHandlers;
 
 public class AvroAvscListTypeHandler : IAvroAvscTypeHandler
 {
-    private readonly Lazy<IAvroSchemaGenerator> _avroSchemaGenerator;
+    private readonly Lazy<IAvroFusionSchemaGenerator> _avroSchemaGenerator;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AvroAvscListTypeHandler"/> class.
     /// </summary>
     /// <param name="avroSchemaGenerator">The avro schema generator.</param>
-    public AvroAvscListTypeHandler(Lazy<IAvroSchemaGenerator> avroSchemaGenerator)
+    public AvroAvscListTypeHandler(Lazy<IAvroFusionSchemaGenerator> avroSchemaGenerator)
     {
         _avroSchemaGenerator = avroSchemaGenerator;
     }
@@ -39,7 +39,7 @@ public class AvroAvscListTypeHandler : IAvroAvscTypeHandler
     public object? ThenCreateAvroAvscType(Type? type, HashSet<string> forAvroAvscGeneratedTypes)
     {
         var itemType =
-            _avroSchemaGenerator.Value.GenerateAvroAvscType(type?.GetGenericArguments()[0], forAvroAvscGeneratedTypes);
+            _avroSchemaGenerator.Value.GenerateAvroFusionAvscAvroType(type?.GetGenericArguments()[0], forAvroAvscGeneratedTypes);
         return new Dictionary<string, object?> {{"type", "array"}, {"items", itemType}};
     }
 }
