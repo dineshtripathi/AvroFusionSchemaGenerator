@@ -13,9 +13,13 @@
     {
         var workspacePath = GetEnvironmentVariableWithMessage("GITHUB_WORKSPACE", "GITHUB_WORKSPACE");
         LogMessage(workspacePath);
+        if (workspacePath == null)
+            return;
         var readmeFilePath = Path.Combine(workspacePath, "README.md");
         LogMessage(readmeFilePath);
-        string?[] lines = File.ReadAllLines(readmeFilePath);
+        string[] lines = File.ReadAllLines(readmeFilePath);
+        if (packageUrl == null) 
+            return;
         var updatedLines = InsertRowInReadmeTable(lines, packageUrl,packageName, packageVersion,releaseNumber, releaseType);
         File.WriteAllLines("README.md", updatedLines);
     }
@@ -25,7 +29,7 @@
     /// </summary>
     /// <param name="lines">The lines.</param>
     /// <returns>An int.</returns>
-    private static int FindHeaderLine(string?[] lines)
+    private static int FindHeaderLine(string[] lines)
     {
         return Array.FindIndex(lines, line => line.Contains("| Download Package| Package Name    | Package Version | Release Number | Release Type |"));
     }
@@ -40,7 +44,7 @@
     /// <param name="releaseNumber">The release number.</param>
     /// /// <param name="releaseType">The release number.</param>
     /// <returns>An array of string?.</returns>
-    private static string?[] InsertRowInReadmeTable(string?[] lines, string packageUrl,string packageName, string packageVersion,string releaseNumber, string releaseType)
+    private static string[] InsertRowInReadmeTable(string[] lines, string packageUrl,string packageName, string packageVersion,string releaseNumber, string releaseType)
     {
         var headerLine = FindHeaderLine(lines);
       
@@ -60,9 +64,9 @@
     /// <param name="index">The index.</param>
     /// <param name="newRow">The new row.</param>
     /// <returns>An array of string?.</returns>
-    private static string?[] InsertRowInLines(string?[] lines, int index, string? newRow)
+    private static string[] InsertRowInLines(string[] lines, int index, string newRow)
     {
-        var newLines = new string?[lines.Length + 1];
+        var newLines = new string[lines.Length + 1];
         Array.Copy(lines, 0, newLines, 0, index);
         newLines[index] = newRow;
         Array.Copy(lines, index, newLines, index + 1, lines.Length - index);

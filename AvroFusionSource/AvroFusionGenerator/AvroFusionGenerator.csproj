@@ -38,7 +38,7 @@ By using the Avro Schema Generator for C#, developers can improve the efficiency
 	  <PackageId>AvroFusionGenerator</PackageId>
 	  <PackageOutputPath>./nupkg</PackageOutputPath>
       <PackageIcon>.\Assets\AVSCGenerator.png</PackageIcon>
-	  <Version>1.0.0</Version>
+	  <Version>2.0.0</Version>
 	  <VersionSuffix>$(VersionSuffix)</VersionSuffix>
   </PropertyGroup>
 
@@ -65,13 +65,13 @@ By using the Avro Schema Generator for C#, developers can improve the efficiency
     <PackageReference Include="autofac" Version="7.0.1" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="MediatR" Version="12.0.1" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.6.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Scrutor" Version="4.2.2" />
-    <PackageReference Include="spectre.console" Version="0.46.0" />
-    <PackageReference Include="Spectre.Console.Cli" Version="0.46.0" />
+    <PackageReference Include="spectre.console" Version="0.47.0" />
+    <PackageReference Include="Spectre.Console.Cli" Version="0.47.0" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
   </ItemGroup>
 

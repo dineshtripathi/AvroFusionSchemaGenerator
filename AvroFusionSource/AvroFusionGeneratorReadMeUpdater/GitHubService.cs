@@ -1,11 +1,15 @@
-﻿using Octokit;
-using System.Net.Http.Headers;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
+using Octokit;
 
+namespace AvroFusionGeneratorReadMeUpdater;
+
+/// <summary>
+/// The git hub service.
+/// </summary>
 public class GitHubService : IGitHubService
 {
     private readonly GitHubClient _github;
-    const string Pattern = @"(?<name>[^\.]+)\.(?<version>[0-9.]+)-(?<releaseType>[^\d]+)(?<number>\d+)\.nupkg";
+    private const string Pattern = @"(?<name>[^\.]+)\.(?<version>[0-9.]+)-(?<releaseType>[^\d]+)(?<number>\d+)\.nupkg";
     public GitHubService(string? token)
     {
         _github = new GitHubClient(new Octokit.ProductHeaderValue("UpdateReadme"))
@@ -18,19 +22,26 @@ public class GitHubService : IGitHubService
     /// Gets the package version and tag async.
     /// </summary>
     /// <returns>A Task.</returns>
-    public Task<(string packageVersion, string packageName, string releaseNumber,string packageType, string? packageUrl)> GetPackageVersionAndTagAsync()
+    public Task<(string packageVersion, string packageName, string releaseNumber, string packageType, string? packageUrl)> GetPackageVersionAndTagAsync()
     {
         var packageName = GetEnvironmentVariableWithMessage("PACKAGE_NAME", "GITHUB PACKAGE_NAME");
         var packageUrl = GetEnvironmentVariableWithMessage("PACKAGE_URL", "ARTIFACT PACKAGE URL");
+
+        if (packageName == null)
+            return Task.FromResult((packageVersion: string.Empty, packageName: string.Empty,
+                releaseNumber: string.Empty, packageType: string.Empty, packageUrl: (string?) null));
+
         var extractedProperties = Regex.Match(packageName, Pattern);
 
         var packageVersion = extractedProperties.Groups["version"].Value;
         var releaseNumber = extractedProperties.Groups["number"].Value;
-        var packageType= extractedProperties.Groups["releaseType"].Value;
+        var packageType = extractedProperties.Groups["releaseType"].Value;
         packageName = extractedProperties.Groups["name"].Value;
 
-        return Task.FromResult((packageVersion,packageName,releaseNumber,packageType,packageUrl));
+        return Task.FromResult((packageVersion, packageName, releaseNumber, packageType, packageUrl));
+
     }
+
 
     /// <summary>
     /// Gets the environment variable with message.
@@ -56,5 +67,3 @@ public class GitHubService : IGitHubService
         Console.WriteLine("-----------------------------");
     }
 }
-
-
