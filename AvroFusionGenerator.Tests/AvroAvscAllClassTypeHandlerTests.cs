@@ -172,12 +172,12 @@ public class AvroAvscAllClassTypeHandlerTests
     public class NestedTestModel
     {
         public int Id { get; set; }
-        public TestModel InnerTestModel { get; set; }
+        public TestModel? InnerTestModel { get; set; }
     }
 
     public class CustomTupleTestModel
     {
-        public Tuple<int, string> Tuple2 { get; set; }
+        public Tuple<int, string>? Tuple2 { get; set; }
         public ValueTuple<int, string> ValueTuple2 { get; set; }
         public ValueTuple<int, string, DateTime> ValueTuple3 { get; set; }
     }
@@ -186,41 +186,41 @@ public class AvroAvscAllClassTypeHandlerTests
     public class UnionTestModel
     {
         [AvroUnionType(typeof(string), typeof(int))]
-        public object Value { get; set; }
+        public object? Value { get; set; }
     }
 
     public class TestModelContainer
     {
-        public TestModel TestModel { get; set; }
-        public NestedTestModel NestedTestModel { get; set; }
-        public CustomTupleTestModel CustomTupleTestModel { get; set; }
-        public UnionTestModel UnionTestModel { get; set; }
+        public TestModel? TestModel { get; set; }
+        public NestedTestModel? NestedTestModel { get; set; }
+        public CustomTupleTestModel? CustomTupleTestModel { get; set; }
+        public UnionTestModel? UnionTestModel { get; set; }
     }
 
     public class TestModel
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public Exception Exception { get; set; }
-        public Uri Uri { get; set; }
-        public System.IO.Stream Stream { get; set; }
-        public System.Threading.Tasks.Task Task { get; set; }
-        public System.Threading.Tasks.ValueTask ValueTask { get; set; }
-        public System.Threading.CancellationToken CancellationToken { get; set; }
+        public string? Name { get; set; }
+        public Exception? Exception { get; set; }
+        public Uri? Uri { get; set; }
+        public Stream? Stream { get; set; }
+        public Task? Task { get; set; }
+        public ValueTask ValueTask { get; set; }
+        public CancellationToken CancellationToken { get; set; }
         public TimeSpan TimeSpan { get; set; }
         public DateTime DateTime { get; set; }
         public DateTimeOffset DateTimeOffset { get; set; }
-        public Encoding Encoding { get; set; }
-        public System.IO.MemoryStream MemoryStream { get; set; }
-        public WebRequest WebRequest { get; set; }
-        public WebResponse WebResponse { get; set; }
-        public System.Net.Http.HttpRequestMessage HttpRequestMessage { get; set; }
-        public System.Net.Http.HttpResponseMessage HttpResponseMessage { get; set; }
-        public IQueryable IQueryable { get; set; }
-        public IDbConnection IDbConnection { get; set; }
-        public IDbCommand IDbCommand { get; set; }
-        public IDbTransaction IDbTransaction { get; set; }
-        public IEnumerable<string> IEnumerable { get; set; }
+        public Encoding? Encoding { get; set; }
+        public MemoryStream? MemoryStream { get; set; }
+        public WebRequest? WebRequest { get; set; }
+        public WebResponse? WebResponse { get; set; }
+        public HttpRequestMessage? HttpRequestMessage { get; set; }
+        public HttpResponseMessage? HttpResponseMessage { get; set; }
+        public IQueryable? Queryable { get; set; }
+        public IDbConnection? DbConnection { get; set; }
+        public IDbCommand? DbCommand { get; set; }
+        public IDbTransaction? DbTransaction { get; set; }
+        public IEnumerable<string>? Enumerable { get; set; }
     }
 
 }

@@ -8,13 +8,12 @@ namespace AvroFusionGenerator.Tests;
 
 public class AvroAvscClassTypeHandlerTests
 {
-    private readonly Mock<IAvroFusionSchemaGenerator> _avroSchemaGeneratorMock;
     private readonly AvroAvscClassTypeHandler _handler;
 
     public AvroAvscClassTypeHandlerTests()
     {
-        _avroSchemaGeneratorMock = new Mock<IAvroFusionSchemaGenerator>();
-        _handler = new AvroAvscClassTypeHandler(new Lazy<IAvroFusionSchemaGenerator>(() => _avroSchemaGeneratorMock.Object));
+        Mock<IAvroFusionSchemaGenerator> avroSchemaGeneratorMock = new();
+        _handler = new AvroAvscClassTypeHandler(new Lazy<IAvroFusionSchemaGenerator>(() => avroSchemaGeneratorMock.Object));
     }
 
     [Theory]
@@ -23,7 +22,7 @@ public class AvroAvscClassTypeHandlerTests
     public void IfCanHandleAvroAvscTypeClass_ShouldReturnExpectedResult(Type type, bool expectedResult)
     {
         // Act
-        bool result = _handler.IfCanHandleAvroAvscType(type);
+        var result = _handler.IfCanHandleAvroAvscType(type);
 
         // Assert
         result.Should().Be(expectedResult);
@@ -32,7 +31,7 @@ public class AvroAvscClassTypeHandlerTests
    
     private class TestClass
     {
-        public string Property1 { get; set; }
+        public string? Property1 { get; set; }
         public int Property2 { get; set; }
     }
 }

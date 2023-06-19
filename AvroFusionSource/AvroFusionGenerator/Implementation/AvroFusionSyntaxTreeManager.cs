@@ -78,7 +78,7 @@ public class AvroFusionSyntaxTreeManager : IAvroFusionSyntaxTreeManager
     public SyntaxTree? AddMissingUsingDirective(SyntaxTree syntaxTree, string namespaceName)
     {
         var root = syntaxTree.GetRoot() as CompilationUnitSyntax;
-        var usingDirectives = root?.Usings.Select(uds => uds.Name.ToString()).ToList();
+        var usingDirectives = root?.Usings.Select(uds => uds.Name?.ToString()).ToList();
 
         if (usingDirectives != null && !usingDirectives.Contains(namespaceName))
         {
@@ -99,7 +99,7 @@ public class AvroFusionSyntaxTreeManager : IAvroFusionSyntaxTreeManager
     {
         var usingDirectives = syntaxTrees.SelectMany(st => st.GetRoot().DescendantNodes()
                 .OfType<UsingDirectiveSyntax>()
-                .Select(uds => uds.Name.ToString()))
+                .Select(uds => uds.Name?.ToString()))
             .Distinct()
             .ToList();
 

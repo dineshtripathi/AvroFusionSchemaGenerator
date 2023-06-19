@@ -17,25 +17,25 @@ public  class SpectreConsoleSettings : CommandSettings
     /// </summary>
     [CommandOption("--source-directory-path")]
     [Required]
-    public string DirectoryPath{ get; set; }
+    public string DirectoryPath { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the input file.
     /// </summary>
     [CommandOption("--input-file")]
     [Required]
-    public string InputFile { get; set; }
+    public string InputFile { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the output dir.
     /// </summary>
     [CommandOption("--output-dir")]
     [Required]
-    public string OutputDir { get; set; }
+    public string OutputDir { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the namespace.
     /// </summary>
     [CommandOption("--namespace")]
-    public string? Namespace { get; set; }
+    public string? Namespace { get; set; } = string.Empty;
 }
