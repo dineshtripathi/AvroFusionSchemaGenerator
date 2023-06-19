@@ -138,7 +138,7 @@ public class AvroAvscClassTypeHandler : IAvroAvscTypeHandler
             {"name", $"Tuple{genericArgs.Length}"},
             {"namespace", "CustomNamespace"}, // Change "CustomNamespace" to a namespace of your choice
             {
-                "fields", genericArgs.Select((arg, i) => new Dictionary<string, object>
+                "fields", genericArgs.Select((arg, i) => new Dictionary<string, object?>
                 {
                     {"name", fieldNames[i]},
                     {"type", _avroSchemaGenerator.Value.GenerateAvroFusionAvscAvroType(arg, new HashSet<string>())}
